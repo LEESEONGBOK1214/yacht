@@ -217,6 +217,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 						PrintWriter pw = new PrintWriter(ost, true);
 						pw.println("회원가입/" + 회원가입.get아이디받기().getText() + "/" + 회원가입.get비밀번호받기().getText() + "/"
 								+ 회원가입.get이름받기().getText());
+						System.out.println("회원가입 pw.println 밑.");
 						BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 						Thread thread = new Thread(new Runnable() {
 
@@ -228,6 +229,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 
 									}
 									JOptionPane.showMessageDialog(null, 응답);
+									System.out.println("응답 : " + 응답);
 									if (응답.equals("회원가입이 완료되었습니다.")) {
 										카드.show(메인카드, "메뉴");
 									}

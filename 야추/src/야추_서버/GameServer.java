@@ -6,7 +6,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class ChatServer {
+public class GameServer {
 
 	public static ArrayList<PrintWriter> m_OutputList;
 
@@ -22,7 +22,7 @@ public class ChatServer {
 				//연결동안 계속 돌면서 데이터 확인
 				
 				Socket c_socket = s_socket.accept();
-				ClientManagerThread c_thread = new ClientManagerThread();
+				ServerThread c_thread = new ServerThread();
 				c_thread.setSocket(c_socket);
 				
 				m_OutputList.add(new PrintWriter(c_socket.getOutputStream()));
