@@ -92,7 +92,6 @@ public class 야추Frame extends JFrame implements ActionListener {
 		
 		case "게임시작" :
 			카드.show(메인카드, "로그인");
-			
 			break;
 			
 		case "회원가입" :
