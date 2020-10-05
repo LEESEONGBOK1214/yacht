@@ -6,6 +6,7 @@ import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 
@@ -13,7 +14,8 @@ public class 회원가입 extends JPanel// extends 가입배경
 {
 	private Font 가입폰트;
 	private JLabel 아이디,비밀번호,이름;
-	private JTextField 아이디받기,비밀번호받기,이름받기;
+	private JTextField 아이디받기, 이름받기;
+	private JPasswordField 비밀번호받기;
 	private JButton 가입,취소;
 	
 	public JTextField get아이디받기() {
@@ -45,8 +47,10 @@ public class 회원가입 extends JPanel// extends 가입배경
 		아이디받기.setFont(가입폰트);
 		비밀번호 = new JLabel("비밀번호 ");
 		비밀번호.setFont(가입폰트);
-		비밀번호받기 = new JTextField();
+		비밀번호받기 = new JPasswordField();
 		비밀번호받기.setFont(가입폰트);
+		비밀번호받기.selectAll(); // 전체 선택 후,
+		비밀번호받기.setEchoChar('*');
 		이름 = new JLabel("  이  름 ");
 		이름.setFont(가입폰트);
 		이름받기 = new JTextField();

@@ -33,7 +33,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 	private String[] scores;
 	private String yourname;
 	private 대기화면 waitpage;
-	
+	String 응답;
 	Socket socket;
 	Connection conn;
 	PreparedStatement ptst;
@@ -48,7 +48,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 
 		// =================================================================================================
 		try {
-			socket = new Socket(InetAddress.getLocalHost().getHostAddress(),320);
+			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -103,9 +103,9 @@ public class 야추Frame extends JFrame implements ActionListener {
 //			기록조회();
 //			break;
 			
-//		case "가입" :
-//			회원가입();
-//			break;
+		case "가입":
+			회원가입();
+			break;
 			
 		case "취소" :
 		case "뒤로" :
@@ -204,5 +204,74 @@ public class 야추Frame extends JFrame implements ActionListener {
 		}else {
 			JOptionPane.showMessageDialog(null, "아이디를 입력하세요.");
 		}
-	}
+	}// end of 로그인 Method
+
+	private void 회원가입() {
+		if (!회원가입.get아이디받기().getText().equals("")) {
+			if (!회원가입.get비밀번호받기().getText().equals("")) {
+				if (!회원가입.get이름받기().getText().equals("")) {
+					try {
+						OutputStream os = socket.getOutputStream();
+						OutputStreamWriter ost = new OutputStreamWriter(os);
+						PrintWriter pw = new PrintWriter(ost, true);
+						String 아이디 = 회원가입.get아이디받기().getText();
+						String 비밀번호 = 회원가입.get비밀번호받기().getText();
+						String 이름 = 회원가입.get이름받기().getText();
+						pw.println("회원가입/" + 아이디 + "/" + 비밀번호 + "/" + 이름);
+						System.out.println("회원가입 pw.println 밑.");
+						BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						Thread thread = new Thread(new Runnable() {
+
+							@Override
+							public void run() {
+								// TODO Auto-generated method stub
+								try {
+									while ((응답 = in.readLine()) == null) {
+
+									}
+									JOptionPane.showMessageDialog(null, 응답);
+									System.out.println("응답 : " + 응답);
+									if (응답.equals("회원가입이 완료되었습니다.")) {
+										카드.show(메인카드, "메뉴");
+									}
+								} catch (IOException e) {
+									// TODO Auto-generated catch block
+									e.printStackTrace();
+								}
+							}
+						});
+						thread.start();
+
+//						if(rs != null && rs.next()) {
+//							JOptionPane.showMessageDialog(null, "이미 존재하는 아이디입니다.");
+//						}else {
+//							String sql = "insert into 윷놀이 (id,passwd,name) values ('"+makeInfo.get아이디받기().getText()+"','"
+//									+makeInfo.get비밀번호받기().getText()+"','"+makeInfo.get이름받기().getText()+"')";
+//							try {
+//								stmt.executeUpdate(sql);
+//								JOptionPane.showMessageDialog(null, "가입이 완료되었습니다.");
+//								card.show(mainCard, "메뉴");
+//							} catch (SQLException e1) {
+//								e1.printStackTrace();
+//							}
+//							System.out.println("없노");
+//						}
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+//					catch (NullPointerException e) {
+//						System.out.println("야추Frame() -> 회원가입() -> 이름받는 곳에서 null 발생.");
+//					}
+
+				} else {
+					JOptionPane.showMessageDialog(null, "이름을 확인하세요");
+				}
+			} else {
+				JOptionPane.showMessageDialog(null, "비밀번호를 확인하세요");
+			}
+		} else {
+			JOptionPane.showMessageDialog(null, "아이디를 확인하세요");
+		}
+	}// end of 회원가입 Method
 }
