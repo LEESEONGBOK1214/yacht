@@ -12,8 +12,9 @@ import java.util.ArrayList;
 public class ServerThread extends Thread {
 	private Socket m_socket;
 	private String m_ID;
-	ArrayList<Room> RoomList = new ArrayList<Room>();
+	ArrayList<GameRoom> RoomList = new ArrayList<GameRoom>();
 
+//ÀÌ°Å ¾²´Â°Å ¾Æ´Ô.. ÀÏ´Ü ³ÀµÒ.
 	@Override
 	public void run() {
 		// TODO Auto-generated method stub
@@ -27,6 +28,7 @@ public class ServerThread extends Thread {
 				
 				String inline;
 				while ((inline = br.readLine()) != null) {
+					System.out.println("ÀÔ·Â : " + inline);
 					Process(inline);
 				}
 				inline = null;
@@ -62,3 +64,27 @@ public class ServerThread extends Thread {
 		m_socket = _socket;
 	}
 }
+
+
+/*
+ * InetSocketAddress isa; Socket socket;
+ * 
+ * static String url = "jdbc:oracle:thin:@localhost:1521:xe"; static String id =
+ * "system"; static String passwd = "oracle"; static Connection conn; static
+ * Statement stmt;
+ * 
+ * public void run() { try { isa = new
+ * InetSocketAddress(InetAddress.getLocalHost().getHostAddress(), 8888); socket
+ * = new Socket(); socket.connect(isa); socket.setSoTimeout(10000); // 10ÃÊ
+ * 
+ * OutputStream os = socket.getOutputStream(); InputStream is =
+ * socket.getInputStream(); InputStreamReader isr = new InputStreamReader(is);
+ * BufferedReader br = new BufferedReader(isr);
+ * 
+ * String inline; while ((inline = br.readLine()) != null) { for (int i = 0; i <
+ * 10; i++) { System.out.println(i); } return; }
+ * 
+ * } catch (IOException e) { e.printStackTrace();
+ * 
+ * } }
+ */

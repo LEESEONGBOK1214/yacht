@@ -6,19 +6,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class OracleDB {
-	Connection conn;
-	PreparedStatement pstm;
-	ResultSet rs;
-	String sql;
+	static Connection conn;
+	static PreparedStatement pstm;
+	static ResultSet rs;
+	static String sql;
 
-	OracleDB() {
+	public OracleDB() {
 		conn = DBConnection.getConnection();
 		pstm = null;
 		rs = null;
 	}
 
-	public String 회원가입(String id, String pw, String name) {
-		sql = "insert into yat_user values('?, ?, ?')";
+	public static String 회원가입(String id, String pw, String name) {
+		sql = "insert into yat_user values(?, ?, ?)";
+		System.out.println("id : " + id + "," + "pw : " + pw + "," + "name : " + name);
 		//									id,pw,name
 		try {
 			pstm = conn.prepareStatement(sql);
@@ -42,6 +43,11 @@ public class OracleDB {
 		}
 		return "잘못된출력";
 
+	}
+
+	public boolean 로그인(String string, String string2, String string3) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

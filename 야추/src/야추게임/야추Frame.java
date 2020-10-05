@@ -215,8 +215,10 @@ public class 야추Frame extends JFrame implements ActionListener {
 						OutputStream os = socket.getOutputStream();
 						OutputStreamWriter ost = new OutputStreamWriter(os);
 						PrintWriter pw = new PrintWriter(ost, true);
-						pw.println("회원가입/" + 회원가입.get아이디받기().getText() + "/" + 회원가입.get비밀번호받기().getText() + "/"
-								+ 회원가입.get이름받기().getText());
+						String 아이디 = 회원가입.get아이디받기().getText();
+						String 비밀번호 = 회원가입.get비밀번호받기().getText();
+						String 이름 = 회원가입.get이름받기().getText();
+						pw.println("회원가입/" + 아이디 + "/" + 비밀번호 + "/" + 이름);
 						System.out.println("회원가입 pw.println 밑.");
 						BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 						Thread thread = new Thread(new Runnable() {
