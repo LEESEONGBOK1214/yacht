@@ -128,19 +128,26 @@ public class 야추Frame extends JFrame implements ActionListener {
 					
 					public void run() {
 						// TODO Auto-generated method stub
+						// 서버가 보낸 채팅 입력받는 in
 						BufferedReader in;
-						//2.소켓을 이용하여 서버에 데이터를 보낸다.
+						// 서버에 출력해줄 os
 						OutputStream os;
 						
 						try {
+							// 서버로부터 출력할 수 있도록 가져온다.
 							os = socket.getOutputStream();
 							OutputStreamWriter ost = new OutputStreamWriter(os);
 							PrintWriter pw = new PrintWriter(ost,true);
-							pw.println("로그인/"+로그인.getIdTextField().getText()+"/"+로그인.getPasswdTextField().getText());
+							
+							String 아이디 = 로그인.getIdTextField().getText();
+							String 비밀번호 = 로그인.getPasswdTextField().getText();
+							// 서버로    로그인/ 아이디 / 비밀번호 보냄. 
+							pw.println("로그인/"+ 아이디+"/"+ 비밀번호);
 							in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 							while((loginstatus=in.readLine()) == null) {
 								
 							}
+							
 							if(loginstatus.equals("로그인성공")) {
 								try {
 //											Socket socket = new Socket(InetAddress.getLocalHost().getHostAddress(),320);
