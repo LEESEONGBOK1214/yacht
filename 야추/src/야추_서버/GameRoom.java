@@ -74,7 +74,7 @@ public class GameRoom extends Thread {
 	public GameUser GetUserByNickName(String _nickName) {
 		// 닉네임을 통해서 방에 속한 유저를 리턴함
 		for (GameUser user : userList) {
-			if (user.nickName.equals(_nickName)) {
+			if (user.name.equals(_nickName)) {
 				return user;
 				// 유저를 찾았다면
 			}

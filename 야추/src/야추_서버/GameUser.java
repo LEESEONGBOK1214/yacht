@@ -11,7 +11,9 @@ import DB.OracleDB;
 public class GameUser extends Thread {
 	GameRoom room; // 유저가 속한 룸이다.
 	Socket m_socket;
-	String nickName;
+	String id;
+	String pw;
+	String name;
 
 	// 게임에 관련된 변수 설정 // ... //
 
@@ -25,7 +27,7 @@ public class GameUser extends Thread {
 
 	public GameUser(Socket socket, String nickName) {
 		this.m_socket = socket;
-		this.nickName = nickName;
+		this.name = nickName;
 	}
 
 	public void EnterRoom(GameRoom _room) {
@@ -40,15 +42,31 @@ public class GameUser extends Thread {
 	public void 회원가입(String[] split) {
 		System.out.println("in 회원가입 >");
 		OracleDB DB = new OracleDB();
-		DB.회원가입(split[1], split[2], split[3]);
+		String id = split[1];
+		String pw = split[2];
+		String name = split[3];
+		
+		boolean 결과 = DB.회원가입(id, pw, name);
+		if (결과) {
+			outprint("회원가입이 완료되었습니다.");
+		}
 	}
 
 	private void 로그인(String[] split) {
 		// TODO Auto-generated method stub
 		System.out.println("in 로그인 >");
 		OracleDB DB = new OracleDB();
-		if (DB.로그인(split[1], split[2], split[3])) {
+		String id = split[1];
+		String pw = split[2];
+		System.out.println("split.length : " + split.length);
+
+		boolean 결과 = DB.로그인(id, pw);
+		if (결과) {
 			System.out.println("로그인 성공");
+			this.id = id;
+			this.pw = pw;
+			this.name = name;
+			outprint("로그인성공");
 		} else {
 			System.out.println("로그인 실패");
 		}
@@ -65,6 +83,15 @@ public class GameUser extends Thread {
 		}
 	}
 
+	public void outprint(String str) {
+		try {
+			PrintWriter out = new PrintWriter(m_socket.getOutputStream(), true);
+			out.println(str);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public void run() {
 		super.run();

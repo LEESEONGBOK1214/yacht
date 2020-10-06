@@ -42,8 +42,8 @@ public class 야추Frame extends JFrame implements ActionListener {
 		super("yacht!");
 		// 기본 설정.
 		setSize(700, 700);
-		setLocation(1920 / 2 - this.getWidth() / 2, 1080 / 2 - this.getHeight() / 2); // 화면 가운데 조정
-		
+		setLocation((1920 - this.getWidth()) / 2 - 200, (1080 - this.getHeight()) / 2 - 100); // 화면 가운데 조정
+
 		setDefaultCloseOperation(3);// 닫기 누르면 종료.
 
 		// =================================================================================================
@@ -113,9 +113,9 @@ public class 야추Frame extends JFrame implements ActionListener {
 			카드.show(메인카드, "메뉴");
 			break;
 			
-//		case "시작" :
-//			로그인();
-//			break;
+		case "시작":
+			로그인();
+			break;
 		}
 	}
 	
@@ -130,14 +130,15 @@ public class 야추Frame extends JFrame implements ActionListener {
 					public void run() {
 						// TODO Auto-generated method stub
 						BufferedReader in;
-						//2.소켓을 이용하여 서버에 데이터를 보낸다.
+						// 2.소켓을 이용하여 서버에 데이터를 보낸다.
 						OutputStream os;
 						
 						try {
 							os = socket.getOutputStream();
 							OutputStreamWriter ost = new OutputStreamWriter(os);
-							PrintWriter pw = new PrintWriter(ost,true);
+							PrintWriter pw = new PrintWriter(ost, true);
 							pw.println("로그인/"+로그인.getIdTextField().getText()+"/"+로그인.getPasswdTextField().getText());
+							System.out.println("서버로 로그인 데이터 보냄.");
 							in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 							while((loginstatus=in.readLine()) == null) {
 								
@@ -227,6 +228,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 							public void run() {
 								// TODO Auto-generated method stub
 								try {
+
 									while ((응답 = in.readLine()) == null) {
 
 									}
