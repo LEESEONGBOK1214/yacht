@@ -22,7 +22,7 @@ import javax.swing.JPanel;
 public class 야추Frame extends JFrame implements ActionListener {
 	private 주사위Panel 주사위패널;
 	private 점수선택Panel 선택패널;
-	private 게임Panel 게임패널;
+	private 게임화면 게임화면;
 	
 	private 회원가입 회원가입;
 	private 메뉴 메뉴;
@@ -34,6 +34,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 	private String yourname;
 	private 대기화면 waitpage;
 	String 응답;
+
 	Socket socket;
 	Connection conn;
 	PreparedStatement ptst;
@@ -77,6 +78,9 @@ public class 야추Frame extends JFrame implements ActionListener {
 		로그인.getBackButton().addActionListener(this);
 		메인카드.add(로그인,"로그인");
 		
+		게임화면 = new 게임화면();
+
+
 		카드.show(메인카드, "메뉴");
 		
 		
@@ -89,7 +93,8 @@ public class 야추Frame extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		System.out.println(e.getActionCommand());
 		switch(e.getActionCommand()) {
-		
+		case "바로가기":
+			카드.show(메인카드, "게임화면");
 		case "게임시작" :
 			카드.show(메인카드, "로그인");
 			
@@ -170,8 +175,8 @@ public class 야추Frame extends JFrame implements ActionListener {
 													System.out.println(yourname);
 												}
 												System.out.println("상대방 이름 : "+yourname);
-												게임패널 = new 게임Panel(로그인.getIdTextField().getText(),yourname, socket);
-												메인카드.add(게임패널,"게임판");
+												게임화면 = new 게임화면();
+												메인카드.add(게임화면, "게임판");
 												카드.show(메인카드, "게임판");
 												
 											} catch (IOException e) {

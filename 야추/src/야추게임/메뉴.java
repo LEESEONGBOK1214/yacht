@@ -7,6 +7,7 @@ import javax.swing.JButton;
 
 public class 메뉴 extends 배경화면 {
 private JButton 게임시작,회원가입;
+private JButton 바로시작;
 	
 	public JButton get게임시작() {
 		return 게임시작;
@@ -29,7 +30,10 @@ private JButton 게임시작,회원가입;
 		게임시작.setBounds(100, 250, 250, 100);
 		add(게임시작);
 		
-		
+		바로시작 = new JButton("바로시작");
+		바로시작.setBounds(300, 350, 100, 100);
+		add(바로시작);
+
 		회원가입 = new JButton("회원가입");
 		회원가입.setBackground(Color.white);
 		회원가입.setOpaque(false);

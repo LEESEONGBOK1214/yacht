@@ -49,6 +49,8 @@ public class GameUser extends Thread {
 		boolean 결과 = DB.회원가입(id, pw, name);
 		if (결과) {
 			outprint("회원가입이 완료되었습니다.");
+		}else {
+			outprint("아이디가 중복됩니다.");
 		}
 	}
 
@@ -65,7 +67,6 @@ public class GameUser extends Thread {
 			System.out.println("로그인 성공");
 			this.id = id;
 			this.pw = pw;
-			this.name = name;
 			outprint("로그인성공");
 		} else {
 			System.out.println("로그인 실패");
