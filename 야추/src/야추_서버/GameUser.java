@@ -14,6 +14,8 @@ public class GameUser extends Thread {
 	String id;
 	String pw;
 	String name;
+	String nickName;
+	int port;
 
 	// 게임에 관련된 변수 설정 // ... //
 
@@ -42,6 +44,7 @@ public class GameUser extends Thread {
 	public void 회원가입(String[] split) {
 		System.out.println("in 회원가입 >");
 		OracleDB DB = new OracleDB();
+
 		String id = split[1];
 		String pw = split[2];
 		String name = split[3];
@@ -52,6 +55,8 @@ public class GameUser extends Thread {
 		}else {
 			outprint("아이디가 중복됩니다.");
 		}
+		//         id        pw        name
+		DB.회원가입(split[1], split[2], split[3]);
 	}
 
 	private void 로그인(String[] split) {
@@ -105,6 +110,7 @@ public class GameUser extends Thread {
 				while ((text = tmpbuffer.readLine()) != null) {
 					System.out.println("서버로 들어온 값 : " + text);
 					System.out.println("서버 접속된 포트 값 : " + m_socket.getPort());
+					this.port = m_socket.getPort();
 					process(text);
 				} // end of while 2
 				text = null;
