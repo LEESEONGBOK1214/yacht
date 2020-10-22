@@ -5,8 +5,8 @@ import java.util.ArrayList;
 
 
 public class RoomManager {
-	Socket m_socket;
-	static ArrayList<GameRoom> roomList; // 방의 리스트
+	private Socket m_socket;
+	private static ArrayList<GameRoom> roomList; // 방의 리스트
 
 	public RoomManager() {
 		roomList = new ArrayList<GameRoom>();
@@ -37,6 +37,10 @@ public class RoomManager {
 	public static void RemoveRoom(GameRoom _room) {
 		roomList.remove(_room); // 전달받은 룸을 제거한다.
 		System.out.println("Room Deleted!");
+	}
+
+	public static ArrayList<GameRoom> getRoomList() {
+		return roomList;
 	}
 
 	public static int RoomCount() {
