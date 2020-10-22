@@ -1,4 +1,4 @@
-package 야추_클라;
+package 야추_클라t;
 
 import java.io.BufferedReader;
 import java.io.IOException;

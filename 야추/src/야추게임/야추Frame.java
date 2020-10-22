@@ -19,8 +19,11 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import 야추_클라.로그인;
+import 야추_클라.메뉴;
+import 야추_클라.회원가입;
+
 public class 야추Frame extends JFrame implements ActionListener {
-	private 주사위Panel 주사위패널;
 	private 점수선택Panel 선택패널;
 	private 게임화면 게임화면;
 	
@@ -66,6 +69,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 		
 		메뉴.get게임시작().addActionListener(this);
 		메뉴.get회원가입().addActionListener(this);
+		메뉴.get바로시작().addActionListener(this);
 		메인카드.add(메뉴,"메뉴");
 		
 		회원가입 = new 회원가입();
@@ -79,7 +83,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 		메인카드.add(로그인,"로그인");
 		
 		게임화면 = new 게임화면();
-
+		메인카드.add(게임화면, "게임화면");
 
 		카드.show(메인카드, "메뉴");
 		
@@ -93,8 +97,9 @@ public class 야추Frame extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		System.out.println(e.getActionCommand());
 		switch(e.getActionCommand()) {
-		case "바로가기":
+		case "바로시작":
 			카드.show(메인카드, "게임화면");
+			break;
 		case "게임시작" :
 			카드.show(메인카드, "로그인");
 			

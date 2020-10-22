@@ -1,4 +1,4 @@
-package 야추게임;
+package 야추_클라;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -15,8 +15,11 @@ private JButton 바로시작;
 	public JButton get회원가입() {
 		return 회원가입;
 	}
-
-	메뉴(){
+	
+	public JButton get바로시작() {
+		return 바로시작;
+	}
+	public 메뉴(){
 		setLayout(null);
 		Font 메뉴폰트 = new Font(null,0,40);
 		

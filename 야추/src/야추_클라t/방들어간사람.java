@@ -1,4 +1,4 @@
-package 야추_클라;
+package 야추_클라t;
 
 import java.io.IOException;
 import java.net.Socket;

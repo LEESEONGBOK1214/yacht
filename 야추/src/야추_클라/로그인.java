@@ -1,4 +1,4 @@
-package 야추게임;
+package 야추_클라;
 
 
 import java.awt.BorderLayout;
