@@ -45,8 +45,8 @@ public class 야추Frame extends JFrame implements ActionListener {
 	야추Frame() {
 		super("yacht!");
 		// 기본 설정.
-		setSize(700, 700);
-		setLocation((1920 - this.getWidth()) / 2 - 200, (1080 - this.getHeight()) / 2 - 100); // 화면 가운데 조정
+		setSize(720, 700);
+		setLocation(600, 200); // 화면 가운데 조정
 
 		setDefaultCloseOperation(3);// 닫기 누르면 종료.
 

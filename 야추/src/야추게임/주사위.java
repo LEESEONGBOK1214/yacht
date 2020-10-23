@@ -1,5 +1,8 @@
 package 야추게임;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.Random;
 
 import javax.swing.ImageIcon;
@@ -7,8 +10,9 @@ import javax.swing.JLabel;
 
 public class 주사위 extends JLabel {
 	int 눈금;
+	boolean 저장중 = false;
 	String 이미지파일[] = { "one.png", "two.png", "three.png", "four.png", "five.png", "six.png" };
-
+	
 	void randomset() {
 		Random r = new Random();
 		
@@ -17,7 +21,10 @@ public class 주사위 extends JLabel {
 	}
 
 	void set이미지(int 눈금) {
-		ImageIcon icon = new ImageIcon("./images/" + 이미지파일[눈금 - 1]);
+//		ImageIcon icon = new ImageIcon("./images/" + 이미지파일[눈금 - 1]);
+		ImageIcon icon = new ImageIcon(getClass().getResource("/images/" + 이미지파일[눈금-1]));
+		setIcon(icon);
+		System.out.println("getIcon() : " + getIcon());
 	}
 
 	// 이미지 출처 https://www.flaticon.com/kr/authors/smashicons"
