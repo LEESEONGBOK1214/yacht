@@ -24,7 +24,6 @@ import 야추_클라.메뉴;
 import 야추_클라.회원가입;
 
 public class 야추Frame extends JFrame implements ActionListener {
-	private 점수선택Panel 선택패널;
 	private 게임화면 게임화면;
 	
 	private 회원가입 회원가입;

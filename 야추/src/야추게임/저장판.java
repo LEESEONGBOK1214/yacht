@@ -1,14 +1,15 @@
 package 야추게임;
 
+import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 public class 저장판 extends JPanel {
 	저장판(){
 		setLayout(null);
-		setBounds(0,0,400,70);
+		setBounds(150, 100, 400, 70);
+		setBorder(new LineBorder(Color.blue));
 	}
-	
-	
 }
