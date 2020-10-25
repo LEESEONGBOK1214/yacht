@@ -33,21 +33,41 @@ public class 굴림판 extends JPanel {
 		점수화면전환.addMouseListener(new 이벤트_마우스());
 		점수화면전환.setBounds(20, 250, 50, 100);
 		
+		세팅();
+		
 		add(주사위판);
 		add(저장판);
 		add(굴림버튼);
 		add(점수화면전환);
 	}
+	
+	void 세팅() {
+		for(int i=0;i<5;i++) {
+			if(주사위들[i].저장중) {
+				주사위들[i].setBounds(82 * i, 0, 70, 70);
+				저장판.add(주사위들[i]);
+				
+			}else {
+				주사위들[i].setBounds(주사위들[i].x, 0, 주사위들[i].size, 주사위들[i].size);
+				// n번쨰는 n 이런식으로 i+1값으로 초기화
+				주사위판.add(주사위들[i]);
+			}
+		}
+	}
 
 	void 굴리기() {
 		for (int i = 0; i < 주사위들.length; i++) {
 			if (!주사위들[i].저장중) { // 저장중이 아니면,
+				
 				주사위들[i].굴리기();
 			}
 
 		}
 		주사위판.repaint();
 		게임화면.턴++;
+		if(게임화면.턴==3) {
+			야추Frame.get게임화면().차례 = false;
+		}
 	}
 
 	public void 선택됨() {

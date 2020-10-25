@@ -14,9 +14,6 @@ public class 주사위판 extends JPanel {
 		for (int i = 0; i < this.주사위들.length; i++) {
 			주사위들[i].굴리기();
 			주사위들[i].setName(i+"번째");
-			주사위들[i].setBounds(주사위들[i].x, 0, 주사위들[i].size, 주사위들[i].size);
-			// n번쨰는 n 이런식으로 i+1값으로 초기화
-			add(주사위들[i]);
 		}
 		
 	}

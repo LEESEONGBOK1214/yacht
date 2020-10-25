@@ -31,7 +31,7 @@ public class 주사위 extends JLabel implements MouseListener {
 //		ImageIcon icon = new ImageIcon("./images/" + 이미지파일[눈금 - 1]);
 
 		int 회수 = new Random().nextInt(5) + 5; // 5~10회 흔들기.
-		if (게임화면.턴 > 1) {
+		if (게임화면.턴 > 0) {
 			Thread 흔들기 = new Thread(new Runnable() {
 				@Override
 				public void run() {

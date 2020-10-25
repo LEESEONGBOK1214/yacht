@@ -10,7 +10,7 @@ public class 이벤트_마우스 implements MouseListener {
 
 	public void mouseClicked(MouseEvent e) {
 		JButton 버튼 = (JButton) e.getSource();
-
+		
 		switch (버튼.getName()) {
 		case "점수화면으로":
 			야추Frame.get게임화면().점수판으로();

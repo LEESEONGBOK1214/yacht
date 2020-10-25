@@ -32,7 +32,7 @@ public class 게임화면 extends JPanel implements ActionListener, MouseListener {
 			주사위들[i].addMouseListener(this);
 		}
 		굴림판 = new 굴림판(주사위들);
-		점수판 = new 점수판();
+		점수판 = new 점수판(주사위들);
 
 		// 객체 세팅
 
@@ -52,7 +52,10 @@ public class 게임화면 extends JPanel implements ActionListener, MouseListener {
 
 	void 주사위선택() {
 		// 요소 다 삭제하고 새로 그려주기 위함.
-
+		if(!차례) {
+			// 차례 = false면 내 차례 아님.
+			return;
+		}
 		System.out.print("주사위선택 >");
 		// 저장중=true인 주사위 수만큼 그리기
 
@@ -77,18 +80,25 @@ public class 게임화면 extends JPanel implements ActionListener, MouseListener {
 	}
 
 	public void 점수판으로() {
+		점수판.점수설정();
 		점수판.선택됨();
+		
 		장면.show(this, "점수선택하기");
 	}
 
 	public void 굴림판으로() {
 		굴림판.선택됨();
+		굴림판.세팅();
 		장면.show(this, "주사위굴리기");
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// 마우스 클릭 시
+		if(!차례) {
+			// 차례 = false면 내 차례 아님.
+			return;
+		}
 		System.out.print("겜화MouseClicked > ");
 		System.out.println(e.getSource().getClass());
 		if (e.getSource().getClass() == 주사위.class) {
