@@ -9,9 +9,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -24,7 +22,7 @@ import 야추_클라.메뉴;
 import 야추_클라.회원가입;
 
 public class 야추Frame extends JFrame implements ActionListener {
-	private 게임화면 게임화면;
+	private static 게임화면 게임화면;
 	
 	private 회원가입 회원가입;
 	private 메뉴 메뉴;
@@ -45,20 +43,20 @@ public class 야추Frame extends JFrame implements ActionListener {
 		super("yacht!");
 		// 기본 설정.
 		setSize(720, 700);
-		setLocation(600, 200); // 화면 가운데 조정
+		setLocation(400, 50); // 화면 가운데 조정
 
 		setDefaultCloseOperation(3);// 닫기 누르면 종료.
 
 		// =================================================================================================
-		try {
-			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
-		} catch (UnknownHostException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+//		try {
+//			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
+//		} catch (UnknownHostException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		} catch (IOException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
 		// =================================================================================================
 //		System.out.println("socket 다음");
 		카드 = new CardLayout();
@@ -286,4 +284,8 @@ public class 야추Frame extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(null, "아이디를 확인하세요");
 		}
 	}// end of 회원가입 Method
+
+	public static 게임화면 get게임화면() {
+		return 게임화면;
+	}
 }
