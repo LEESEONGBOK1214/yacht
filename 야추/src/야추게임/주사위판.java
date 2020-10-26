@@ -1,10 +1,12 @@
 package 야추게임;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 public class 주사위판 extends JPanel {
 	
 	주사위[] 주사위들;
+
 	주사위판(주사위[] 주사위들) {
 		setLayout(null);
 		setBounds(100, 350, 500, 70);
@@ -12,7 +14,9 @@ public class 주사위판 extends JPanel {
 		this.주사위들 = 주사위들;
 
 		for (int i = 0; i < this.주사위들.length; i++) {
-			주사위들[i].굴리기();
+//			주사위들[i].굴리기();
+			ImageIcon icon = new ImageIcon(getClass().getResource("/images/No.png"));
+			주사위들[i].setIcon(icon);
 			주사위들[i].setName(i+"번째");
 		}
 		

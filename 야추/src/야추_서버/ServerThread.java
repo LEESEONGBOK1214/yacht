@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class ServerThread extends Thread {
 	private Socket m_socket;
 	private String m_ID;
-	ArrayList<GameRoom> RoomList = new ArrayList<GameRoom>();
+	ArrayList<¹æ> RoomList = new ArrayList<¹æ>();
 
 //ÀÌ°Å ¾²´Â°Å ¾Æ´Ô.. ÀÏ´Ü ³ÀµÒ.
 	@Override

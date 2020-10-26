@@ -8,35 +8,76 @@ import java.net.Socket;
 
 import DB.OracleDB;
 
-public class GameUser extends Thread {
-	GameRoom room; // 유저가 속한 룸이다.
+public class 유저 extends Thread {
+	방 room; // 유저가 속한 룸이다.
 	Socket m_socket;
-	String id;
-	String pw;
-	String name;
-
+	private String 아이디;
+	private String 비밀번호;
+	private String 이름;
+	private boolean 차례; // true면 내 차례.
+	private int 내점수 = 0;
 	// 게임에 관련된 변수 설정 // ... //
 
-	public GameUser() {
-		// 아무런 정보가 없는 깡통 유저를 만들 때
+	public 유저(String nickName) {
+		this.이름 = nickName;
 	}
 
-	public GameUser(Socket socket) {
+	public 유저(Socket socket) {
 		this.m_socket = socket;
 	}
 
-	public GameUser(Socket socket, String nickName) {
+	public 유저(Socket socket, String nickName) {
 		this.m_socket = socket;
-		this.name = nickName;
+		this.이름 = nickName;
 	}
 
-	public void EnterRoom(GameRoom _room) {
+	public void EnterRoom(방 _room) {
 		_room.EnterRoom(this); // 룸에 입장시킨 후
 		this.room = _room; // 유저가 속한 방을 룸으로 변경한다.(중요)
 	}
 
 	public void setSocket(Socket _socket) {
 		m_socket = _socket;
+	}
+
+	public int get내점수() {
+		return 내점수;
+	}
+
+	public void set내점수(int 내점수) {
+		this.내점수 = 내점수;
+	}
+
+	public boolean is차례() {
+		return 차례;
+	}
+
+	public void set차례(boolean 차례) {
+		this.차례 = 차례;
+	}
+
+	public String get아이디() {
+		return 아이디;
+	}
+
+	public void set아이디(String 아이디) {
+		this.아이디 = 아이디;
+	}
+
+	public String get비밀번호() {
+		return 비밀번호;
+	}
+
+	public void set비밀번호(String 비밀번호) {
+		this.비밀번호 = 비밀번호;
+	}
+
+	public String get이름() {
+		return 이름;
+	}
+
+	public void set이름(String 이름) {
+		this.이름 = 이름;
 	}
 
 	public void 회원가입(String[] split) {
@@ -65,8 +106,8 @@ public class GameUser extends Thread {
 		boolean 결과 = DB.로그인(id, pw);
 		if (결과) {
 			System.out.println("로그인 성공");
-			this.id = id;
-			this.pw = pw;
+			this.아이디 = id;
+			this.비밀번호 = pw;
 			outprint("로그인성공");
 		} else {
 			System.out.println("로그인 실패");
@@ -81,6 +122,7 @@ public class GameUser extends Thread {
 			break;
 		case "로그인":
 			로그인(split);
+			break;
 		}
 	}
 
@@ -106,13 +148,14 @@ public class GameUser extends Thread {
 					System.out.println("서버로 들어온 값 : " + text);
 					System.out.println("서버 접속된 포트 값 : " + m_socket.getPort());
 					process(text);
+//					System.out.println("설마 계속 돌고있나?");
 				} // end of while 2
 				text = null;
 				break;
 			} // end of while 1
 
 
-			GameServer.m_OutputList.remove(new PrintWriter(m_socket.getOutputStream()));
+			게임서버.m_OutputList.remove(new PrintWriter(m_socket.getOutputStream()));
 			m_socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();

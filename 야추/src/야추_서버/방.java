@@ -3,38 +3,38 @@ package 야추_서버;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GameRoom extends Thread {
-	ArrayList<GameUser> userList;
-	GameUser roomOwner; // 방장
+public class 방 extends Thread {
+	ArrayList<유저> userList;
+	유저 roomOwner; // 방장
 	String roomName; // 방 이름
 
-	public GameRoom() { // 아무도 없는 방을 생성할 때
-		userList = new ArrayList<GameUser>();
+	public 방() { // 아무도 없는 방을 생성할 때
+		userList = new ArrayList<유저>();
 	}
 
-	public GameRoom(GameUser _user) {
+	public 방(유저 _user) {
 		// 유저가 방을 만들때
-		userList = new ArrayList<GameUser>();
+		userList = new ArrayList<유저>();
 		userList.add(_user); // 유저를 추가시킨 후
 		this.roomOwner = _user; // 방장을 유저로 만든다.
 	}
 
-	public GameRoom(ArrayList<GameUser> _userList) {
+	public 방(ArrayList<유저> _userList) {
 		// 유저 리스트가 방을 생성할
 		this.userList = _userList; // 유저리스트 복사
 		this.roomOwner = userList.get(0);
 		// 첫번째 유저를 방장으로 설정
 	}
 
-	public void EnterRoom(GameUser _user) {
+	public void EnterRoom(유저 _user) {
 		userList.add(_user);
 	}
 
-	public void ExitRoom(GameUser _user) { 
+	public void ExitRoom(유저 _user) { 
 		userList.remove(_user); 
 		if (userList.size() < 1) {
 	    //모든 인원이 다 방을 나갔다면 
-			RoomManager.RemoveRoom(this); 
+			방관리.RemoveRoom(this); 
 			// 이 방을 제거한다. 
 			return; 
 		} 
@@ -48,7 +48,7 @@ public class GameRoom extends Thread {
 	// 게임 로직
 	@SuppressWarnings("unused")
 	public void Broadcast(byte[] data) {
-		for (GameUser user : userList) {
+		for (유저 user : userList) {
 			// 방에 속한 유저의 수만큼 반복
 			// 각 유저에게 데이터를 전송하는 메서드 호출~
 			// ex) user.SendData(data);
@@ -62,7 +62,7 @@ public class GameRoom extends Thread {
 		}
 	}
 
-	public void SetOwner(GameUser _user) {
+	public void SetOwner(유저 _user) {
 		this.roomOwner = _user; // 특정 사용자를 방장으로 변경한다.
 	}
 
@@ -71,10 +71,10 @@ public class GameRoom extends Thread {
 		this.roomName = _name;
 	}
 
-	public GameUser GetUserByNickName(String _nickName) {
+	public 유저 GetUserByNickName(String _nickName) {
 		// 닉네임을 통해서 방에 속한 유저를 리턴함
-		for (GameUser user : userList) {
-			if (user.name.equals(_nickName)) {
+		for (유저 user : userList) {
+			if (user.get이름().equals(_nickName)) {
 				return user;
 				// 유저를 찾았다면
 			}
@@ -93,7 +93,7 @@ public class GameRoom extends Thread {
 		return userList.size();
 	}
 
-	public GameUser GetOwner() {
+	public 유저 GetOwner() {
 		// 방장을 리턴
 		return roomOwner;
 	}

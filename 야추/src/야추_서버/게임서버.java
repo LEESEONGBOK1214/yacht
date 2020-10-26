@@ -6,8 +6,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class GameServer {
-	static ArrayList<GameUser> userList = new ArrayList<GameUser>();
+public class 게임서버 {
+	static ArrayList<유저> userList = new ArrayList<유저>();
 	public static ArrayList<PrintWriter> m_OutputList;
 
 	public static void main(String[] args) {
@@ -20,7 +20,7 @@ public class GameServer {
 				// 연결동안 계속 돌면서 데이터 확인
 
 				Socket c_socket = s_socket.accept();
-				GameUser c_thread = new GameUser(c_socket);
+				유저 c_thread = new 유저(c_socket);
 				c_thread.setSocket(c_socket);
 
 				userList.add(c_thread);

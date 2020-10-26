@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
@@ -17,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import 야추_서버.유저;
 import 야추_클라.로그인;
 import 야추_클라.메뉴;
 import 야추_클라.회원가입;
@@ -32,7 +35,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 //	private 전적확인 scorecheck;
 	private String[] scores;
 	private String yourname;
-	private 대기화면 waitpage;
+	private 대기화면 대기화면;
 	String 응답;
 
 	Socket socket;
@@ -48,15 +51,15 @@ public class 야추Frame extends JFrame implements ActionListener {
 		setDefaultCloseOperation(3);// 닫기 누르면 종료.
 
 		// =================================================================================================
-//		try {
-//			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
-//		} catch (UnknownHostException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		} catch (IOException e1) {
-//			// TODO Auto-generated catch block
-//			e1.printStackTrace();
-//		}
+		try {
+			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		// =================================================================================================
 //		System.out.println("socket 다음");
 		카드 = new CardLayout();
@@ -67,6 +70,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 		메뉴.get게임시작().addActionListener(this);
 		메뉴.get회원가입().addActionListener(this);
 		메뉴.get바로시작().addActionListener(this);
+		메뉴.get방목록보기().addActionListener(this);
 		메인카드.add(메뉴,"메뉴");
 		
 		회원가입 = new 회원가입();
@@ -79,8 +83,10 @@ public class 야추Frame extends JFrame implements ActionListener {
 		로그인.getBackButton().addActionListener(this);
 		메인카드.add(로그인,"로그인");
 		
-		게임화면 = new 게임화면();
-		메인카드.add(게임화면, "게임화면");
+
+
+		대기화면 = new 대기화면();
+		메인카드.add(대기화면, "대기화면");
 
 		카드.show(메인카드, "메뉴");
 		
@@ -94,9 +100,6 @@ public class 야추Frame extends JFrame implements ActionListener {
 		// TODO Auto-generated method stub
 		System.out.println(e.getActionCommand());
 		switch(e.getActionCommand()) {
-		case "바로시작":
-			카드.show(메인카드, "게임화면");
-			break;
 		case "게임시작" :
 			카드.show(메인카드, "로그인");
 			
@@ -123,15 +126,29 @@ public class 야추Frame extends JFrame implements ActionListener {
 		case "시작":
 			로그인();
 			break;
+
+		// 테스팅용들
+		case "바로시작":
+			게임화면 = new 게임화면(new 유저("A"), new 유저("B"));
+			메인카드.add(게임화면, "게임화면");
+			카드.show(메인카드, "게임화면");
+			break;
+		case "방목록보기":
+			카드.show(메인카드, "대기화면");
+			break;
 		}
 	}
 	
+	// 방에 들어갔을 때 추가해야함..!!!!
+//	게임화면 = new 게임화면();
+//	메인카드.add(게임화면, "게임판");
+
 
 	String loginstatus = null;
 	private void 로그인() {
 		if(!로그인.getIdTextField().getText().equals("")) {
 			if(!로그인.getPasswdTextField().getText().equals("")) {
-				
+				System.out.println("야추Frame > 로그인() > ");
 				Thread loginthread = new Thread(new Runnable() {
 					
 					public void run() {
@@ -150,7 +167,8 @@ public class 야추Frame extends JFrame implements ActionListener {
 							while((loginstatus=in.readLine()) == null) {
 								
 							}
-							if(loginstatus.equals("로그인성공")) {
+							System.out.println("loginstatus : " + loginstatus);
+							if (loginstatus.equals("로그인성공")) {
 								try {
 //											Socket socket = new Socket(InetAddress.getLocalHost().getHostAddress(),320);
 									BufferedReader in1 = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -159,35 +177,34 @@ public class 야추Frame extends JFrame implements ActionListener {
 									pw = new PrintWriter(ost,true);
 									pw.println(로그인.getIdTextField().getText());
 									
-									waitpage = new 대기화면();
-									메인카드.add(waitpage,"대기화면");
+//
+//									System.out.println("메인카드, \"대기화면\"할 차롄데...");
 									카드.show(메인카드, "대기화면");
 									System.out.println("로그인성공");
-									Thread thread = new Thread(new Runnable() {
-										
-										@Override
-										public void run() {
-											
-											try {
-												OutputStream os = socket.getOutputStream();
-												OutputStreamWriter ost = new OutputStreamWriter(os);
-												PrintWriter pw = new PrintWriter(ost,true);
-												pw.println("아이디줘");
-												while((yourname = in1.readLine()) == null) {
-													System.out.println(yourname);
-												}
-												System.out.println("상대방 이름 : "+yourname);
-												게임화면 = new 게임화면();
-												메인카드.add(게임화면, "게임판");
-												카드.show(메인카드, "게임판");
-												
-											} catch (IOException e) {
-												// TODO Auto-generated catch block
-												e.printStackTrace();
-											}
-										}
-									});
-									thread.start();
+//									Thread thread = new Thread(new Runnable() {
+//										
+//										@Override
+//										public void run() {
+//											
+//											try {
+//												OutputStream os = socket.getOutputStream();
+//												OutputStreamWriter ost = new OutputStreamWriter(os);
+//												PrintWriter pw = new PrintWriter(ost,true);
+//												pw.println("아이디줘");
+//												while((yourname = in1.readLine()) == null) {
+//													System.out.println(yourname);
+//												}
+//												System.out.println("상대방 이름 : "+yourname);
+//
+//												카드.show(메인카드, "게임판");
+//												
+//											} catch (IOException e) {
+//												// TODO Auto-generated catch block
+//												e.printStackTrace();
+//											}
+//										}
+//									});
+//									thread.start();
 									
 								
 								} catch (IOException e) {

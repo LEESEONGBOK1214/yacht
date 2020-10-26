@@ -30,9 +30,11 @@ public class 점수판 extends JPanel {
 				목록[j].setBounds(20 + 300 * i, 70 * (j % 6) + 50, 100, 50);
 				
 				선택[j] = new JButton();
+				선택[j].setName("점수선택버튼");
 				선택[j].setBackground(Color.white);
 				선택[j].setFocusPainted(false);
 				선택[j].setBounds(120 + 300 * i, 70 * (j % 6) + 50, 100, 50);
+				선택[j].addActionListener(new 이벤트_액션());
 				add(목록[j]);
 				add(선택[j]);
 			}
@@ -58,6 +60,7 @@ public class 점수판 extends JPanel {
 		// 점수 0으로 바꾸기
 		for(int i=0;i<12;i++) {
 			점수[i] = 0;
+
 		}
 		// 1~6합.		
 		for(주사위 주사위 : 주사위들) {
@@ -104,20 +107,26 @@ public class 점수판 extends JPanel {
 		
 		// 스몰스트
 		// 라지스트
-		if(점수[2] > 0 && 점수[3] > 0) { // 3, 4는 무조건 있어야함.
+		if (점수[2] > 0 && 점수[3] > 0) { // 3, 4는 무조건 있어야함.
+			System.out.print("3, 4");
 			if(점수[1] >0 && 점수[4] >0) {// 2 3 4 5
-				if(점수[0] == 1 || 점수[5] == 1) { // 1 2 3 4 5 || 2 3 4 5 6
-					점수[9] = 30;
+				System.out.print(", 2, 5");
+				if (점수[0] > 0 || 점수[5] > 0) { // 1 2 3 4 5 || 2 3 4 5 6
+					System.out.print(", 1 or 6");
+					점수[10] = 30;
 				}
-				점수[8] = 15;
+				점수[9] = 15;
 			}
 			else if(점수[0] >0 &&  점수[1] >0) {// 1 2 3 4
+				System.out.print(", 1, 2");
 				// 1 2 3 4 5는 위에서 처리.
-				점수[8] = 15; 
+				점수[9] = 15;
 			}
 			else if(점수[4] >0 && 점수[5] >0) { // 3 4 5 6
-				점수[8] = 15;
+				System.out.print(", 5, 6");
+				점수[9] = 15;
 			}
+			System.out.println();
 		}
 		
 		
@@ -132,7 +141,7 @@ public class 점수판 extends JPanel {
 		for(int i=0;i<12;i++) {
 			remove(선택[i]);
 			선택[i].setText("" + 점수[i]);
-			System.out.println(선택[i].getText());
+			System.out.println(목록들[i] + " : " + 선택[i].getText());
 			add(선택[i]);
 //			System.out.println(목록들[i] + " : " + 점수[i]);
 		}

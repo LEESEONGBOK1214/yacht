@@ -7,18 +7,29 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class OracleDB {
-	static Connection conn;
-	static PreparedStatement pstm;
-	static ResultSet rs;
+//	Connection conn;
+//	static PreparedStatement pstm;
+//	static ResultSet rs;
 	static String sql;
+	DBConnection DBconn;
 
 	public OracleDB() {
-		conn = DBConnection.getConnection();
-		pstm = null;
-		rs = null;
+		DBconn = DBConnection.getInstance();
+//		conn = DBconn.getConnection();
+//		pstm = null;
+//		rs = null;
 	}
 
 	public boolean 회원가입(String id, String pw, String name) {
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
 		sql = "insert into yat_user values(?, ?, ?)";
 		System.out.println("id : " + id + "," + "pw : " + pw + "," + "name : " + name);
 		// id,pw,name
@@ -54,13 +65,26 @@ public class OracleDB {
 				System.out.println("들어온 유저가 맞음.");
 				return true;
 
-			} else
-				return false;
-		} else
+			} else {
+				System.out.println("비밀번호 틀림!");
+			}
 			return false;
+		} else {
+			System.out.println("아이디 없음!");
+			return false;
+		}
 	}
 
 	public boolean checkId(String id) { // 해당 아이디가 있는지 없는지 확인
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
 		sql = "select user_id from yat_user";
 //		System.out.println();
 		try {
@@ -82,6 +106,15 @@ public class OracleDB {
 	}
 
 	public boolean checkPw(String pw) { // 해당 비밀번호가 있는지 없는지 확인
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
 		sql = "select user_pw from yat_user";
 
 		try {
@@ -103,6 +136,15 @@ public class OracleDB {
 	}
 
 	public ArrayList<String> selectAll() { // 해당 비밀번호가 있는지 없는지 확인
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
 		String sql = "select * from books";
 		ArrayList<String> 반환값 = new ArrayList<String>();
 		try {
@@ -118,5 +160,20 @@ public class OracleDB {
 		}
 		return 반환값;
 	}// end of method
-
+	
+	
+	/*
+	 void 메서드명(){
+	 	Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		String sql="";
+	 }
+	 */
 }

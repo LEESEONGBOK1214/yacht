@@ -5,28 +5,35 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Random;
 
 import javax.swing.JPanel;
+
+import 야추_서버.유저;
 
 public class 게임화면 extends JPanel implements ActionListener, MouseListener {
 	static 점수판 점수판;
 	static 굴림판 굴림판;
 	static 주사위 주사위들[] = new 주사위[5];
 
-	public static int 턴 = 1;
-	public static String 상태 = "";
-	boolean 차례; // true면 내 차례.
+	public static int 턴 = 0;
 
 	static CardLayout 장면;
-
-	public 게임화면() {
-
+	유저 유저A, 유저B;
+	static 유저 턴유저;
+	public 게임화면(유저 유저A, 유저 유저B) {
 		// 판 속성 세팅
-
 		장면 = new CardLayout();
 		setLayout(장면);
 
 		// 객체 초기화
+		this.유저A = 유저A;
+		this.유저B = 유저B;
+		
+		유저세팅(new Random().nextBoolean());
+		
+		
+
 		for (int i = 0; i < 주사위들.length; i++) {
 			주사위들[i] = new 주사위((i * 102) + 10, 0, 70);
 			주사위들[i].addMouseListener(this);
@@ -44,6 +51,18 @@ public class 게임화면 extends JPanel implements ActionListener, MouseListener {
 		장면.show(this, "주사위굴리기");
 	}
 
+	private void 유저세팅(boolean b) {
+		// TODO Auto-generated method stub
+		this.유저A.set차례(b);
+		this.유저B.set차례(!b);
+
+		if (유저A.is차례()) {
+			턴유저 = 유저A;
+		} else {
+			턴유저 = 유저B;
+		}
+	}
+
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
@@ -52,10 +71,10 @@ public class 게임화면 extends JPanel implements ActionListener, MouseListener {
 
 	void 주사위선택() {
 		// 요소 다 삭제하고 새로 그려주기 위함.
-		if(!차례) {
-			// 차례 = false면 내 차례 아님.
-			return;
-		}
+//		if(!차례) {
+//			// 차례 = false면 내 차례 아님.
+//			return;
+//		}
 		System.out.print("주사위선택 >");
 		// 저장중=true인 주사위 수만큼 그리기
 
@@ -80,7 +99,7 @@ public class 게임화면 extends JPanel implements ActionListener, MouseListener {
 	}
 
 	public void 점수판으로() {
-		점수판.점수설정();
+//		점수판.점수설정();
 		점수판.선택됨();
 		
 		장면.show(this, "점수선택하기");
@@ -88,17 +107,17 @@ public class 게임화면 extends JPanel implements ActionListener, MouseListener {
 
 	public void 굴림판으로() {
 		굴림판.선택됨();
-		굴림판.세팅();
+		굴림판.주사위세팅();
 		장면.show(this, "주사위굴리기");
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		// 마우스 클릭 시
-		if(!차례) {
-			// 차례 = false면 내 차례 아님.
-			return;
-		}
+//		if(!차례) {
+//			// 차례 = false면 내 차례 아님.
+//			return;
+//		}
 		System.out.print("겜화MouseClicked > ");
 		System.out.println(e.getSource().getClass());
 		if (e.getSource().getClass() == 주사위.class) {
@@ -134,5 +153,7 @@ public class 게임화면 extends JPanel implements ActionListener, MouseListener {
 		// TODO Auto-generated method stub
 
 	}
+
+
 
 }

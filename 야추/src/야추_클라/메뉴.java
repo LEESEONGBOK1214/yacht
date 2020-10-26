@@ -8,6 +8,7 @@ import javax.swing.JButton;
 public class 메뉴 extends 배경화면 {
 private JButton 게임시작,회원가입;
 private JButton 바로시작;
+private JButton 방목록보기;
 	
 	public JButton get게임시작() {
 		return 게임시작;
@@ -18,6 +19,10 @@ private JButton 바로시작;
 	
 	public JButton get바로시작() {
 		return 바로시작;
+	}
+
+	public JButton get방목록보기() {
+		return 방목록보기;
 	}
 	public 메뉴(){
 		setLayout(null);
@@ -32,10 +37,6 @@ private JButton 바로시작;
 		게임시작.setFont(메뉴폰트);
 		게임시작.setBounds(100, 250, 250, 100);
 		add(게임시작);
-		
-		바로시작 = new JButton("바로시작");
-		바로시작.setBounds(300, 350, 100, 100);
-		add(바로시작);
 
 		회원가입 = new JButton("회원가입");
 		회원가입.setBackground(Color.white);
@@ -45,5 +46,15 @@ private JButton 바로시작;
 		회원가입.setFont(메뉴폰트);
 		회원가입.setBounds(360, 250, 250, 100);
 		add(회원가입);
+
+		// 테스팅용들
+
+		바로시작 = new JButton("바로시작");
+		바로시작.setBounds(300, 350, 100, 100);
+		add(바로시작);
+
+		방목록보기 = new JButton("방목록보기");
+		방목록보기.setBounds(500, 350, 100, 100);
+		add(방목록보기);
 	}
 }
