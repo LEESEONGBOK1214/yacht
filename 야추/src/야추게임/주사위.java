@@ -40,7 +40,7 @@ public class 주사위 extends JLabel implements MouseListener {
 				@Override
 				public void run() {
 					// TODO Auto-generated method stub
-					야추Frame.get게임화면().굴림판.굴림버튼.setEnabled(false);
+					야추Frame.get게임화면().get굴림판().굴림버튼.setEnabled(false);
 					// 굴리는 중엔 선택못하게.
 					try {
 						for (int i = 0, j = 10; i < 회수; i++) {
@@ -63,7 +63,7 @@ public class 주사위 extends JLabel implements MouseListener {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					야추Frame.get게임화면().굴림판.굴림버튼.setEnabled(true);
+					야추Frame.get게임화면().get굴림판().굴림버튼.setEnabled(true);
 					System.out.println(getName());
 //					if (getName().equals("4번째") && 게임화면.턴 == 3) {
 //						게임화면.굴림판.턴종료();

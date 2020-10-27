@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class 게임서버 {
-	static ArrayList<유저> userList = new ArrayList<유저>();
+	public static ArrayList<유저> 유저목록 = new ArrayList<유저>();
 	public static ArrayList<PrintWriter> m_OutputList;
 
 	public static void main(String[] args) {
@@ -20,10 +20,12 @@ public class 게임서버 {
 				// 연결동안 계속 돌면서 데이터 확인
 
 				Socket c_socket = s_socket.accept();
+				// 연결된 창의 포트를 가져옴
 				유저 c_thread = new 유저(c_socket);
-				c_thread.setSocket(c_socket);
+				// 가져온 포트로 유저 생성.
+				c_thread.setM_socket(c_socket);
 
-				userList.add(c_thread);
+				유저목록.add(c_thread);
 				m_OutputList.add(new PrintWriter(c_socket.getOutputStream()));
 
 				c_thread.start();
@@ -36,4 +38,10 @@ public class 게임서버 {
 		System.out.println("게임 서버가 비활성화 됐습니다.");
 	}
 
+	public PrintWriter serach유저(Socket _socket) {
+		for(PrintWriter pw : m_OutputList) {
+			if()
+		}
+		return null;
+	}
 }

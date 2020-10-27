@@ -23,7 +23,7 @@ public class 이벤트_액션 implements ActionListener {
 //					System.out.println("내 차례 아님.");
 //					return;
 //				}
-				게임화면.굴림판.굴리기();
+				야추Frame.get게임화면().get굴림판().굴리기();
 				return;
 			}
 

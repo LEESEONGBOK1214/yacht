@@ -30,12 +30,12 @@ public class 야추Frame extends JFrame implements ActionListener {
 	private 회원가입 회원가입;
 	private 메뉴 메뉴;
 	private 로그인 로그인;
-	private CardLayout 카드; // 카드 레이아웃은 add한 레이아웃들을 하나씩 show 가능.
-	private JPanel 메인카드;
+	private CardLayout 장면; // 카드 레이아웃은 add한 레이아웃들을 하나씩 show 가능.
+	private JPanel 메인화면;
 //	private 전적확인 scorecheck;
 	private String[] scores;
 	private String yourname;
-	private 대기화면 대기화면;
+	private static 대기화면 대기화면;
 	String 응답;
 
 	Socket socket;
@@ -62,8 +62,8 @@ public class 야추Frame extends JFrame implements ActionListener {
 		}
 		// =================================================================================================
 //		System.out.println("socket 다음");
-		카드 = new CardLayout();
-		메인카드 = new JPanel(카드);
+		장면 = new CardLayout();
+		메인화면 = new JPanel(장면);
 		
 		메뉴 = new 메뉴();
 		
@@ -71,27 +71,27 @@ public class 야추Frame extends JFrame implements ActionListener {
 		메뉴.get회원가입().addActionListener(this);
 		메뉴.get바로시작().addActionListener(this);
 		메뉴.get방목록보기().addActionListener(this);
-		메인카드.add(메뉴,"메뉴");
+		메인화면.add(메뉴, "메뉴");
 		
 		회원가입 = new 회원가입();
 		회원가입.get가입().addActionListener(this);
 		회원가입.get취소().addActionListener(this);
-		메인카드.add(회원가입,"회원가입");
+		메인화면.add(회원가입, "회원가입");
 		
 		로그인 = new 로그인();
 		로그인.getStartButton().addActionListener(this);
 		로그인.getBackButton().addActionListener(this);
-		메인카드.add(로그인,"로그인");
+		메인화면.add(로그인, "로그인");
 		
 
 
-		대기화면 = new 대기화면();
-		메인카드.add(대기화면, "대기화면");
+		대기화면 = new 대기화면(this);
+		메인화면.add(대기화면, "대기화면");
 
-		카드.show(메인카드, "메뉴");
+		장면.show(메인화면, "메뉴");
 		
 		
-		add(메인카드);
+		add(메인화면);
 		setVisible(true);
 	}
 
@@ -101,12 +101,12 @@ public class 야추Frame extends JFrame implements ActionListener {
 		System.out.println(e.getActionCommand());
 		switch(e.getActionCommand()) {
 		case "게임시작" :
-			카드.show(메인카드, "로그인");
+			장면.show(메인화면, "로그인");
 			
 			break;
 			
 		case "회원가입" :
-			카드.show(메인카드, "회원가입");
+			장면.show(메인화면, "회원가입");
 			break;
 			
 //		case "초기화" :
@@ -120,7 +120,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 			
 		case "취소" :
 		case "뒤로" :
-			카드.show(메인카드, "메뉴");
+			장면.show(메인화면, "메뉴");
 			break;
 			
 		case "시작":
@@ -129,12 +129,12 @@ public class 야추Frame extends JFrame implements ActionListener {
 
 		// 테스팅용들
 		case "바로시작":
-			게임화면 = new 게임화면(new 유저("A"), new 유저("B"));
-			메인카드.add(게임화면, "게임화면");
-			카드.show(메인카드, "게임화면");
+			게임화면 = new 게임화면(null);
+			메인화면.add(게임화면, "게임화면");
+			장면.show(메인화면, "게임화면");
 			break;
 		case "방목록보기":
-			카드.show(메인카드, "대기화면");
+			장면.show(메인화면, "대기화면");
 			break;
 		}
 	}
@@ -142,7 +142,16 @@ public class 야추Frame extends JFrame implements ActionListener {
 	// 방에 들어갔을 때 추가해야함..!!!!
 //	게임화면 = new 게임화면();
 //	메인카드.add(게임화면, "게임판");
+	public void 대기화면으로() {
+		// 대기화면 세팅.
+		장면.show(메인화면, "대기화면");
+	}
 
+	public void 게임화면으로(유저 만든사람) {
+		// 게임화면 세팅.
+		// 방목록에서 가져와 추가하고 거기로 이동시켜야함.
+		장면.show(메인화면, "게임화면");
+	}
 
 	String loginstatus = null;
 	private void 로그인() {
@@ -161,6 +170,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 							os = socket.getOutputStream();
 							OutputStreamWriter ost = new OutputStreamWriter(os);
 							PrintWriter pw = new PrintWriter(ost, true);
+							유저 로그인유저 = new 유저(socket);
 							pw.println("로그인/"+로그인.getIdTextField().getText()+"/"+로그인.getPasswdTextField().getText());
 							System.out.println("서버로 로그인 데이터 보냄.");
 							in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -179,7 +189,9 @@ public class 야추Frame extends JFrame implements ActionListener {
 									
 //
 //									System.out.println("메인카드, \"대기화면\"할 차롄데...");
-									카드.show(메인카드, "대기화면");
+
+
+									장면.show(메인화면, "대기화면");
 									System.out.println("로그인성공");
 //									Thread thread = new Thread(new Runnable() {
 //										
@@ -259,7 +271,7 @@ public class 야추Frame extends JFrame implements ActionListener {
 									JOptionPane.showMessageDialog(null, 응답);
 									System.out.println("응답 : " + 응답);
 									if (응답.equals("회원가입이 완료되었습니다.")) {
-										카드.show(메인카드, "메뉴");
+										장면.show(메인화면, "메뉴");
 									}
 								} catch (IOException e) {
 									// TODO Auto-generated catch block

@@ -23,8 +23,8 @@ public class DBConnection {
 //		String user = "s1901206";
 //		String pw = "p1901206";
 //		String url = "jdbc:oracle:thin:@net.yju.ac.kr:1521:orcl";
-		String user = "insa";
-		String pw = "insa";
+		String user = "timeck";
+		String pw = "lenope1214";
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
 
 		conn = DriverManager.getConnection(url, user, pw);

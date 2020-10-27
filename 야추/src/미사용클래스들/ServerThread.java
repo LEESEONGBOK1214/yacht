@@ -1,4 +1,4 @@
-package 야추_서버;
+package 미사용클래스들;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,10 +9,12 @@ import java.net.Socket;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
+import 야추게임.게임화면;
+
 public class ServerThread extends Thread {
 	private Socket m_socket;
 	private String m_ID;
-	ArrayList<방> RoomList = new ArrayList<방>();
+	ArrayList<게임화면> 방목록 = new ArrayList<게임화면>();
 
 //이거 쓰는거 아님.. 일단 냅둠.
 	@Override

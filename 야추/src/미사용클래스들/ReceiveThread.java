@@ -1,4 +1,4 @@
-package 야추_클라t;
+package 미사용클래스들;
 
 import java.io.BufferedReader;
 import java.io.IOException;

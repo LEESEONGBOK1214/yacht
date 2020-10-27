@@ -95,7 +95,7 @@ public class 굴림판 extends JPanel {
 		게임화면 턴종료화면 = 야추Frame.get게임화면();
 //		턴종료화면.차례 = false;
 		턴종료화면.턴 = 0;
-		턴종료화면.점수판.돌아가기.setVisible(false);
+		턴종료화면.get점수판().돌아가기.setVisible(false);
 		턴종료화면.점수판으로();
 	}
 
