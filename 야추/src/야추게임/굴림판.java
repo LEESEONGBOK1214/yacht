@@ -27,7 +27,7 @@ public class 굴림판 extends JPanel {
 
 		저장판 = new 저장판();
 
-		차례표시세팅();
+
 
 		주사위판.setBorder(new LineBorder(Color.red));
 
@@ -41,14 +41,15 @@ public class 굴림판 extends JPanel {
 		add(저장판);
 		add(굴림버튼);
 		add(점수화면전환);
-		add(차례표시);
+//		차례표시세팅();
+//		add(차례표시);
 	}
 
 	private void 차례표시세팅() {
 		// TODO Auto-generated method stub
 
-		차례표시 = new JLabel(게임화면.턴유저.get이름());
-		차례표시.setBounds(325, 580, 100, 50);
+//		차례표시 = new JLabel(게임화면.턴유저.get이름());
+//		차례표시.setBounds(325, 580, 100, 50);
 	}
 
 	private void 굴림버튼세팅() {

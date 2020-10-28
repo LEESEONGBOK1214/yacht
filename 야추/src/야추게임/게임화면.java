@@ -4,11 +4,10 @@ import java.awt.CardLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.swing.JPanel;
 
-import 야추_서버.방관리;
+import 야추_서버.방목록화면;
 import 야추_서버.유저;
 
 public class 게임화면 extends JPanel implements MouseListener {
@@ -32,9 +31,10 @@ public class 게임화면 extends JPanel implements MouseListener {
 		setLayout(장면);
 
 		// 객체 초기화
-		set유저A(방장);
 
-		유저세팅(new Random().nextBoolean());
+//		set유저A(방장);
+
+//		유저세팅(new Random().nextBoolean());
 
 		for (int i = 0; i < 주사위들.length; i++) {
 			주사위들[i] = new 주사위((i * 102) + 10, 0, 70);
@@ -89,6 +89,7 @@ public class 게임화면 extends JPanel implements MouseListener {
 	}
 
 	private void 유저세팅(boolean b) {
+		System.out.println("b : " + b);
 		get유저A().set차례(b);
 		get유저B().set차례(!b);
 
@@ -114,7 +115,7 @@ public class 게임화면 extends JPanel implements MouseListener {
 		}
 
 		if (get유저A() == null && get유저B() == null) {
-			방관리.방삭제(this);
+			방목록화면.방삭제(this);
 			return;
 		}
 

@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import 야추_서버.방목록화면;
 import 야추_서버.유저;
 import 야추_클라.로그인;
 import 야추_클라.메뉴;
@@ -30,15 +31,15 @@ public class 야추Frame extends JFrame implements ActionListener {
 	private 회원가입 회원가입;
 	private 메뉴 메뉴;
 	private 로그인 로그인;
-	private CardLayout 장면; // 카드 레이아웃은 add한 레이아웃들을 하나씩 show 가능.
-	private JPanel 메인화면;
+	private static CardLayout 장면; // 카드 레이아웃은 add한 레이아웃들을 하나씩 show 가능.
+	private static JPanel 메인화면;
 //	private 전적확인 scorecheck;
 	private String[] scores;
 	private String yourname;
-	private static 대기화면 대기화면;
+	private static 방목록화면 방목록화면;
 	String 응답;
 
-	Socket socket;
+	static Socket socket;
 	Connection conn;
 	PreparedStatement ptst;
 	
@@ -83,10 +84,11 @@ public class 야추Frame extends JFrame implements ActionListener {
 		로그인.getBackButton().addActionListener(this);
 		메인화면.add(로그인, "로그인");
 		
+		게임화면 = new 게임화면(null);
+		메인화면.add(게임화면, "게임화면");
 
-
-		대기화면 = new 대기화면(this);
-		메인화면.add(대기화면, "대기화면");
+		방목록화면 = new 방목록화면();
+		메인화면.add(방목록화면, "대기화면");
 
 		장면.show(메인화면, "메뉴");
 		
@@ -129,11 +131,11 @@ public class 야추Frame extends JFrame implements ActionListener {
 
 		// 테스팅용들
 		case "바로시작":
-			게임화면 = new 게임화면(null);
-			메인화면.add(게임화면, "게임화면");
+
 			장면.show(메인화면, "게임화면");
 			break;
 		case "방목록보기":
+
 			장면.show(메인화면, "대기화면");
 			break;
 		}
@@ -142,12 +144,17 @@ public class 야추Frame extends JFrame implements ActionListener {
 	// 방에 들어갔을 때 추가해야함..!!!!
 //	게임화면 = new 게임화면();
 //	메인카드.add(게임화면, "게임판");
-	public void 대기화면으로() {
+	public static void 메뉴로() {
+//		System.out.println("메인으로 가라고!");
+		장면.show(메인화면, "메뉴");
+	}
+
+	public static void 대기화면으로() {
 		// 대기화면 세팅.
 		장면.show(메인화면, "대기화면");
 	}
 
-	public void 게임화면으로(유저 만든사람) {
+	public static void 게임화면으로(유저 만든사람) {
 		// 게임화면 세팅.
 		// 방목록에서 가져와 추가하고 거기로 이동시켜야함.
 		장면.show(메인화면, "게임화면");
@@ -316,5 +323,9 @@ public class 야추Frame extends JFrame implements ActionListener {
 
 	public static 게임화면 get게임화면() {
 		return 게임화면;
+	}
+
+	public static Socket getSocket() {
+		return socket;
 	}
 }
