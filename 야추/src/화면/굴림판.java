@@ -1,4 +1,4 @@
-package 야추게임;
+package 화면;
 
 import java.awt.Color;
 
@@ -6,6 +6,8 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
+
+import 야추게임.야추Frame;
 
 public class 굴림판 extends JPanel {
 	주사위판 주사위판;
@@ -16,7 +18,7 @@ public class 굴림판 extends JPanel {
 	JButton 점수화면전환;
 
 	굴림판(주사위[] 주사위들) {
-		System.out.println("굴림판으로 옴.");
+//		System.out.println("굴림판으로 옴.");
 		setLayout(null);
 		setBackground(Color.pink);
 

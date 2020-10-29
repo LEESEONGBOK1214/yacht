@@ -1,10 +1,12 @@
-package 야추게임;
+package 화면;
 
 import java.awt.Color;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import 야추게임.야추Frame;
 
 public class 점수판 extends JPanel {
 	JLabel 목록[] = new JLabel[12];

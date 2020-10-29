@@ -1,9 +1,11 @@
-package 야추게임;
+package 화면;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+
+import 야추게임.야추Frame;
 
 public class 이벤트_액션 implements ActionListener {
 

@@ -9,7 +9,7 @@ import java.net.Socket;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 
-import 야추게임.게임화면;
+import 화면.게임화면;
 
 public class ServerThread extends Thread {
 	private Socket m_socket;

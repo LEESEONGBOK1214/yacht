@@ -13,9 +13,9 @@ import javax.swing.JTextField;
 public class 회원가입 extends JPanel// extends 가입배경
 {
 	private Font 가입폰트;
-	private JLabel 아이디,비밀번호,이름;
-	private JTextField 아이디받기, 이름받기;
-	private JPasswordField 비밀번호받기;
+	private static JLabel 아이디, 비밀번호, 이름;
+	private static JTextField 아이디받기, 이름받기;
+	private static JPasswordField 비밀번호받기;
 	private JButton 가입,취소;
 	
 	public JTextField get아이디받기() {

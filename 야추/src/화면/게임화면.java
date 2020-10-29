@@ -1,4 +1,4 @@
-package 야추게임;
+package 화면;
 
 import java.awt.CardLayout;
 import java.awt.event.MouseEvent;
@@ -24,11 +24,11 @@ public class 게임화면 extends JPanel implements MouseListener {
 	private 유저 유저B; // 방장
 	private String 방제목; // 방 이름
 
-	public 게임화면(유저 방장) {
+	public 게임화면() {
 		// 방 생성하는거거든.
 		// 판 속성 세팅
 		장면 = new CardLayout();
-		setLayout(장면);
+		setLayout(get장면());
 
 		// 객체 초기화
 
@@ -49,20 +49,20 @@ public class 게임화면 extends JPanel implements MouseListener {
 		add(굴림판, "주사위굴리기");
 		add(점수판, "점수선택하기");
 
-		장면.show(this, "주사위굴리기");
+		get장면().show(this, "주사위굴리기");
 	}
 
 	public void 점수판으로() {
 //		점수판.점수설정();
 		점수판.선택됨();
 
-		장면.show(this, "점수선택하기");
+		get장면().show(this, "점수선택하기");
 	}
 
 	public void 굴림판으로() {
 		굴림판.선택됨();
 		굴림판.주사위세팅();
-		장면.show(this, "주사위굴리기");
+		get장면().show(this, "주사위굴리기");
 	}
 
 
@@ -125,7 +125,7 @@ public class 게임화면 extends JPanel implements MouseListener {
 		// 각 유저에게 데이터를 전송하는 메서드 호출~
 		// ex) user.SendData(data);
 		try {
-			유저A.getM_socket().getOutputStream().write(data);
+			유저A.getSocket().getOutputStream().write(data);
 			// 이런식으로 바이트배열을 보낸다. //
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -214,5 +214,9 @@ public class 게임화면 extends JPanel implements MouseListener {
 	}
 
 	public void mouseReleased(MouseEvent e) {
+	}
+
+	public static CardLayout get장면() {
+		return 장면;
 	}
 }

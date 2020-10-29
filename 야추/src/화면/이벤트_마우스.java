@@ -1,9 +1,11 @@
-package 야추게임;
+package 화면;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
+
+import 야추게임.야추Frame;
 
 public class 이벤트_마우스 implements MouseListener {
 

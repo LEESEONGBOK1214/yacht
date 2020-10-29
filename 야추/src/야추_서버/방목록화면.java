@@ -3,21 +3,13 @@ package 야추_서버;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.Socket;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import 야추게임.게임화면;
 import 야추게임.야추Frame;
+import 화면.게임화면;
 
 public class 방목록화면 extends JPanel implements ActionListener {
 	// 1. GameRoom List 가져와서 뿌려주기.
@@ -70,60 +62,7 @@ public class 방목록화면 extends JPanel implements ActionListener {
 		방목록패널.removeAll(); // 요소 전부 삭제해고 새로 쓰기.
 	}
 
-	static void 방만들기() {
-		System.out.print("방만들기 > ");
-		목록보여주기();
-		try {
-//			for (유저 유저 : 게임서버.유저목록) {
-//				if(유저.get아이디() == ) {
-//					
-//				}
-//			}
-			Socket socket = 야추Frame.getSocket();
-			OutputStream os = socket.getOutputStream();
-			OutputStreamWriter ost = new OutputStreamWriter(os);
-			PrintWriter pw = new PrintWriter(ost, true);
 
-			System.out.print("서버로 요청 : ");
-			pw.println("방만들기/" + socket.getLocalPort());
-			System.out.println("방만들기/" + socket.getLocalPort());
-			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			Thread thread = new Thread(new Runnable() {
-
-				@Override
-				public void run() {
-					// TODO Auto-generated method stub
-					String 응답 = "";
-					try {
-
-						while ((응답 = in.readLine()) == null) {
-
-						}
-						JOptionPane.showMessageDialog(null, 응답);
-						System.out.println("응답 : " + 응답);
-						/*
-						 * 응답 값으로 유저 만들어주고, 방 생성 되도록 해야함.
-						 * 
-						 */
-
-						if (응답.equals("방만들기 성공.")) {
-							게임화면 새방 = new 게임화면(만든사람);
-							방목록.add(새방);
-//							야추Frame.게임화면으로(만든사람);
-						}
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			});
-			thread.start();
-
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -149,7 +88,7 @@ public class 방목록화면 extends JPanel implements ActionListener {
 
 	public static 게임화면 방생성(유저 _owner) {
 		// 유저가 방을 생성할 때 사용(유저가 방장으로 들어감)
-		게임화면 room = new 게임화면(_owner);
+		게임화면 room = new 게임화면();
 		방목록.add(room);
 		System.out.println("Room Created!");
 		return room;

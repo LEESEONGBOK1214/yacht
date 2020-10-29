@@ -1,4 +1,4 @@
-package 야추게임;
+package 화면;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -6,6 +6,8 @@ import java.util.Random;
 
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+import 야추게임.야추Frame;
 
 public class 주사위 extends JLabel implements MouseListener {
 	int x, y;

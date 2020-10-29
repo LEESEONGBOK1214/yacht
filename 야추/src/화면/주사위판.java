@@ -1,4 +1,4 @@
-package 야추게임;
+package 화면;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;

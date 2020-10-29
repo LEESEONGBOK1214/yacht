@@ -24,33 +24,29 @@ import 야추_서버.유저;
 import 야추_클라.로그인;
 import 야추_클라.메뉴;
 import 야추_클라.회원가입;
+import 화면.게임화면;
 
 public class 야추Frame extends JFrame implements ActionListener {
 	private static 게임화면 게임화면;
-	
-	private 회원가입 회원가입;
+
 	private 메뉴 메뉴;
-	private 로그인 로그인;
-	private static CardLayout 장면; // 카드 레이아웃은 add한 레이아웃들을 하나씩 show 가능.
+	private static 회원가입 회원가입;
+	private static 로그인 로그인;
+	private CardLayout 장면; // 카드 레이아웃은 add한 레이아웃들을 하나씩 show 가능.
 	private static JPanel 메인화면;
-//	private 전적확인 scorecheck;
-	private String[] scores;
-	private String yourname;
 	private static 방목록화면 방목록화면;
-	String 응답;
 
 	static Socket socket;
 	Connection conn;
 	PreparedStatement ptst;
-	
+
+	String 응답;
 	야추Frame() {
 		super("yacht!");
 		// 기본 설정.
 		setSize(720, 700);
 		setLocation(400, 50); // 화면 가운데 조정
-
 		setDefaultCloseOperation(3);// 닫기 누르면 종료.
-
 		// =================================================================================================
 		try {
 			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
@@ -62,38 +58,35 @@ public class 야추Frame extends JFrame implements ActionListener {
 			e1.printStackTrace();
 		}
 		// =================================================================================================
-//		System.out.println("socket 다음");
 		장면 = new CardLayout();
 		메인화면 = new JPanel(장면);
-		
 		메뉴 = new 메뉴();
-		
+
 		메뉴.get게임시작().addActionListener(this);
 		메뉴.get회원가입().addActionListener(this);
 		메뉴.get바로시작().addActionListener(this);
 		메뉴.get방목록보기().addActionListener(this);
-		메인화면.add(메뉴, "메뉴");
-		
+		get메인화면().add(메뉴, "메뉴");
+
 		회원가입 = new 회원가입();
 		회원가입.get가입().addActionListener(this);
 		회원가입.get취소().addActionListener(this);
-		메인화면.add(회원가입, "회원가입");
-		
+		get메인화면().add(회원가입, "회원가입");
+
 		로그인 = new 로그인();
 		로그인.getStartButton().addActionListener(this);
 		로그인.getBackButton().addActionListener(this);
-		메인화면.add(로그인, "로그인");
-		
-		게임화면 = new 게임화면(null);
-		메인화면.add(게임화면, "게임화면");
+		get메인화면().add(로그인, "로그인");
+
+		게임화면 = new 게임화면();
+		get메인화면().add(게임화면, "게임화면");
 
 		방목록화면 = new 방목록화면();
-		메인화면.add(방목록화면, "대기화면");
+		get메인화면().add(방목록화면, "방목록화면");
 
-		장면.show(메인화면, "메뉴");
-		
-		
-		add(메인화면);
+		장면.show(get메인화면(), "메뉴");
+
+		add(get메인화면());
 		setVisible(true);
 	}
 
@@ -101,102 +94,78 @@ public class 야추Frame extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		System.out.println(e.getActionCommand());
-		switch(e.getActionCommand()) {
-		case "게임시작" :
-			장면.show(메인화면, "로그인");
-			
+		switch (e.getActionCommand()) {
+		case "게임시작":
+			장면.show(get메인화면(), "로그인");
 			break;
-			
-		case "회원가입" :
-			장면.show(메인화면, "회원가입");
+
+		case "회원가입":
+			장면.show(get메인화면(), "회원가입");
 			break;
-			
-//		case "초기화" :
-//			System.out.println("초기화눌림?");
-//			기록조회();
-//			break;
-			
+
 		case "가입":
 			회원가입();
 			break;
-			
-		case "취소" :
-		case "뒤로" :
-			장면.show(메인화면, "메뉴");
+
+		case "취소":
+		case "뒤로":
+			장면.show(get메인화면(), "메뉴");
 			break;
-			
+
 		case "시작":
-			로그인();
+//			로그인();
 			break;
 
 		// 테스팅용들
 		case "바로시작":
 
-			장면.show(메인화면, "게임화면");
+			장면.show(get메인화면(), "게임화면");
 			break;
 		case "방목록보기":
 
-			장면.show(메인화면, "대기화면");
+			장면.show(get메인화면(), "방목록화면");
 			break;
 		}
-	}
-	
-	// 방에 들어갔을 때 추가해야함..!!!!
-//	게임화면 = new 게임화면();
-//	메인카드.add(게임화면, "게임판");
-	public static void 메뉴로() {
-//		System.out.println("메인으로 가라고!");
-		장면.show(메인화면, "메뉴");
-	}
-
-	public static void 대기화면으로() {
-		// 대기화면 세팅.
-		장면.show(메인화면, "대기화면");
-	}
-
-	public static void 게임화면으로(유저 만든사람) {
-		// 게임화면 세팅.
-		// 방목록에서 가져와 추가하고 거기로 이동시켜야함.
-		장면.show(메인화면, "게임화면");
 	}
 
 	String loginstatus = null;
 	private void 로그인() {
-		if(!로그인.getIdTextField().getText().equals("")) {
-			if(!로그인.getPasswdTextField().getText().equals("")) {
+		if (!로그인.getIdTextField().getText().equals("")) {
+			if (!로그인.getPasswdTextField().getText().equals("")) {
 				System.out.println("야추Frame > 로그인() > ");
 				Thread loginthread = new Thread(new Runnable() {
-					
+
 					public void run() {
 						// TODO Auto-generated method stub
 						BufferedReader in;
 						// 2.소켓을 이용하여 서버에 데이터를 보낸다.
 						OutputStream os;
-						
+
 						try {
 							os = socket.getOutputStream();
 							OutputStreamWriter ost = new OutputStreamWriter(os);
 							PrintWriter pw = new PrintWriter(ost, true);
 							유저 로그인유저 = new 유저(socket);
-							pw.println("로그인/"+로그인.getIdTextField().getText()+"/"+로그인.getPasswdTextField().getText());
+							pw.println(
+									"로그인/" + 로그인.getIdTextField().getText() + "/" + 로그인.getPasswdTextField().getText());
 							System.out.println("서버로 로그인 데이터 보냄.");
 							in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-							while((loginstatus=in.readLine()) == null) {
-								
+							while ((loginstatus = in.readLine()) == null) {
+
 							}
 							System.out.println("loginstatus : " + loginstatus);
 							if (loginstatus.equals("로그인성공")) {
 								try {
 //											Socket socket = new Socket(InetAddress.getLocalHost().getHostAddress(),320);
-									BufferedReader in1 = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+									BufferedReader in1 = new BufferedReader(
+											new InputStreamReader(socket.getInputStream()));
 									os = socket.getOutputStream();
 									ost = new OutputStreamWriter(os);
-									pw = new PrintWriter(ost,true);
+									pw = new PrintWriter(ost, true);
 									pw.println(로그인.getIdTextField().getText());
-									
+
 //
 //									System.out.println("메인카드, \"대기화면\"할 차롄데...");
-
 
 									장면.show(메인화면, "대기화면");
 									System.out.println("로그인성공");
@@ -224,15 +193,14 @@ public class 야추Frame extends JFrame implements ActionListener {
 //										}
 //									});
 //									thread.start();
-									
-								
+
 								} catch (IOException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
 								}
 //										yourname=br.readLine();
 //										socket.close();
-							}else {
+							} else {
 								System.out.println("로그인실패");
 								JOptionPane.showMessageDialog(야추Frame.this, "아이디/비밀번호를 확인하세요.");
 							}
@@ -243,28 +211,32 @@ public class 야추Frame extends JFrame implements ActionListener {
 					}
 				});
 				loginthread.start();
-			}else {
+			} else {
 				JOptionPane.showMessageDialog(null, "비밀번호를 입력하세요.");
 			}
-		}else {
+		} else {
 			JOptionPane.showMessageDialog(null, "아이디를 입력하세요.");
 		}
 	}// end of 로그인 Method
 
-	private void 회원가입() {
+	public void 회원가입() {
+
+		야추_클라.회원가입 회원가입 = 야추Frame.get회원가입();
 		if (!회원가입.get아이디받기().getText().equals("")) {
 			if (!회원가입.get비밀번호받기().getText().equals("")) {
 				if (!회원가입.get이름받기().getText().equals("")) {
 					try {
-						OutputStream os = socket.getOutputStream();
+						OutputStream os = 야추Frame.getSocket().getOutputStream();
 						OutputStreamWriter ost = new OutputStreamWriter(os);
 						PrintWriter pw = new PrintWriter(ost, true);
 						String 아이디 = 회원가입.get아이디받기().getText();
 						String 비밀번호 = 회원가입.get비밀번호받기().getText();
 						String 이름 = 회원가입.get이름받기().getText();
+//						System.out.println(pw);
 						pw.println("회원가입/" + 아이디 + "/" + 비밀번호 + "/" + 이름);
 						System.out.println("회원가입 pw.println 밑.");
-						BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+						BufferedReader in = new BufferedReader(
+								new InputStreamReader(야추Frame.getSocket().getInputStream()));
 						Thread thread = new Thread(new Runnable() {
 
 							@Override
@@ -321,11 +293,93 @@ public class 야추Frame extends JFrame implements ActionListener {
 		}
 	}// end of 회원가입 Method
 
+	static void 방만들기() {
+		System.out.print("방만들기 > ");
+//		목록보여주기();
+		try {
+//			for (유저 유저 : 게임서버.유저목록) {
+//				if(유저.get아이디() == ) {
+//					
+//				}
+//			}
+			Socket socket = 야추Frame.getSocket();
+			OutputStream os = socket.getOutputStream();
+			OutputStreamWriter ost = new OutputStreamWriter(os);
+			PrintWriter pw = new PrintWriter(ost, true);
+
+			System.out.print("서버로 요청 : ");
+			pw.println("방만들기/" + socket.getLocalPort());
+			System.out.println("방만들기/" + socket.getLocalPort());
+			BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			Thread thread = new Thread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					String 응답 = "";
+					try {
+
+						while ((응답 = in.readLine()) == null) {
+
+						}
+						JOptionPane.showMessageDialog(null, 응답);
+						System.out.println("응답 : " + 응답);
+						/*
+						 * 응답 값으로 유저 만들어주고, 방 생성 되도록 해야함.
+						 * 
+						 */
+
+						if (응답.equals("방만들기 성공.")) {
+							게임화면 새방 = new 게임화면(만든사람);
+							방목록.add(새방);
+//							야추Frame.게임화면으로(만든사람);
+						}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
+			thread.start();
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	}
+
+	// 방에 들어갔을 때 추가해야함..!!!!
+//	게임화면 = new 게임화면();
+//	메인카드.add(게임화면, "게임판");
+	public void 메뉴로() {
+//		System.out.println("메인으로 가라고!");
+		장면.show(get메인화면(), "메뉴");
+	}
+
+	public void 방목록으로() {
+		// 방목록화면 세팅.
+		장면.show(get메인화면(), "방목록화면");
+	}
+
+	public void 게임화면으로(유저 만든사람) {
+		// 게임화면 세팅.
+		// 방목록에서 가져와 추가하고 거기로 이동시켜야함.
+		장면.show(get메인화면(), "게임화면");
+	}
+
 	public static 게임화면 get게임화면() {
 		return 게임화면;
 	}
 
+	public static 회원가입 get회원가입() {
+		return 회원가입;
+	}
+
 	public static Socket getSocket() {
 		return socket;
+	}
+
+	public static JPanel get메인화면() {
+		return 메인화면;
 	}
 }
