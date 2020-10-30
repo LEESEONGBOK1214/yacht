@@ -6,7 +6,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class 게임서버 {
-	static ArrayList<유저> userList = new ArrayList<유저>();
+	static ArrayList<유저> 유저목록 = new ArrayList<유저>();
 
 	public static void main(String[] args) {
 		try {
@@ -16,7 +16,7 @@ public class 게임서버 {
 			Socket socket = null;
 			while ((socket = serverSocket.accept()) != null) {
 				boolean flag = true;
-				for (유저 value : userList) {
+				for (유저 value : 유저목록) {
 					if (socket.getPort() == value.getSocket().getPort()) {
 						// 같은 유저가 있으면... 안되니까.
 						flag = false;
@@ -28,7 +28,7 @@ public class 게임서버 {
 				if (flag) {
 					유저 client = new 유저(socket);
 					client.start();
-					userList.add(client);
+					유저목록.add(client);
 				}
 
 			}
