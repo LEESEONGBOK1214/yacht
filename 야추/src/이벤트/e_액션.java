@@ -1,4 +1,4 @@
-package 화면;
+package 이벤트;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -7,7 +7,7 @@ import javax.swing.JButton;
 
 import 야추게임.야추Frame;
 
-public class 이벤트_액션 implements ActionListener {
+public class e_액션 implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {

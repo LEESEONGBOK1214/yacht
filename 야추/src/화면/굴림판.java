@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import 야추게임.야추Frame;
+import 이벤트.e_마우스;
+import 이벤트.e_액션;
 
 public class 굴림판 extends JPanel {
 	주사위판 주사위판;
@@ -36,7 +38,7 @@ public class 굴림판 extends JPanel {
 		점수화면전환 = new JButton("<html>점수<br>화면</html>");
 		점수화면전환.setName("점수화면으로");
 
-		점수화면전환.addMouseListener(new 이벤트_마우스());
+		점수화면전환.addMouseListener(new e_마우스());
 		점수화면전환.setBounds(20, 250, 50, 100);
 
 		add(주사위판);
@@ -60,7 +62,7 @@ public class 굴림판 extends JPanel {
 		굴림버튼.setBounds(300, 500, 100, 50);
 		굴림버튼.setBackground(Color.white);
 		굴림버튼.setOpaque(false);
-		굴림버튼.addActionListener(new 이벤트_액션());
+		굴림버튼.addActionListener(new e_액션());
 	}
 
 	void 주사위세팅() {
@@ -77,7 +79,7 @@ public class 굴림판 extends JPanel {
 		}
 	}
 
-	void 굴리기() {
+	public void 굴리기() {
 		게임화면.턴++;
 		for (int i = 0; i < 주사위들.length; i++) {
 			if (!주사위들[i].저장중) { // 저장중이 아니면,
@@ -90,17 +92,17 @@ public class 굴림판 extends JPanel {
 		주사위판.repaint();
 
 		if (게임화면.턴 == 3) {
-			턴종료();
+//			턴종료();
 		}
 	}
 
-	public void 턴종료() {
-		게임화면 턴종료화면 = 야추Frame.get게임화면();
-//		턴종료화면.차례 = false;
-		턴종료화면.턴 = 0;
-		턴종료화면.get점수판().돌아가기.setVisible(false);
-		턴종료화면.점수판으로();
-	}
+//	public void 턴종료() {
+//		게임화면 턴종료화면 = 야추Frame.get게임화면();
+////		턴종료화면.차례 = false;
+//		턴종료화면.턴 = 0;
+//		턴종료화면.get점수판().돌아가기.setVisible(false);
+//		턴종료화면.점수판으로();
+//	}
 
 	public void 선택됨() {
 		// TODO Auto-generated method stub

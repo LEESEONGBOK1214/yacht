@@ -7,6 +7,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import 야추게임.야추Frame;
+import 이벤트.e_마우스;
+import 이벤트.e_액션;
 
 public class 점수판 extends JPanel {
 	JLabel 목록[] = new JLabel[12];
@@ -36,7 +38,7 @@ public class 점수판 extends JPanel {
 				선택[j].setBackground(Color.white);
 				선택[j].setFocusPainted(false);
 				선택[j].setBounds(120 + 300 * i, 70 * (j % 6) + 50, 100, 50);
-				선택[j].addActionListener(new 이벤트_액션());
+				선택[j].addActionListener(new e_액션());
 				add(목록[j]);
 				add(선택[j]);
 			}
@@ -48,7 +50,7 @@ public class 점수판 extends JPanel {
 		돌아가기 = new JButton("돌아가기");
 		돌아가기.setName("굴림판으로");
 		돌아가기.setBounds(300, 600, 100, 50);
-		돌아가기.addMouseListener(new 이벤트_마우스());
+		돌아가기.addMouseListener(new e_마우스());
 		add(돌아가기);
 	}
 	

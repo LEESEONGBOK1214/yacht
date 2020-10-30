@@ -9,10 +9,12 @@ import java.util.ArrayList;
 
 import DB.OracleDB;
 import 화면.게임화면;
+import 화면.방목록화면;
 
 public class 유저 extends Thread {
-	게임화면 room = null; // 유저가 속한 룸이다.
+	방 room = null; // 유저가 속한 룸이다.
 	private Socket socket;
+	private int port;
 	private String 아이디;
 	private String 비밀번호;
 	private String 이름;
@@ -34,7 +36,7 @@ public class 유저 extends Thread {
 
 		boolean 결과 = DB.회원가입(id, pw, name);
 		if (결과) {
-			outprint("회원가입이 완료되었습니다.");
+			outprint(this.port + "회원가입이 완료되었습니다.");
 		} else {
 			outprint("아이디가 중복됩니다.");
 		}
@@ -44,8 +46,8 @@ public class 유저 extends Thread {
 		// TODO Auto-generated method stub
 		System.out.print("in 로그인 >");
 		OracleDB DB = new OracleDB();
-		String id = split[1];
-		String pw = split[2];
+		String id = split[2];
+		String pw = split[3];
 		System.out.println("split.length : " + split.length);
 
 		boolean 결과 = DB.로그인(id, pw);
@@ -65,12 +67,29 @@ public class 유저 extends Thread {
 		
 		ArrayList<유저> 유저목록 = 게임서버.유저목록;
 		for (유저 유저 : 유저목록) {
-			
+			if(this.port == 유저.port) {
+				유저목록.remove(this);
+				break;
+			}
 		}
+		
+		outprint(getSocket().getPort() + "로그아웃성공");
+		
 	}
 	private void 방만들기(String[] split) {
 		System.out.println("in 방만들기 >");
 		System.out.println("split.length : " + split.length);
+		
+		System.out.println("응답 in > ");
+		
+		this.room = 방목록화면.방생성(this);
+		if(this.room != null) {
+			outprint(getSocket().getPort() + "방생성성공");
+		}else {
+			outprint(getSocket().getPort() + "방생성실패");
+		}
+		System.out.println("응답 end");
+		
 		if (this.room != null)
 			return;
 //		this.room = 방관리.방생성(this);
@@ -79,7 +98,7 @@ public class 유저 extends Thread {
 	public void process(String inline) {
 		System.out.print("서버 > process > ");
 		String split[] = inline.split("/"); // '/' 단위로 끊겠다.
-		switch (split[0]) {
+		switch (split[1]) {
 		case "회원가입":
 			회원가입(split);
 			break;
@@ -87,12 +106,13 @@ public class 유저 extends Thread {
 			로그인(split);
 			break;
 		case "방만들기":
-//			방만들기(split);
+			방만들기(split);
 			break;
 		case "로그아웃":
 			로그아웃(split);
 			break;
 		}
+		System.out.println();
 	}
 
 
@@ -104,6 +124,7 @@ public class 유저 extends Thread {
 				while ((text = tmpbuffer.readLine()) != null) {
 					System.out.println("서버로 들어온 값 : " + text);
 					System.out.println("서버 접속된 포트 값 : " + getSocket().getPort());
+					this.port = getSocket().getPort();
 					process(text);
 				} // end of while 2
 				text = null;
@@ -132,7 +153,7 @@ public class 유저 extends Thread {
 		this.socket = socket;
 	}
 
-	public void 방입장(게임화면 _room) {
+	public void 방입장(방 _room) {
 //		_room.방입장(this); // 룸에 입장시킨 후
 		this.room = _room; // 유저가 속한 방을 룸으로 변경한다.(중요)
 	}

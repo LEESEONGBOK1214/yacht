@@ -7,7 +7,6 @@ import java.io.IOException;
 
 import javax.swing.JPanel;
 
-import 야추_서버.방목록화면;
 import 야추_서버.유저;
 
 public class 게임화면 extends JPanel implements MouseListener {
@@ -18,10 +17,10 @@ public class 게임화면 extends JPanel implements MouseListener {
 	public static int 턴 = 0;
 
 	static CardLayout 장면;
-	static 유저 턴유저;
+//	static 유저 턴유저;
 
-	private 유저 유저A; // 방장
-	private 유저 유저B; // 방장
+	private 유저[] 유저목록; // 방장
+	
 	private String 방제목; // 방 이름
 
 	public 게임화면() {
@@ -32,7 +31,8 @@ public class 게임화면 extends JPanel implements MouseListener {
 
 		// 객체 초기화
 
-//		set유저A(방장);
+		유저목록 = new 유저[2];
+		
 
 //		유저세팅(new Random().nextBoolean());
 
@@ -89,48 +89,48 @@ public class 게임화면 extends JPanel implements MouseListener {
 	}
 
 	private void 유저세팅(boolean b) {
-		System.out.println("b : " + b);
-		get유저A().set차례(b);
-		get유저B().set차례(!b);
+//		System.out.println("b : " + b);
+//		get유저A().set차례(b);
+//		get유저B().set차례(!b);
 
-		if (get유저A().is차례()) {
-			턴유저 = get유저A();
-		} else {
-			턴유저 = get유저B();
-		}
+//		if (get유저A().is차례()) {
+//			턴유저 = get유저A();
+//		} else {
+//			턴유저 = get유저B();
+//		}
 	}
 
-	public void 방입장(유저 _user) {
-		유저B = _user;
-	}
+//	public void 방입장(유저 _user) {
+//		유저B = _user;
+//	}
 
 	public void 방나가기(유저 _user) {
-		if (_user == get유저A()) {
-			// 유저A가 나가면,
-			set유저A(유저B);
-			set유저B(null);
-		} else {
-			// 유저B가 나가면,
-			set유저B(null);
-		}
-
-		if (get유저A() == null && get유저B() == null) {
-			방목록화면.방삭제(this);
-			return;
-		}
+//		if (_user == get유저A()) {
+//			// 유저A가 나가면,
+//			set유저A(유저B);
+//			set유저B(null);
+//		} else {
+//			// 유저B가 나가면,
+//			set유저B(null);
+//		}
+//
+//		if (get유저A() == null && get유저B() == null) {
+//			방목록화면.방삭제(this);
+//			return;
+//		}
 
 	}
 
 	public void Broadcast(byte[] data) {
 		// 각 유저에게 데이터를 전송하는 메서드 호출~
 		// ex) user.SendData(data);
-		try {
-			유저A.getSocket().getOutputStream().write(data);
-			// 이런식으로 바이트배열을 보낸다. //
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			유저A.getSocket().getOutputStream().write(data);
+//			// 이런식으로 바이트배열을 보낸다. //
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 	}
 
@@ -156,14 +156,18 @@ public class 게임화면 extends JPanel implements MouseListener {
 	// get set --------------------------------------------------------------
 
 
-	public void set유저A(유저 _user) {
-		this.유저A = _user; // 특정 사용자를 방장으로 변경한다.
-	}
+//	public void set유저A(유저 _user) {
+//		this.유저A = _user; // 특정 사용자를 방장으로 변경한다.
+//	}
+//
+//	public void set유저B(유저 _user) {
+//		this.유저B = _user; // 특정 사용자를 방장으로 변경한다.
+//	}
 
-	public void set유저B(유저 _user) {
-		this.유저B = _user; // 특정 사용자를 방장으로 변경한다.
-	}
-
+//	public void 유저추가(유저 신규유저) {
+//		유저
+//	}
+	
 	public void set방제목(String _name) {
 		this.방제목 = _name;
 	}
@@ -172,13 +176,13 @@ public class 게임화면 extends JPanel implements MouseListener {
 		return 방제목;
 	}
 
-	public 유저 get유저A() {
-		return 유저A;
-	}
-
-	public 유저 get유저B() {
-		return 유저B;
-	}
+//	public 유저 get유저A() {
+//		return 유저A;
+//	}
+//
+//	public 유저 get유저B() {
+//		return 유저B;
+//	}
 
 	public 점수판 get점수판() {
 		return 점수판;

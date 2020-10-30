@@ -1,4 +1,4 @@
-package 야추_서버;
+package 화면;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import 화면.게임화면;
+import 야추_서버.방;
+import 야추_서버.유저;
+
 
 public class 방목록화면 extends JPanel {
 	// 1. GameRoom List 가져와서 뿌려주기.
@@ -15,7 +17,7 @@ public class 방목록화면 extends JPanel {
 
 	private JPanel 방목록패널;
 	private JPanel 버튼목록;
-	private static ArrayList<게임화면> 방목록 = new ArrayList<게임화면>(); // 방의 리스트방목록
+	private static ArrayList<방> 방목록 = new ArrayList<방>(); // 방의 리스트방목록
 	private JButton 방만들기;
 	private JButton 새로고침;
 	private JButton 들어가기;
@@ -57,20 +59,20 @@ public class 방목록화면 extends JPanel {
 		방목록패널.removeAll(); // 요소 전부 삭제해고 새로 쓰기.
 	}
 
-	public static 게임화면 방생성(유저 _owner) {
+	public static 방 방생성(유저 _owner) {
 		// 유저가 방을 생성할 때 사용(유저가 방장으로 들어감)
-		게임화면 room = new 게임화면();
+		방 room = new 방();
 		방목록.add(room);
 		System.out.println("Room Created!");
 		return room;
 	}
 
-	public static void 방삭제(게임화면 게임화면) {
+	public static void 방삭제(방 게임화면) {
 		방목록.remove(게임화면); // 전달받은 룸을 제거한다.
 		System.out.println("Room Deleted!");
 	}
 
-	public static ArrayList<게임화면> getroomList() {
+	public static ArrayList<방> getroomList() {
 		return 방목록;
 	}
 
@@ -93,4 +95,5 @@ public class 방목록화면 extends JPanel {
 	public JButton get로그아웃() {
 		return 로그아웃;
 	}
+
 }

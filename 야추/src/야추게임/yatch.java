@@ -7,7 +7,7 @@ package 야추게임;
  * 
  */
 
-public class yacht {
+public class yatch {
 
 
 	public static void main(String[] args) {
