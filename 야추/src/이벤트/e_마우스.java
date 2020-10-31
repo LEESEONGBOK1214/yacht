@@ -5,7 +5,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 
-import 야추게임.야추Frame;
+import 야추메인.야추Frame;
 
 public class e_마우스 implements MouseListener {
 

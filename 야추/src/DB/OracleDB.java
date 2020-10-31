@@ -54,24 +54,68 @@ public class OracleDB {
 			e.printStackTrace();
 			System.out.println("오류 : " + e.getCause());
 		}
+
+		try {
+			rs.close();
+			pstm.close();
+			conn.close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 		return false;
 
 	}
 
-	public boolean 로그인(String id, String pw) {
+	public String 로그인(String id, String pw) {
 		// TODO Auto-generated method stub
 		if (checkId(id)) {
 			if (checkPw(pw)) {
 				System.out.println("들어온 유저가 맞음.");
-				return true;
+				Connection conn = null;
+				try {
+					conn = DBconn.getConnection();
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				PreparedStatement pstm = null;
+				ResultSet rs = null;
+				sql = "select user_name from yat_user where user_id = ?";
+				try {
+					pstm = conn.prepareStatement(sql);
+					pstm.setString(1, id);
+					rs = pstm.executeQuery();
+					if (rs.next()) {
+						return rs.getString(1);
+					} else {
+						return null;
+					}
+
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					System.out.println("오류 : " + e.getCause());
+				}
+
+				try {
+					rs.close();
+					pstm.close();
+					conn.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return null;
 
 			} else {
 				System.out.println("비밀번호 틀림!");
 			}
-			return false;
+			return null;
 		} else {
 			System.out.println("아이디 없음!");
-			return false;
+			return null;
 		}
 	}
 
@@ -160,20 +204,11 @@ public class OracleDB {
 		}
 		return 반환값;
 	}// end of method
-	
-	
+
 	/*
-	 void 메서드명(){
-	 	Connection conn = null;
-		try {
-			conn = DBconn.getConnection();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		PreparedStatement pstm = null;
-		ResultSet rs = null;
-		String sql="";
-	 }
+	 * void 메서드명(){ Connection conn = null; try { conn = DBconn.getConnection(); }
+	 * catch (Exception e1) { // TODO Auto-generated catch block
+	 * e1.printStackTrace(); } PreparedStatement pstm = null; ResultSet rs = null;
+	 * String sql=""; }
 	 */
 }

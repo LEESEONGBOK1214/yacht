@@ -7,7 +7,7 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import 야추게임.야추Frame;
+import 야추메인.야추Frame;
 
 public class 주사위 extends JLabel implements MouseListener {
 	int x, y;

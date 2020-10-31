@@ -6,14 +6,15 @@ import java.net.Socket;
 import java.util.ArrayList;
 
 public class 게임서버 {
-	static ArrayList<유저> 유저목록 = new ArrayList<유저>();
-
+	private static ArrayList<유저> 유저목록;
+	
 	public static void main(String[] args) {
 		try {
 			ServerSocket serverSocket = new ServerSocket(8888);
 			System.out.println("서버가 시작됐습니다.");
 			System.out.println("서버의 포트는 " + serverSocket.getLocalPort());
 			Socket socket = null;
+			유저목록 = new ArrayList<유저>();
 			while ((socket = serverSocket.accept()) != null) {
 				boolean flag = true;
 				for (유저 value : 유저목록) {
@@ -28,13 +29,17 @@ public class 게임서버 {
 				if (flag) {
 					유저 client = new 유저(socket);
 					client.start();
-					유저목록.add(client);
+//					유저목록.add(client);
 				}
-
+//				System.out.println("게임서버 > 유저목록.size() : " + 유저목록.size());
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static ArrayList<유저> get유저목록(){
+		return 유저목록;
 	}
 
 }

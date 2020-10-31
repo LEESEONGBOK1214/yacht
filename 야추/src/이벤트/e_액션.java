@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 
-import 야추게임.야추Frame;
+import 야추메인.야추Frame;
 
 public class e_액션 implements ActionListener {
 

@@ -6,12 +6,12 @@ import java.awt.Font;
 import javax.swing.JButton;
 
 public class 메뉴 extends 배경화면 {
-private JButton 게임시작,회원가입;
+private JButton 로그인,회원가입;
 private JButton 바로시작;
 private JButton 방목록보기;
 	
-	public JButton get게임시작() {
-		return 게임시작;
+	public JButton get로그인() {
+		return 로그인;
 	}
 	public JButton get회원가입() {
 		return 회원가입;
@@ -29,14 +29,14 @@ private JButton 방목록보기;
 		Font 메뉴폰트 = new Font(null,0,40);
 		
 		
-		게임시작 = new JButton("게임시작");
-		게임시작.setBackground(Color.white);
-		게임시작.setOpaque(false);
-		게임시작.setBorderPainted(false);
-		게임시작.setFocusPainted(false);
-		게임시작.setFont(메뉴폰트);
-		게임시작.setBounds(100, 250, 250, 100);
-		add(게임시작);
+		로그인 = new JButton("로그인");
+		로그인.setBackground(Color.white);
+		로그인.setOpaque(false);
+		로그인.setBorderPainted(false);
+		로그인.setFocusPainted(false);
+		로그인.setFont(메뉴폰트);
+		로그인.setBounds(100, 250, 250, 100);
+		add(로그인);
 
 		회원가입 = new JButton("회원가입");
 		회원가입.setBackground(Color.white);

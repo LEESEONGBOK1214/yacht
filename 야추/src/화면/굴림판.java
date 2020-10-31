@@ -7,7 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import 야추게임.야추Frame;
+import 야추메인.야추Frame;
 import 이벤트.e_마우스;
 import 이벤트.e_액션;
 
