@@ -1,4 +1,4 @@
-package 이벤트;
+package 인게임이벤트;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;

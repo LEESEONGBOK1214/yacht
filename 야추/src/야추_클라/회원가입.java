@@ -18,15 +18,15 @@ public class 회원가입 extends JPanel// extends 가입배경
 	private static JPasswordField 비밀번호받기;
 	private JButton 가입,취소;
 	
-	public JTextField get아이디받기() {
+	public static JTextField get아이디받기() {
 		return 아이디받기;
 	}
 
-	public JTextField get비밀번호받기() {
+	public static JTextField get비밀번호받기() {
 		return 비밀번호받기;
 	}
 
-	public JTextField get이름받기() {
+	public static JTextField get이름받기() {
 		return 이름받기;
 	}
 

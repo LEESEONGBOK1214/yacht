@@ -8,8 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import 야추메인.야추Frame;
-import 이벤트.e_마우스;
-import 이벤트.e_액션;
+import 인게임이벤트.e_마우스;
+import 인게임이벤트.e_액션;
 
 public class 굴림판 extends JPanel {
 	주사위판 주사위판;

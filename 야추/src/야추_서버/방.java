@@ -3,13 +3,17 @@ package 具眠_辑滚;
 import java.util.ArrayList;
 
 public class 规 {
+	String 力格;
+	
+
 	ArrayList<蜡历> 蜡历甸;
 	boolean 矫累;
 	
-	public 规(蜡历 _owner) {
+	public 规(蜡历 _owner, String title) {
 		蜡历甸 = new ArrayList<蜡历>();
 		蜡历甸.add(_owner);
-		矫累 = false;
+		this.力格 = title;
+		this.矫累 = false;
 	}
 	
 	public String 涝厘(蜡历 蜡历) {
@@ -21,7 +25,6 @@ public class 规 {
 		}
 		
 	}
-	
 	
 	// get set
 	public String get规厘捞抚() {
@@ -40,4 +43,11 @@ public class 规 {
 		this.矫累 = 蔼;
 	}
 
+	public String get力格() {
+		return 力格;
+	}
+
+	public void set力格(String 力格) {
+		this.力格 = 力格;
+	}
 }

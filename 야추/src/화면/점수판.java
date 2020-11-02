@@ -7,8 +7,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import 야추메인.야추Frame;
-import 이벤트.e_마우스;
-import 이벤트.e_액션;
+import 인게임이벤트.e_마우스;
+import 인게임이벤트.e_액션;
 
 public class 점수판 extends JPanel {
 	JLabel 목록[] = new JLabel[12];

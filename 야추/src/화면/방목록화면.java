@@ -1,12 +1,14 @@
 package 화면;
 
 import java.awt.Color;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import DB.OracleDB;
 import 야추_서버.방;
 import 야추_서버.유저;
 
@@ -54,10 +56,10 @@ public class 방목록화면 extends JPanel {
 		add(버튼목록);
 	}
 
-	public void 목록새로고침() {
+	public void 목록새로고침(int ㅁㄴㅇㄹ ) {
 		방목록패널.removeAll(); // 요소 전부 삭제해고 새로 쓰기.
 		
-		System.out.println("방목록.size() : " + 방목록.size());
+//		System.out.println("방목록.size() : " + 방개수());
 		
 		if(방목록.size()==0) {
 			JLabel 라벨 = new JLabel("방이 없습니다.");
@@ -73,17 +75,23 @@ public class 방목록화면 extends JPanel {
 			JLabel 라벨 = new JLabel(room.get방장이름());
 			라벨.setBounds(20, i*50 + 20, 100, 20);
 			방목록패널.add(라벨);
-			repaint();
+			instance.repaint();
 		}
 		
-		setBackground(Color.blue);
+		instance.setBackground(Color.blue);
 	}
 
-	public 방 방생성(유저 _owner) {
+	public 방 방생성(유저 _owner, String title) {
 		// 유저가 방을 생성할 때 사용(유저가 방장으로 들어감)
-		방 room = new 방(_owner);
+		방 room = new 방(_owner, title);
+		try {
+			new OracleDB().방생성(room);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		방목록.add(room);
-		System.out.println("Room Created!");
+		System.out.println("방목록화면 > 방생성!");
 		return room;
 	}
 

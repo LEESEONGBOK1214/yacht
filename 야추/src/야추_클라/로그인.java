@@ -11,16 +11,16 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class 로그인 extends 배경화면{
-	JTextField idTextField;
-	JPasswordField passwdTextField;
+	static JTextField idTextField;
+	static JPasswordField passwdTextField;
 	JButton startButton,backButton;
 	JLabel id,passwd;
 	
-	public JTextField getIdTextField() {
+	public static JTextField getIdTextField() {
 		return idTextField;
 	}
 
-	public JTextField getPasswdTextField() {
+	public static JTextField getPasswdTextField() {
 		return passwdTextField;
 	}
 

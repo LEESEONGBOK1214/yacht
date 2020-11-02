@@ -6,6 +6,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import 야추_서버.방;
+import 야추_서버.유저;
+
 public class OracleDB {
 //	Connection conn;
 //	static PreparedStatement pstm;
@@ -20,7 +23,7 @@ public class OracleDB {
 //		rs = null;
 	}
 
-	public boolean 회원가입(String id, String pw, String name) {
+	public boolean 회원가입(String id, String pw, String name) throws SQLException {
 		Connection conn = null;
 		try {
 			conn = DBconn.getConnection();
@@ -53,22 +56,19 @@ public class OracleDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("오류 : " + e.getCause());
+		}finally{
+			if(rs!=null)rs.close();
+			if(pstm!=null)pstm.close();
+			if(conn!=null)conn.close();
 		}
 
-		try {
-			rs.close();
-			pstm.close();
-			conn.close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
 
 		return false;
 
 	}
 
-	public String 로그인(String id, String pw) {
+	public String 로그인(String id, String pw) throws SQLException {
 		// TODO Auto-generated method stub
 		if (checkId(id)) {
 			if (checkPw(pw)) {
@@ -97,16 +97,13 @@ public class OracleDB {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					System.out.println("오류 : " + e.getCause());
+				}finally{
+					if(rs!=null)rs.close();
+					if(pstm!=null)pstm.close();
+					if(conn!=null)conn.close();
 				}
 
-				try {
-					rs.close();
-					pstm.close();
-					conn.close();
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+		
 				return null;
 
 			} else {
@@ -119,7 +116,7 @@ public class OracleDB {
 		}
 	}
 
-	public boolean checkId(String id) { // 해당 아이디가 있는지 없는지 확인
+	public boolean checkId(String id) throws SQLException { // 해당 아이디가 있는지 없는지 확인
 		Connection conn = null;
 		try {
 			conn = DBconn.getConnection();
@@ -144,12 +141,16 @@ public class OracleDB {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			if(rs!=null)rs.close();
+			if(pstm!=null)pstm.close();
+			if(conn!=null)conn.close();
 		}
 
 		return false;
 	}
 
-	public boolean checkPw(String pw) { // 해당 비밀번호가 있는지 없는지 확인
+	public boolean checkPw(String pw) throws SQLException { // 해당 비밀번호가 있는지 없는지 확인
 		Connection conn = null;
 		try {
 			conn = DBconn.getConnection();
@@ -174,12 +175,17 @@ public class OracleDB {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			if(rs!=null)rs.close();
+			if(pstm!=null)pstm.close();
+			if(conn!=null)conn.close();
 		}
 
 		return false;
 	}
 
-	public ArrayList<String> selectAll() { // 해당 비밀번호가 있는지 없는지 확인
+
+	public void 방생성(방 room) throws SQLException {
 		Connection conn = null;
 		try {
 			conn = DBconn.getConnection();
@@ -189,21 +195,63 @@ public class OracleDB {
 		}
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		String sql = "select * from books";
-		ArrayList<String> 반환값 = new ArrayList<String>();
+		String sql = "insert into yat_room values(?, ?, ?)";
+		// 1: 방장 유저 소켓
+		// 2: 일반 유저 소켓
+		// 3: 방제목
 		try {
 			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, room.get유저들().get(0).getSocket().getPort());
+			pstm.setString(2, room.get방장이름());
+			pstm.setString(3, room.get제목());
+			
 			rs = pstm.executeQuery();
 
-			while (rs.next()) {
-
+			if (rs.next()) {
+				System.out.println("DB > 방생성 > 성공");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}finally{
+			if(rs!=null)rs.close();
+			if(pstm!=null)pstm.close();
+			if(conn!=null)conn.close();
 		}
-		return 반환값;
-	}// end of method
+	}
+
+	public void 방삭제(int port) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		String sql = "delete from yat_room where u1_socket= ?";
+		// 1: 방장 유저 소켓
+		// 2: 일반 유저 소켓
+		// 3: 방제목
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, port);
+			
+			rs = pstm.executeQuery();
+			if (rs.next()) {
+				System.out.println("DB > 방삭제 > 성공");
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			if(rs!=null)rs.close();
+			if(pstm!=null)pstm.close();
+			if(conn!=null)conn.close();
+		}
+		
+	}
 
 	/*
 	 * void 메서드명(){ Connection conn = null; try { conn = DBconn.getConnection(); }
