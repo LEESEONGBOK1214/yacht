@@ -35,6 +35,9 @@ public class 게임서버 {
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
+		}finally {
+			
+			
 		}
 	}
 	

@@ -10,12 +10,14 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import 야추_서버.유저;
 import 야추_클라.로그인;
 import 야추_클라.메뉴;
 import 야추_클라.회원가입;
@@ -114,7 +116,12 @@ public class 야추Frame extends JFrame {
 							continue;
 						}
 						String 응답[] = 서버응답.split("/");
-						if (응답[0].equals("" + socket.getLocalPort())) {
+						if(응답[0].equals("broadCast")) {
+							// 모든 유저에게 전달하는 브로드캐스트 >
+							// 방 생성 삭제 시에 업데이트 시켜야함.
+							방목록새로고침();
+						}
+						else if (응답[0].equals("" + socket.getLocalPort())) {
 							System.out.println("해당 yatch파일에서 요청받음.");
 							// 여기서 switch 문으로 응답값 분배시키기.
 							switch (응답[1]) {
@@ -134,7 +141,7 @@ public class 야추Frame extends JFrame {
 								장면.show(메인화면, "대기화면");
 								break;
 							case "새로고침":
-								새로고침();
+								새로고침눌림();
 								break;
 							}
 						}
@@ -148,11 +155,27 @@ public class 야추Frame extends JFrame {
 					e.printStackTrace();
 				}
 			}
+
+			
 		});
 		방나가기.start();
 	}
 
-	private void 새로고침() {
+	private void 방목록새로고침() {
+		try {
+			ArrayList<String> DB방목록;
+			DB방목록 = new DB.OracleDB().방목록가져오기();
+			Iterator<String> 방목록 = DB방목록.iterator();
+			while(방목록.hasNext()) {
+				방목록.next();
+				// 화면에 그려주기.
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void 새로고침눌림() {
 
 		Thread reflash = new Thread(new Runnable() {
 

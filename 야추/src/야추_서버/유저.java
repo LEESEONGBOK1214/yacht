@@ -116,7 +116,7 @@ public class 유저 extends Thread {
 	}
 
 	private void 새로고침() {
-		System.out.println("서버에서의 방목록.size() : " + get방목록().size() );
+//		System.out.println("서버에서의 방목록.size() : " + get방목록().size() );
 		outprint("/새로고침");
 //		getInstance();
 //		outprint("새로고침" + get방목록().size());
@@ -212,17 +212,39 @@ public class 유저 extends Thread {
 				break;
 			} // end of while 1
 			socket.close();
-			게임서버.get유저목록().remove(this);
 		} catch (IOException e) {
 			e.printStackTrace();
+		}finally {
+			// 여기서 유저 정보 싹다 초기화.
+			종료();
 		}
 
 	}
 
+	private void 종료() {
+		// DB에도 삭제하고 서버에도 삭제해야함.
+		try {
+			new DB.OracleDB().방삭제(port);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		게임서버.get유저목록().remove(this);
+	}
+
+	public void broadCast(String str) {
+		PrintWriter out;
+		try {
+			out = new PrintWriter(getSocket().getOutputStream(), true);
+			out.println("broadCast/"+str);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}		
+	}
+	
 	public void outprint(String str) {
 		try {
 			PrintWriter out = new PrintWriter(getSocket().getOutputStream(), true);
-			System.out.println("서버응답 > ");
+			System.out.print("서버응답 > ");
 			System.out.println(getSocket().getPort() + str);
 			out.println(getSocket().getPort() + str);
 		} catch (IOException e) {

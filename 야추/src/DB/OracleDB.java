@@ -212,7 +212,7 @@ public class OracleDB {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
 		}finally{
 			if(rs!=null)rs.close();
 			if(pstm!=null)pstm.close();
@@ -220,7 +220,7 @@ public class OracleDB {
 		}
 	}
 
-	public void 规昏力(int port) throws SQLException {
+	public boolean 规昏力(int port) throws SQLException {
 		Connection conn = null;
 		try {
 			conn = DBconn.getConnection();
@@ -241,6 +241,7 @@ public class OracleDB {
 			rs = pstm.executeQuery();
 			if (rs.next()) {
 				System.out.println("DB > 规昏力 > 己傍");
+				return true;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -250,7 +251,47 @@ public class OracleDB {
 			if(pstm!=null)pstm.close();
 			if(conn!=null)conn.close();
 		}
+		return false;
+	}
+
+	public ArrayList<String> 规格废啊廉坷扁() throws SQLException {
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		String sql = "select u1_socket, title from yat_room";
+		// 1: 规厘 蜡历 家南
+		// 2: 老馆 蜡历 家南
+		// 3: 规力格
 		
+		ArrayList<String> 规格废  = new ArrayList<String>();
+		try {
+			pstm = conn.prepareStatement(sql);
+			
+			rs = pstm.executeQuery();
+			while(rs.next()) { // 规捞 乐阑锭父 true摆烈? ぞ-ぞ
+				// u1 socket
+				// u2 socket
+				// title
+				String 家南力格 = "";
+				家南力格 += rs.getInt(1);
+				家南力格 += rs.getString(2);
+				规格废.add(家南力格);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			
+			if(rs!=null)rs.close();
+			if(pstm!=null)pstm.close();
+			if(conn!=null)conn.close();
+		}
+		return 规格废;
 	}
 
 	/*

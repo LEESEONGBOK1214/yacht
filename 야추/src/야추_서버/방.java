@@ -4,8 +4,6 @@ import java.util.ArrayList;
 
 public class 방 {
 	String 제목;
-	
-
 	ArrayList<유저> 유저들;
 	boolean 시작;
 	
@@ -15,7 +13,10 @@ public class 방 {
 		this.제목 = title;
 		this.시작 = false;
 	}
-	
+
+	public 방() {
+	}
+
 	public String 입장(유저 유저) {
 		if(유저들.size()<2) {
 			유저들.add(유저);
@@ -25,6 +26,7 @@ public class 방 {
 		}
 		
 	}
+	
 	
 	// get set
 	public String get방장이름() {
