@@ -17,7 +17,7 @@ public class 방목록화면 extends JPanel {
 	// 1. GameRoom List 가져와서 뿌려주기.
 	// 2. 룸 선택시, 입장확인 메세지 보여주기.
 	// 3. 확인 선택시, 게임방 입장.
-	private static 방목록화면 instance = new 방목록화면();
+	
 	private static JPanel 방목록패널;
 	private JPanel 버튼목록;
 	private static ArrayList<방> 방목록 = new ArrayList<방>(); // 방의 리스트방목록
@@ -25,7 +25,7 @@ public class 방목록화면 extends JPanel {
 	private JButton 새로고침;
 	private JButton 들어가기;
 	private JButton 로그아웃;
-	private 방목록화면() {
+	public 방목록화면() {
 		버튼목록 = new JPanel();
 
 		setLayout(null);
@@ -49,39 +49,15 @@ public class 방목록화면 extends JPanel {
 		새로고침.setBounds(363, 0, 150, 50);
 		로그아웃.setBounds(535, 0, 150, 50);
 
-		방목록패널.setBounds(10, 20, 685, 500);
+		방목록패널.setBounds(10, 20, 685, 550);
 		버튼목록.setBounds(0, 600, 700, 200);
 		
 		add(방목록패널);
 		add(버튼목록);
 	}
 
-	public void 목록새로고침(int ㅁㄴㅇㄹ ) {
-		방목록패널.removeAll(); // 요소 전부 삭제해고 새로 쓰기.
-		
-//		System.out.println("방목록.size() : " + 방개수());
-		
-		if(방목록.size()==0) {
-			JLabel 라벨 = new JLabel("방이 없습니다.");
-			라벨.setBounds(200, 200, 100, 20);
-			방목록패널.add(라벨);
-			
-			repaint();
-			return;
-		}
-		
-		int i=0;
-		for(방 room : 방목록 ) {
-			JLabel 라벨 = new JLabel(room.get방장이름());
-			라벨.setBounds(20, i*50 + 20, 100, 20);
-			방목록패널.add(라벨);
-			instance.repaint();
-		}
-		
-		instance.setBackground(Color.blue);
-	}
 
-	public 방 방생성(유저 _owner, String title) {
+	public static 방 방생성(유저 _owner, String title) {
 		// 유저가 방을 생성할 때 사용(유저가 방장으로 들어감)
 		방 room = new 방(_owner, title);
 		try {
@@ -119,8 +95,14 @@ public class 방목록화면 extends JPanel {
 		return 로그아웃;
 	}
 
-	public static 방목록화면 getInstance() {
-		return instance;
+	public static JPanel get방목록패널() {
+		return 방목록패널;
 	}
+
+	public static void set방목록패널(JPanel 방목록패널) {
+		방목록화면.방목록패널 = 방목록패널;
+	}
+
+
 
 }

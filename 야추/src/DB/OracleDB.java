@@ -196,15 +196,15 @@ public class OracleDB {
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
 		String sql = "insert into yat_room values(?, ?, ?)";
-		// 1: 规厘 蜡历 家南
-		// 2: 老馆 蜡历 家南
+		// 1: 规厘 蜡历 器飘 锅龋
+		// 2: 老馆 蜡历 器飘 锅龋
 		// 3: 规力格
 		try {
 			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, room.get蜡历甸().get(0).getSocket().getPort());
-			pstm.setString(2, room.get规厘捞抚());
+			pstm.setInt(2, 0);
 			pstm.setString(3, room.get力格());
-			
+
 			rs = pstm.executeQuery();
 
 			if (rs.next()) {
@@ -212,15 +212,16 @@ public class OracleDB {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
+			e.printStackTrace();
+//			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
 		}finally{
 			if(rs!=null)rs.close();
 			if(pstm!=null)pstm.close();
 			if(conn!=null)conn.close();
 		}
 	}
-
-	public boolean 规昏力(int port) throws SQLException {
+	
+	public boolean 规涝厘(int 规厘port, int 蜡历port) throws SQLException {
 		Connection conn = null;
 		try {
 			conn = DBconn.getConnection();
@@ -230,28 +231,69 @@ public class OracleDB {
 		}
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		String sql = "delete from yat_room where u1_socket= ?";
+		String sql = "update yat_room set u2_port = ? where u1_port = ?";
 		// 1: 规厘 蜡历 家南
 		// 2: 老馆 蜡历 家南
 		// 3: 规力格
 		try {
 			pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, port);
-			
+			pstm.setInt(1, 蜡历port);
+			pstm.setInt(2, 规厘port);
+
 			rs = pstm.executeQuery();
+
 			if (rs.next()) {
-				System.out.println("DB > 规昏力 > 己傍");
+				System.out.println("DB > 规涝厘 > 己傍");
 				return true;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+//			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
 		}finally{
 			if(rs!=null)rs.close();
 			if(pstm!=null)pstm.close();
 			if(conn!=null)conn.close();
 		}
 		return false;
+	}
+
+	public String 规昏力(int port) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		String sql = "delete from yat_room where u1_port= ?";
+		// 1: 规厘 蜡历 家南
+		// 2: 老馆 蜡历 家南
+		// 3: 规力格
+		try {
+			conn.setAutoCommit(false);
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, port);
+			
+			rs = pstm.executeQuery();
+			
+			if (rs.next()) {
+				System.out.println("DB > 规昏力 > 己傍");
+				return "规诀单捞飘";
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			conn.commit();
+			conn.setAutoCommit(true);
+			if(rs!=null)rs.close();
+			if(pstm!=null)pstm.close();
+			if(conn!=null)conn.close();
+		}
+		return "";
 	}
 
 	public ArrayList<String> 规格废啊廉坷扁() throws SQLException {
@@ -264,7 +306,7 @@ public class OracleDB {
 		}
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		String sql = "select u1_socket, title from yat_room";
+		String sql = "select u1_port, title from yat_room";
 		// 1: 规厘 蜡历 家南
 		// 2: 老馆 蜡历 家南
 		// 3: 规力格
@@ -280,7 +322,7 @@ public class OracleDB {
 				// title
 				String 家南力格 = "";
 				家南力格 += rs.getInt(1);
-				家南力格 += rs.getString(2);
+				家南力格 += ("/" + rs.getString(2));
 				规格废.add(家南力格);
 			}
 		} catch (SQLException e) {
@@ -292,6 +334,27 @@ public class OracleDB {
 			if(conn!=null)conn.close();
 		}
 		return 规格废;
+	}
+
+	public void 辑滚辆丰() throws SQLException {
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		String sql = "delete from yat_room";
+		try {
+			pstm = conn.prepareStatement(sql);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}finally{
+			if(rs!=null)rs.close();
+			if(pstm!=null)pstm.close();
+			if(conn!=null)conn.close();
+		}
 	}
 
 	/*

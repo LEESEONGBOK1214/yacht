@@ -20,11 +20,6 @@ public class e_액션 implements ActionListener {
 			System.out.println("JButton 클릭.");
 			switch (명령) {
 			case "굴리기":
-//				if (!야추Frame.get게임화면().차례) {
-//					// 차례 = false면 내 차례 아님.
-//					System.out.println("내 차례 아님.");
-//					return;
-//				}
 				야추Frame.get게임화면().get굴림판().굴리기();
 				return;
 			}

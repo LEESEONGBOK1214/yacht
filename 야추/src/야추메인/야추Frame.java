@@ -1,6 +1,12 @@
 package 야추메인;
 
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -14,9 +20,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 import 야추_클라.로그인;
 import 야추_클라.메뉴;
@@ -26,7 +36,7 @@ import 화면.대기화면;
 import 화면.방목록화면;
 
 @SuppressWarnings("serial")
-public class 야추Frame extends JFrame {
+public class 야추Frame extends JFrame implements ActionListener, WindowListener {
 	private static 게임화면 게임화면;
 
 	private 메뉴 메뉴;
@@ -48,6 +58,7 @@ public class 야추Frame extends JFrame {
 		setSize(720, 700);
 		setLocation(600, 200); // 화면 가운데 조정
 		setDefaultCloseOperation(3);// 닫기 누르면 종료.
+		addWindowListener(this);
 		// =================================================================================================
 		try {
 			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
@@ -82,7 +93,7 @@ public class 야추Frame extends JFrame {
 		게임화면 = new 게임화면();
 		메인화면.add(게임화면, "게임화면");
 
-		방목록창 = 방목록화면.getInstance();
+		방목록창 = new 방목록화면();
 		방목록창.get새로고침().addActionListener(new 버튼이벤트());
 		방목록창.get들어가기().addActionListener(new 버튼이벤트());
 		방목록창.get로그아웃().addActionListener(new 버튼이벤트());
@@ -95,7 +106,7 @@ public class 야추Frame extends JFrame {
 		메인화면.add(대기화면, "대기화면");
 
 		장면.show(get메인화면(), "메뉴");
-
+		setResizable(false);
 		서버값받기();
 		add(get메인화면());
 		setVisible(true);
@@ -110,38 +121,54 @@ public class 야추Frame extends JFrame {
 				System.out.println(socket.getLocalPort());
 				try {
 					in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-					
+
 					while (true) {
-						if((서버응답 = in.readLine()) == null) {
+						while ((서버응답 = in.readLine()) == null) {
+							System.out.println("in while 서버응답 : " + 서버응답);
 							continue;
 						}
+						System.out.println("서버응답 : " + 서버응답);
 						String 응답[] = 서버응답.split("/");
-						if(응답[0].equals("broadCast")) {
+						if (응답[0].equals("broadCast")) {
 							// 모든 유저에게 전달하는 브로드캐스트 >
 							// 방 생성 삭제 시에 업데이트 시켜야함.
-							방목록새로고침();
-						}
-						else if (응답[0].equals("" + socket.getLocalPort())) {
+							if (응답[1] == "")
+								return;
+							switch (응답[1]) {
+							case "방업데이트":
+								방목록새로고침();
+								break;
+							}
+						} else if (응답[0].equals("" + socket.getLocalPort())) {
 							System.out.println("해당 yatch파일에서 요청받음.");
 							// 여기서 switch 문으로 응답값 분배시키기.
 							switch (응답[1]) {
+							case "유저입장":
+								화면.대기화면.getInstance().상대방이름설정(응답[2]);
+								break;
 							case "방나가렴":
 							case "로그인성공":
 								장면.show(메인화면, "방목록화면");
+								방목록새로고침();
 								break;
 							case "로그인실패":
 								JOptionPane.showMessageDialog(야추Frame.this, "아이디/비밀번호를 확인하세요.");
 								break;
 							case "회원가입이 완료되었습니다.":
 								JOptionPane.showMessageDialog(null, "회원 가입 성공!");
-							case "로그아웃성공" :
+							case "로그아웃성공":
 								장면.show(메인화면, "메뉴");
 								break;
 							case "방생성성공":
 								장면.show(메인화면, "대기화면");
 								break;
 							case "새로고침":
-								새로고침눌림();
+								방목록새로고침();
+								break;
+							case "방입장":
+								화면.대기화면.getInstance().get시작하기().setEnabled(false);
+								repaint();
+								장면.show(메인화면, "대기화면");
 								break;
 							}
 						}
@@ -150,13 +177,13 @@ public class 야추Frame extends JFrame {
 					// while true 밖.
 				} catch (IOException e) {
 					e.printStackTrace();
+					System.exit(0);
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					System.exit(0);
 				}
 			}
 
-			
 		});
 		방나가기.start();
 	}
@@ -166,57 +193,60 @@ public class 야추Frame extends JFrame {
 			ArrayList<String> DB방목록;
 			DB방목록 = new DB.OracleDB().방목록가져오기();
 			Iterator<String> 방목록 = DB방목록.iterator();
-			while(방목록.hasNext()) {
-				방목록.next();
-				// 화면에 그려주기.
+			int i = 0;
+
+			방목록화면.get방목록패널().removeAll();
+
+			if (!방목록.hasNext()) {
+				JLabel 방없음 = new JLabel("방이 없습니다.");
+				방없음.setFont(new Font("Serif", Font.BOLD, 40));
+				방없음.setBounds(200, 230, 300, 50);
+//				방없음.setBorder(new LineBorder(Color.pink));
+				방목록화면.get방목록패널().add(방없음);
+				System.out.println("방없음..");
 			}
+			while (방목록.hasNext()) {
+				String 방정보 = 방목록.next();
+
+				System.out.println("방목록 그려주자.");
+				// 화면에 그려주기.
+				JPanel 방패널 = new JPanel(null);
+				방패널.setBounds(12 + (i % 3) * 230, 10 + 35 * ((int) (i / 3)), 200, 30);
+				방패널.setBackground(Color.GREEN);
+				방패널.setBorder(new LineBorder(Color.black));
+//				방패널.setName("방");
+
+				JLabel 방장소켓 = new JLabel(방정보.split("/")[0]);
+				방장소켓.setBounds(0, 0, 50, 30);
+				방장소켓.setBorder(new LineBorder(Color.black));
+
+				JLabel 방제목 = new JLabel(방정보.split("/")[1]);
+				방제목.setBounds(55, 0, 90, 30);
+
+				JButton 입장 = new JButton();
+				입장.setIcon(new ImageIcon(getClass().getResource("/images/입장.png")));
+				입장.setBounds(150, 0, 50, 30);
+				입장.setName(방정보.split("/")[0]); // 방장의 소켓을 넘겨 같은거 찾아 입장시키게 하자.
+				입장.addActionListener(this);
+				// 불가 text면 setEnable false로 하자.
+
+				방패널.add(방장소켓);
+				방패널.add(방제목);
+				방패널.add(입장);
+				방목록화면.get방목록패널().add(방패널);
+				i++;
+			}
+
+			repaint();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	private void 새로고침눌림() {
-
-		Thread reflash = new Thread(new Runnable() {
-
-			public void run() {
-
-				BufferedReader in;
-				// 2.소켓을 이용하여 서버에 데이터를 보낸다.
-
-				try {
-					outprint("새로고침");
-					System.out.println("서버로 로그인 데이터 보냄.");
-					in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-//					while ((응답 = in.readLine()) == null) {
-//
-//					}
-					while (!(응답 = in.readLine()).equals("새로고침끝")) {
-						if (응답.split("/").length > 1)
-							응답 = 응답.split("/")[1]; // 포트번호 다음거 값 가져옴.
-						System.out.println("새로고침 > 응답 : " + 응답);
-
-					}
-//					if (응답.contains("새로고침")) {
-					// 새로고침
-					// while문을 통해 방장이름 송신함.
-					// 방장이름 쓕 나옴.
-
-					// 새로고침끝
-//					}
-				} catch (IOException e1) {
-
-					e1.printStackTrace();
-				}
-			}
-		});
-		reflash.start();
 	}
 
 	// 방에 들어갔을 때 추가해야함..!!!!
 //	게임화면 = new 게임화면();
 //	메인카드.add(게임화면, "게임판");
-	
+
 	protected void outprint(String str) {
 		try {
 			PrintWriter pw = new PrintWriter(getSocket().getOutputStream(), true);
@@ -224,6 +254,13 @@ public class 야추Frame extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		// 입장 버튼 눌렸을 때
+		JButton 버튼 = (JButton) e.getSource();
+		outprint("방입장/" + 버튼.getName());
+
 	}
 
 	// 장면.show
@@ -254,7 +291,7 @@ public class 야추Frame extends JFrame {
 	}
 
 	public Socket getSocket() {
-		return this.socket;
+		return socket;
 	}
 
 	public static JPanel get메인화면() {
@@ -264,4 +301,45 @@ public class 야추Frame extends JFrame {
 	public static CardLayout get장면() {
 		return 장면;
 	}
+
+	@Override
+	public void windowActivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowClosed(WindowEvent arg0) {
+
+	}
+
+	@Override
+	public void windowClosing(WindowEvent arg0) {
+		outprint("창닫음");
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowIconified(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowOpened(WindowEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
 }

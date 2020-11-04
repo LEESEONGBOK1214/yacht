@@ -74,7 +74,9 @@ public class 버튼이벤트 implements ActionListener {
 
 	private void 방만들기() {
 		String title = JOptionPane.showInputDialog("방 제목을 입력해주세요.");
-		outprint("방만들기/" + title);
+		if (title != null) {
+			outprint("방만들기/" + title);
+		}
 	}
 
 	private void 시작() {

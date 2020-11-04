@@ -26,6 +26,9 @@ public class e_마우스 implements MouseListener {
 			야추Frame.get게임화면().굴림판으로();
 			System.out.println("되돌아감 선택");
 			break;
+//		case "방":
+//			
+//			break;
 		}
 	}
 
