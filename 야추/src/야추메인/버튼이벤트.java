@@ -62,7 +62,9 @@ public class 버튼이벤트 implements ActionListener {
 			outprint("방나가기");
 			break;
 		// 테스팅용들
-//		case "게임시작":
+		case "게임시작":
+			outprint("게임시작");
+			break;
 		case "바로시작":
 			장면.show(메인화면, "게임화면");
 			break;

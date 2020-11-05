@@ -4,14 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.net.Socket;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import DB.OracleDB;
-import 야추메인.yatch;
 import 화면.방목록화면;
 
 public class 유저 extends Thread {
@@ -124,7 +123,7 @@ public class 유저 extends Thread {
 	private void 방나가기() {
 		System.out.print("방나가기 > ");
 		System.out.println("방size : " + get방목록().size());
-		
+
 		System.out.println("this.room : " + this.room);
 		Iterator<방> 방목록 = get방목록().iterator();
 		System.out.println("방목록 사이즈 : " + get방목록().size());
@@ -134,7 +133,7 @@ public class 유저 extends Thread {
 //			}
 			방 방 = 방목록.next();
 			System.out.println("======================");
-			for(유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(방)).유저들) {
+			for (유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(방)).유저들) {
 				System.out.println(유저.port);
 			}
 			System.out.println("======================");
@@ -143,7 +142,7 @@ public class 유저 extends Thread {
 			if (방.equals(this.room)) {
 				System.out.println("입장방이랑 같넹!?");
 				System.out.println("인덱스 :" + 방.유저들.indexOf(this));
-				if((방.유저들.indexOf(this) == 0)) {
+				if ((방.유저들.indexOf(this) == 0)) {
 					try {
 						new OracleDB().방삭제(this.port);
 					} catch (SQLException e) {
@@ -152,20 +151,89 @@ public class 유저 extends Thread {
 					}
 					// 같은 방에 있던 유저한테도 보내줘야함..
 					System.out.println("방장이 나감..!");
-					if(방.유저들.size()>1) {
+					if (방.유저들.size() > 1) {
 						System.out.println("같이있던 유저 : " + 방.유저들.get(1).socket.getPort() + "방나가렴");
 						outprint(방.유저들.get(1).socket.getPort(), "방나가렴");
 					}
 					outprint("방나가렴");
 					get방목록().remove(this.room);
 					broadCast("방업데이트");
+					방.유저들.get(1).room = null;
 					return;
-				}
-				else if ((방.유저들.indexOf(this) > 0) ) {
+				} else if ((방.유저들.indexOf(this) > 0)) {
+					outprint("방나가렴");
+					outprint(방.유저들.get(0).socket.getPort(), "상대나감");
 					방.유저들.remove(this);
+					this.room = null;
 					return;
 				}
 			}
+		}
+	}
+
+	public void 방입장(String[] split) {
+//		_room.방입장(this); // 룸에 입장시킨 후
+		Iterator<방> Iter방목록 = 방목록.iterator();
+		while (Iter방목록.hasNext()) {
+			방 in_room = Iter방목록.next();
+			int 방장포트 = Integer.parseInt(split[2]);
+			int 검색포트 = in_room.유저들.get(0).socket.getPort();
+//			System.out.println("현재 검색중인 유저의 포트번호 : " + 검색포트);
+			System.out.println("방장의 포트번호 : " + 방장포트);
+			if (방장포트 == 검색포트) { // split[2]이 방장 소켓이 넘어옴,
+				this.room = in_room; // 유저가 속한 방을 룸으로 변경한다.(중요)
+				방목록화면.get방목록().get(방목록화면.get방목록().indexOf(in_room)).유저들.add(this);
+				System.out.println("======================");
+				for (유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(in_room)).유저들) {
+					System.out.println(유저.port);
+				}
+				System.out.println("======================");
+				outprint("방입장/" + in_room.유저들.get(0).이름);
+				outprint(방장포트, "유저입장/" + this.이름);
+			}
+		}
+
+	}
+
+	private void 게임시작() {
+		// 방목록 훑고 해당 방장이 있는 방 1번 인덱스 유저에게 게임시작 보내줘야함.
+		System.out.println("======================");
+		int 랜덤값 = new Random().nextInt(2);
+		outprint(this.room.유저들.get(1).port, "게임시작함/" + 랜덤값);
+		outprint("게임시작함/" + (랜덤값 + 1) % 2);
+		System.out.println("======================");
+	}
+
+	private void 굴리기(String split[]) {
+		// split[2] = 주사위 순서로 눈금수.
+		if (this.room.유저들.get(0).port == this.port) {
+			outprint(this.room.유저들.get(1).port, "굴림값받음/" + split[2]);
+		} else {
+			outprint(this.room.유저들.get(0).port, "굴림값받음/" + split[2]);
+		}
+	}
+	
+	private void 주사위저장(String[] split) {
+		if (this.room.유저들.get(0).port == this.port) {
+			outprint(this.room.유저들.get(1).port, "주사위저장함/" + split[2]);
+		} else {
+			outprint(this.room.유저들.get(0).port, "주사위저장함/" + split[2]);
+		}
+	}
+	
+	private void 굴림판으로() {
+		if (this.room.유저들.get(0).port == this.port) {
+			outprint(this.room.유저들.get(1).port, "굴림판으로/");
+		} else {
+			outprint(this.room.유저들.get(0).port, "굴림판으로/");
+		}
+	}
+
+	private void 점수판으로() {
+		if (this.room.유저들.get(0).port == this.port) {
+			outprint(this.room.유저들.get(1).port, "점수판으로/");
+		} else {
+			outprint(this.room.유저들.get(0).port, "점수판으로/");
 		}
 	}
 
@@ -197,6 +265,21 @@ public class 유저 extends Thread {
 		case "창닫음":
 			종료();
 			break;
+		case "게임시작":
+			게임시작();
+			break;
+		case "굴리기":
+			굴리기(split);
+			break;
+		case "주사위저장":
+			주사위저장(split);
+			break;
+		case "점수판으로":
+			점수판으로();
+			break;
+		case "굴림판으로":
+			굴림판으로();
+			break;
 		}
 		System.out.println();
 	}
@@ -216,7 +299,7 @@ public class 유저 extends Thread {
 			} // end of while 1
 			socket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(port + " - " + 이름 + "유저 종료!");
 		}
 
 	}
@@ -225,7 +308,12 @@ public class 유저 extends Thread {
 		// DB에도 삭제하고 서버에도 삭제해야함.
 		try {
 			String 삭제결과 = "";
-			if(this.room != null)삭제결과 =  new DB.OracleDB().방삭제(port);
+			if (this.room != null)
+				if (this.room.유저들.get(0).port == this.port) {
+					삭제결과 = new DB.OracleDB().방삭제(port);
+				} else {
+					this.room = null;
+				}
 			broadCast(삭제결과);
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -235,9 +323,9 @@ public class 유저 extends Thread {
 
 	public void broadCast(String str) {
 		PrintWriter out;
-		Iterator opw = 게임서버.m_OutputList.iterator();
+		Iterator<PrintWriter> opw = 게임서버.m_OutputList.iterator();
 		while (opw.hasNext()) {
-			out = new PrintWriter((PrintWriter) opw.next(), true);
+			out = new PrintWriter(opw.next(), true);
 			out.println("broadCast/" + str);
 		}
 		System.out.println("broadCast/" + str);
@@ -253,6 +341,7 @@ public class 유저 extends Thread {
 			e.printStackTrace();
 		}
 	}
+
 	public void outprint(int port, String str) {
 		PrintWriter out;
 		Iterator opw = 게임서버.m_OutputList.iterator();
@@ -266,30 +355,6 @@ public class 유저 extends Thread {
 
 	public 유저(Socket socket) {
 		this.socket = socket;
-	}
-
-	public void 방입장(String[] split) {
-//		_room.방입장(this); // 룸에 입장시킨 후
-		Iterator<방> Iter방목록 = 방목록.iterator();
-		while(Iter방목록.hasNext()) {
-			방 in_room = Iter방목록.next();
-			int 방장포트 = Integer.parseInt(split[2]);
-			int 유저포트 = in_room.유저들.get(0).socket.getPort();
-			System.out.println("현재 검색중인 유저의 포트번호 : " + 유저포트);
-			System.out.println("방장의 포트번호 : " + 방장포트);
-			if(방장포트 == 유저포트) { // split[2]이 방장 소켓이 넘어옴,
-				this.room = in_room; // 유저가 속한 방을 룸으로 변경한다.(중요)
-				방목록화면.get방목록().get(방목록화면.get방목록().indexOf(in_room)).유저들.add(this);
-				System.out.println("======================");
-				for(유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(in_room)).유저들) {
-					System.out.println(유저.port);
-				}
-				System.out.println("======================");
-				outprint("방입장");
-				outprint(방장포트, "유저입장/" + this.이름);
-			}
-		}
-		
 	}
 
 	public int get내점수() {

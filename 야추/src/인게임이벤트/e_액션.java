@@ -32,8 +32,5 @@ public class e_액션 implements ActionListener {
 				야추Frame.get게임화면().굴림판으로();
 			}
 		}
-
-
 	}
-
 }

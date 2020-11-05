@@ -17,7 +17,7 @@ public class 주사위판 extends JPanel {
 //			주사위들[i].굴리기();
 			ImageIcon icon = new ImageIcon(getClass().getResource("/images/No.png"));
 			주사위들[i].setIcon(icon);
-			주사위들[i].setName(i+"번째");
+			주사위들[i].setName((i+1) +"번째");
 		}
 		
 	}

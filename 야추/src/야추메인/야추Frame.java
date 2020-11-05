@@ -32,6 +32,7 @@ import 야추_클라.로그인;
 import 야추_클라.메뉴;
 import 야추_클라.회원가입;
 import 화면.게임화면;
+import 화면.굴림판;
 import 화면.대기화면;
 import 화면.방목록화면;
 
@@ -58,16 +59,16 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		setSize(720, 700);
 		setLocation(600, 200); // 화면 가운데 조정
 		setDefaultCloseOperation(3);// 닫기 누르면 종료.
-		addWindowListener(this);
+		
 		// =================================================================================================
 		try {
 			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
 		} catch (UnknownHostException e1) {
-
-			e1.printStackTrace();
+			System.out.println("서버 연결 실패");
+			return;
 		} catch (IOException e1) {
-
-			e1.printStackTrace();
+			System.out.println("서버 연결 실패");
+			return;
 		}
 		// =================================================================================================
 		장면 = new CardLayout();
@@ -110,6 +111,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		서버값받기();
 		add(get메인화면());
 		setVisible(true);
+		addWindowListener(this);
 	}
 
 	private void 서버값받기() {
@@ -129,6 +131,10 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 						}
 						System.out.println("서버응답 : " + 서버응답);
 						String 응답[] = 서버응답.split("/");
+						if(응답.length<2) {
+							System.out.println("서버 응답이 잘못된거 같다.");
+							return;
+						}
 						if (응답[0].equals("broadCast")) {
 							// 모든 유저에게 전달하는 브로드캐스트 >
 							// 방 생성 삭제 시에 업데이트 시켜야함.
@@ -143,10 +149,31 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 							System.out.println("해당 yatch파일에서 요청받음.");
 							// 여기서 switch 문으로 응답값 분배시키기.
 							switch (응답[1]) {
+							case "굴림판으로":
+								게임화면.굴림판으로();
+								break;
+							case "점수판으로":
+								게임화면.점수판으로();
+								break;
+							case "주사위저장함":
+								게임화면.주사위저장함(응답[2]); // 상대방이 저장함.
+								break;
+							case "굴림값받음":
+								게임화면.get굴림판().굴리기(응답[2]);
+								break;
+							case "게임시작함":
+								게임시작(응답[2]); // 차례 선 정보 전달.
+								break;
+							case "상대나감":
+								화면.대기화면.getInstance().상대방이름설정("");
+								break;
 							case "유저입장":
 								화면.대기화면.getInstance().상대방이름설정(응답[2]);
+								화면.대기화면.getInstance().get시작하기().setEnabled(true);
 								break;
 							case "방나가렴":
+								화면.대기화면.getInstance().get시작하기().setEnabled(false);
+								화면.대기화면.getInstance().상대방이름설정("");
 							case "로그인성공":
 								장면.show(메인화면, "방목록화면");
 								방목록새로고침();
@@ -166,7 +193,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								방목록새로고침();
 								break;
 							case "방입장":
-								화면.대기화면.getInstance().get시작하기().setEnabled(false);
+								화면.대기화면.getInstance().상대방이름설정(응답[2]);
 								repaint();
 								장면.show(메인화면, "대기화면");
 								break;
@@ -186,6 +213,16 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 
 		});
 		방나가기.start();
+	}
+
+	protected void 게임시작(String 순서정하기) {
+		if(순서정하기.equals("0")) { // 0이면 내 굴리기 차례 
+			굴림판.굴림버튼.setEnabled(true);
+			굴림판.점수화면전환.setEnabled(true);
+			굴림판.차례표시.setText("내 차례");
+		}
+		
+		장면.show(메인화면, "게임화면");
 	}
 
 	private void 방목록새로고침() {
@@ -247,12 +284,13 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 //	게임화면 = new 게임화면();
 //	메인카드.add(게임화면, "게임판");
 
-	protected void outprint(String str) {
+	public static void outprint(String str) {
 		try {
 			PrintWriter pw = new PrintWriter(getSocket().getOutputStream(), true);
 			pw.println(socket.getLocalPort() + "/" + str);
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("서버가 연결 안돼있음.");
+			System.exit(0);
 		}
 	}
 
@@ -290,7 +328,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		return 회원가입;
 	}
 
-	public Socket getSocket() {
+	public static Socket getSocket() {
 		return socket;
 	}
 
@@ -315,6 +353,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 
 	@Override
 	public void windowClosing(WindowEvent arg0) {
+		
 		outprint("창닫음");
 	}
 

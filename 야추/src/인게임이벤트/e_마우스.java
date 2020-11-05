@@ -21,10 +21,12 @@ public class e_마우스 implements MouseListener {
 		case "점수화면으로":
 			야추Frame.get게임화면().점수판으로();
 			System.out.println("점수화면으로 선택.");
+			야추Frame.outprint("점수판으로");
 			break;
 		case "굴림판으로":
 			야추Frame.get게임화면().굴림판으로();
 			System.out.println("되돌아감 선택");
+			야추Frame.outprint("굴림판으로");
 			break;
 //		case "방":
 //			

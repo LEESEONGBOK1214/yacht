@@ -247,7 +247,6 @@ public class OracleDB {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 //			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
 		}finally{
@@ -278,7 +277,7 @@ public class OracleDB {
 			pstm.setInt(1, port);
 			
 			rs = pstm.executeQuery();
-			
+			System.out.println("DB > 规昏力 > port : " +  port );
 			if (rs.next()) {
 				System.out.println("DB > 规昏力 > 己傍");
 				return "规诀单捞飘";
