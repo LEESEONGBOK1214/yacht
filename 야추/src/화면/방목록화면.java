@@ -27,9 +27,7 @@ public class 방목록화면 extends JPanel {
 	private JButton 로그아웃;
 	public 방목록화면() {
 		버튼목록 = new JPanel();
-
 		setLayout(null);
-
 		방만들기 = new JButton("방만들기");
 		새로고침 = new JButton("새로고침");
 		들어가기 = new JButton("들어가기");
@@ -102,7 +100,5 @@ public class 방목록화면 extends JPanel {
 	public static void set방목록패널(JPanel 방목록패널) {
 		방목록화면.방목록패널 = 방목록패널;
 	}
-
-
 
 }

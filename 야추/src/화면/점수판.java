@@ -5,6 +5,7 @@ import java.awt.Color;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 import 야추메인.야추Frame;
 import 인게임이벤트.e_마우스;
@@ -18,6 +19,7 @@ public class 점수판 extends JPanel {
 	int 점수[] = new int[12];
 	주사위[] 주사위들;
 	JButton 돌아가기;
+	JLabel 유저점수[][] = new JLabel[2][2];
 	점수판(주사위[] 주사위들) {
 		setLayout(null);
 		setBackground(Color.decode("#CDD1FF"));
@@ -27,17 +29,26 @@ public class 점수판 extends JPanel {
 		// 1~6 합 6개
 		// 초이스, 4 of kind, Full house(2, 3),
 		// S.straight, L.straight, yatch
-
+		
+		for(int i =0;i<2;i++) {
+			for(int j = 0;j<2;j++) {
+				유저점수[i][j] = new JLabel(i+","+j); // [유저][이름, 점수]
+				유저점수[i][j].setBounds(480+160*j, 200+130*i, 150-100*j, 50);
+				유저점수[i][j].setBorder(new LineBorder(Color.yellow));
+				add(유저점수[i][j]);
+			}
+		}
+		
 		for (int i = 0; i < 2; i++) {
 			for (int j = 6 * i; j < 6 * (i + 1); j++) {
 				목록[j] = new JLabel(목록들[j]);
-				목록[j].setBounds(20 + 300 * i, 70 * (j % 6) + 50, 100, 50);
+				목록[j].setBounds(20 + 250 * i, 70 * (j % 6) + 50, 100, 50);
 				
 				선택[j] = new JButton();
 				선택[j].setName("점수선택버튼");
 				선택[j].setBackground(Color.white);
 				선택[j].setFocusPainted(false);
-				선택[j].setBounds(120 + 300 * i, 70 * (j % 6) + 50, 100, 50);
+				선택[j].setBounds(120 + 250 * i, 70 * (j % 6) + 50, 100, 50);
 				선택[j].addActionListener(new e_액션());
 				add(목록[j]);
 				add(선택[j]);
@@ -159,5 +170,14 @@ public class 점수판 extends JPanel {
 		점수설정();
 		add(주사위목록);
 		repaint();
+	}
+
+
+
+
+
+	public void set상대이름(String 상대이름) {
+		유저점수[1][0].setText(상대이름);
+		유저점수[1][1].setText("0");
 	}
 }

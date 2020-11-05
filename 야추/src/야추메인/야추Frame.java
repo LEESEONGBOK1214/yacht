@@ -164,16 +164,14 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 							case "게임시작함":
 								게임시작(응답[2]); // 차례 선 정보 전달.
 								break;
-							case "상대나감":
-								화면.대기화면.getInstance().상대방이름설정("");
-								break;
 							case "유저입장":
-								화면.대기화면.getInstance().상대방이름설정(응답[2]);
-								화면.대기화면.getInstance().get시작하기().setEnabled(true);
+								유저입장(응답);
 								break;
 							case "방나가렴":
 								화면.대기화면.getInstance().get시작하기().setEnabled(false);
+							case "상대나감":
 								화면.대기화면.getInstance().상대방이름설정("");
+								// break 없어도됨.
 							case "로그인성공":
 								장면.show(메인화면, "방목록화면");
 								방목록새로고침();
@@ -193,9 +191,8 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								방목록새로고침();
 								break;
 							case "방입장":
-								화면.대기화면.getInstance().상대방이름설정(응답[2]);
+								방입장(응답);
 								repaint();
-								장면.show(메인화면, "대기화면");
 								break;
 							}
 						}
@@ -211,15 +208,26 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 				}
 			}
 
+			private void 방입장(String[] 응답) {
+				화면.대기화면.getInstance().상대방이름설정(응답[2]);
+				장면.show(메인화면, "대기화면");
+			}
+
+			private void 유저입장(String[] 응답) {
+				화면.대기화면.getInstance().상대방이름설정(응답[2]);
+				화면.대기화면.getInstance().get시작하기().setEnabled(true);
+			}
+
 		});
 		방나가기.start();
 	}
 
 	protected void 게임시작(String 순서정하기) {
 		if(순서정하기.equals("0")) { // 0이면 내 굴리기 차례 
-			굴림판.굴림버튼.setEnabled(true);
-			굴림판.점수화면전환.setEnabled(true);
+			굴림판.굴림버튼.setVisible(true);
+			굴림판.점수화면전환.setVisible(true);
 			굴림판.차례표시.setText("내 차례");
+			
 		}
 		
 		장면.show(메인화면, "게임화면");

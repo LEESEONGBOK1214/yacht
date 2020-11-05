@@ -65,6 +65,7 @@ public class 대기화면 extends JPanel {
 
 	public void 상대방이름설정(String 상대이름) {
 		상대이름라벨.setText("상대방 : " + 상대이름);
+//		게임화면.get점수판().set상대이름(상대이름);
 		if(상대이름.equals("")) {
 			대기중입니다.setText("대기중입니다.");
 		}else {

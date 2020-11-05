@@ -30,6 +30,7 @@ public class e_액션 implements ActionListener {
 //				야추Frame.get게임화면().set내점수(점수);
 				눌린버튼.setVisible(false);
 				야추Frame.get게임화면().굴림판으로();
+				야추Frame.outprint("점수선택/" + 눌린버튼.getText());
 			}
 		}
 	}

@@ -30,11 +30,11 @@ public class 굴림판 extends JPanel {
 		굴림버튼세팅();
 		주사위판세팅(주사위들);
 		주사위세팅();
-
+		
 		저장판 = new 저장판();
 		차례표시세팅();
 		점수화면버튼세팅();
-
+		
 		add(주사위판);
 		add(저장판);
 		add(굴림버튼);
@@ -125,8 +125,6 @@ public class 굴림판 extends JPanel {
 			//3이면 턴종료 outprint로 알림. 상대턴임을 알려줌.
 		}
 	}
-	
-	
 
 //	public void 턴종료() {
 //		게임화면 턴종료화면 = 야추Frame.get게임화면();
