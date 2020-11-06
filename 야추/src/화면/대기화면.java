@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+@SuppressWarnings("serial")
 public class 대기화면 extends JPanel {
 	private static 대기화면 instance = new 대기화면();
 	private JPanel 버튼패널;

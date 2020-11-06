@@ -137,7 +137,6 @@ public class 유저 extends Thread {
 				System.out.println(유저.port);
 			}
 			System.out.println("======================");
-			boolean flag = false;
 			System.out.println("방 : " + 방);
 			if (방.equals(this.room)) {
 				System.out.println("입장방이랑 같넹!?");
@@ -151,21 +150,14 @@ public class 유저 extends Thread {
 					}
 					// 같은 방에 있던 유저한테도 보내줘야함..
 					System.out.println("방장이 나감..!");
-					if (방.유저들.size() > 1) {
-						System.out.println("같이있던 유저 : " + 방.유저들.get(1).socket.getPort() + "방나가렴");
-						outprint(방.유저들.get(1).socket.getPort(), "방나가렴");
-					}
 					outprint("방나가렴");
+					outprint(방.유저들.get(1).socket.getPort(), "방나가렴");
 					get방목록().remove(this.room);
 					broadCast("방업데이트");
 					방.유저들.get(1).room = null;
-					return;
-				} else if ((방.유저들.indexOf(this) > 0)) {
+				} else {
 					outprint("방나가렴");
-					outprint(방.유저들.get(0).socket.getPort(), "상대나감");
-					방.유저들.remove(this);
 					this.room = null;
-					return;
 				}
 			}
 		}
@@ -196,11 +188,11 @@ public class 유저 extends Thread {
 	}
 
 	private void 게임시작() {
-		// 방목록 훑고 해당 방장이 있는 방 1번 인덱스 유저에게 게임시작 보내줘야함.
 		System.out.println("======================");
 		int 랜덤값 = new Random().nextInt(2);
-		outprint(this.room.유저들.get(1).port, "게임시작함/" + 랜덤값);
-		outprint("게임시작함/" + (랜덤값 + 1) % 2);
+		String 이름보내기 = this.room.유저들.get(0).이름 + this.room.유저들.get(1).이름;
+		outprint(this.room.유저들.get(1).port, "게임시작함/" + 랜덤값 + 이름보내기);
+		outprint("게임시작함/" + (랜덤값 + 1) % 2 + 이름보내기);
 		System.out.println("======================");
 	}
 
@@ -344,9 +336,9 @@ public class 유저 extends Thread {
 
 	public void outprint(int port, String str) {
 		PrintWriter out;
-		Iterator opw = 게임서버.m_OutputList.iterator();
+		Iterator<PrintWriter> opw = 게임서버.m_OutputList.iterator();
 		while (opw.hasNext()) {
-			out = new PrintWriter((PrintWriter) opw.next(), true);
+			out = new PrintWriter(opw.next(), true);
 			out.println(port + "/" + str);
 		}
 		System.out.println(port + "/" + str);

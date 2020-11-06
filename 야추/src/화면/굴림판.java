@@ -10,16 +10,15 @@ import javax.swing.border.LineBorder;
 import 야추메인.야추Frame;
 import 인게임이벤트.e_마우스;
 import 인게임이벤트.e_액션;
-import 화면.주사위.흔들기;
 
 @SuppressWarnings("serial")
 public class 굴림판 extends JPanel {
 	주사위판 주사위판;
 	저장판 저장판;
 	주사위 주사위들[];
-	public static JLabel 차례표시;
-	public static JButton 굴림버튼;
-	public static JButton 점수화면전환;
+	private static JLabel 차례표시;
+	private static JButton 굴림버튼;
+	private static JButton 점수화면전환;
 
 	굴림판(주사위[] 주사위들) {
 //		System.out.println("굴림판으로 옴.");
@@ -38,7 +37,7 @@ public class 굴림판 extends JPanel {
 		add(주사위판);
 		add(저장판);
 		add(굴림버튼);
-		add(점수화면전환);
+		add(get점수화면전환());
 //		차례표시세팅();
 //		add(차례표시);
 	}
@@ -49,17 +48,17 @@ public class 굴림판 extends JPanel {
 	}
 
 	private void 점수화면버튼세팅() {
-		점수화면전환 = new JButton("<html>점수<br>화면</html>");
-		점수화면전환.setName("점수화면으로");
-		점수화면전환.setVisible(false);
-		점수화면전환.addMouseListener(new e_마우스());
-		점수화면전환.setBounds(20, 250, 50, 100);
+		set점수화면전환(new JButton("<html>점수<br>화면</html>"));
+		get점수화면전환().setName("점수화면으로");
+		get점수화면전환().setVisible(false);
+		get점수화면전환().addMouseListener(new e_마우스());
+		get점수화면전환().setBounds(20, 250, 50, 100);
 	}
 
 	private void 차례표시세팅() {
-		차례표시 = new JLabel();
-		차례표시.setBounds(250, 20, 200, 100);
-		차례표시.setBorder(new LineBorder(Color.green));
+		set차례표시(new JLabel());
+		get차례표시().setBounds(250, 20, 200, 100);
+		get차례표시().setBorder(new LineBorder(Color.green));
 	}
 
 	private void 굴림버튼세팅() {
@@ -77,13 +76,15 @@ public class 굴림판 extends JPanel {
 			if (주사위들[i].저장중) {
 				주사위들[i].setBounds(82 * i, 0, 70, 70);
 				저장판.add(주사위들[i]);
-
+				
 			} else {
 				주사위들[i].setBounds(주사위들[i].x, 0, 주사위들[i].size, 주사위들[i].size);
 				// n번쨰는 n 이런식으로 i+1값으로 초기화
 				주사위판.add(주사위들[i]);
 			}
 		}
+		
+		
 	}
 
 	public void 굴리기() {
@@ -139,14 +140,30 @@ public class 굴림판 extends JPanel {
 		add(주사위판);
 		add(저장판);
 		add(굴림버튼);
-		add(점수화면전환);
+		add(get점수화면전환());
 	}
 	
-	public JButton get굴림버튼() {
+	public static JButton get굴림버튼() {
 		return 굴림버튼;
 	}
 
-	public void set굴림버튼(JButton 굴림버튼) {
-		굴림판.굴림버튼 = 굴림버튼;
+	public static void set굴림버튼(JButton _굴림버튼) {
+		굴림버튼 = _굴림버튼;
+	}
+
+	public static JButton get점수화면전환() {
+		return 점수화면전환;
+	}
+
+	public static void set점수화면전환(JButton _점수화면전환) {
+		점수화면전환 = _점수화면전환;
+	}
+
+	public static JLabel get차례표시() {
+		return 차례표시;
+	}
+
+	public static void set차례표시(JLabel _차례표시) {
+		차례표시 = _차례표시;
 	}
 }

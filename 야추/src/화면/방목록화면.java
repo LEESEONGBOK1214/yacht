@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import DB.OracleDB;
@@ -13,6 +12,7 @@ import 야추_서버.방;
 import 야추_서버.유저;
 
 
+@SuppressWarnings("serial")
 public class 방목록화면 extends JPanel {
 	// 1. GameRoom List 가져와서 뿌려주기.
 	// 2. 룸 선택시, 입장확인 메세지 보여주기.

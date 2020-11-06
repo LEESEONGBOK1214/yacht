@@ -3,6 +3,7 @@ package 화면;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
+@SuppressWarnings("serial")
 public class 주사위판 extends JPanel {
 	
 	주사위[] 주사위들;

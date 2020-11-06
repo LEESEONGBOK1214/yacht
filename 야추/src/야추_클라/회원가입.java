@@ -10,6 +10,7 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 
+@SuppressWarnings("serial")
 public class 회원가입 extends JPanel// extends 가입배경
 {
 	private Font 가입폰트;

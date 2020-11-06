@@ -11,6 +11,7 @@ import 야추메인.야추Frame;
 import 인게임이벤트.e_마우스;
 import 인게임이벤트.e_액션;
 
+@SuppressWarnings("serial")
 public class 점수판 extends JPanel {
 	JLabel 목록[] = new JLabel[12];
 	JButton 선택[] = new JButton[12];
@@ -19,7 +20,7 @@ public class 점수판 extends JPanel {
 	int 점수[] = new int[12];
 	주사위[] 주사위들;
 	JButton 돌아가기;
-	JLabel 유저점수[][] = new JLabel[2][2];
+	private JLabel 유저점수[][] = new JLabel[2][2];
 	점수판(주사위[] 주사위들) {
 		setLayout(null);
 		setBackground(Color.decode("#CDD1FF"));
@@ -32,10 +33,10 @@ public class 점수판 extends JPanel {
 		
 		for(int i =0;i<2;i++) {
 			for(int j = 0;j<2;j++) {
-				유저점수[i][j] = new JLabel(i+","+j); // [유저][이름, 점수]
-				유저점수[i][j].setBounds(480+160*j, 200+130*i, 150-100*j, 50);
-				유저점수[i][j].setBorder(new LineBorder(Color.yellow));
-				add(유저점수[i][j]);
+				get유저점수()[i][j] = new JLabel(i+","+j); // [유저][이름, 점수]
+				get유저점수()[i][j].setBounds(480+160*j, 200+130*i, 150-100*j, 50);
+				get유저점수()[i][j].setBorder(new LineBorder(Color.yellow));
+				add(get유저점수()[i][j]);
 			}
 		}
 		
@@ -177,7 +178,23 @@ public class 점수판 extends JPanel {
 
 
 	public void set상대이름(String 상대이름) {
-		유저점수[1][0].setText(상대이름);
-		유저점수[1][1].setText("0");
+		get유저점수()[1][0].setText(상대이름);
+		get유저점수()[1][1].setText("0");
+	}
+
+
+
+
+
+	public JLabel[][] get유저점수() {
+		return 유저점수;
+	}
+
+
+
+
+
+	public void set유저점수(JLabel 유저점수[][]) {
+		this.유저점수 = 유저점수;
 	}
 }
