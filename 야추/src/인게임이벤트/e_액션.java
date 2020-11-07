@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import 야추메인.야추Frame;
+import 화면.게임화면;
 
 public class e_액션 implements ActionListener {
 
@@ -31,6 +32,7 @@ public class e_액션 implements ActionListener {
 				눌린버튼.setVisible(false);
 				야추Frame.get게임화면().굴림판으로();
 				야추Frame.outprint("점수선택/" + 눌린버튼.getText());
+				게임화면.턴 = 0;
 			}
 		}
 	}

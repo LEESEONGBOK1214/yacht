@@ -35,6 +35,7 @@ import 화면.게임화면;
 import 화면.굴림판;
 import 화면.대기화면;
 import 화면.방목록화면;
+import 화면.주사위판;
 
 @SuppressWarnings("serial")
 public class 야추Frame extends JFrame implements ActionListener, WindowListener {
@@ -193,6 +194,12 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								방입장(응답);
 								repaint();
 								break;
+							case "내턴":
+								턴세팅(true);
+								break;
+							case "턴종료":
+								턴세팅(false);
+								break;
 							}
 						}
 						Thread.sleep(100);
@@ -223,9 +230,9 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 
 	protected void 게임시작(String 순서정하기, String 유저명1, String 유저명2) {
 		if(순서정하기.equals("0")) { // 0이면 내 굴리기 차례 
-			굴림판.get굴림버튼().setVisible(true);
-			굴림판.get점수화면전환().setVisible(true);
+			턴세팅(true);
 			굴림판.get차례표시().setText("내 차례");
+			게임화면.set턴(1);
 		}
 		게임화면.get점수판().get유저점수()[0][0].setText(유저명1);
 		게임화면.get점수판().get유저점수()[1][0].setText(유저명2);
@@ -386,6 +393,17 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	public void windowOpened(WindowEvent arg0) {
 		// TODO Auto-generated method stub
 
+	}
+
+	private void 턴세팅(boolean 세팅값) {
+		굴림판.get점수화면전환().setVisible(세팅값);
+		굴림판.get굴림버튼().setVisible(세팅값);
+		게임화면.get점수판().get돌아가기().setVisible(세팅값);
+		게임화면.set턴(1);
+		for (int i = 0; i < 주사위판.get주사위들().length; i++) {
+			ImageIcon icon = new ImageIcon(getClass().getResource("/images/No.png"));
+			주사위판.get주사위들()[i].setIcon(icon);
+		}
 	}
 
 }

@@ -56,7 +56,7 @@ public class 주사위 extends JLabel implements MouseListener {
 			} catch (InterruptedException e) {
 				System.out.println("주사위 흔들기에서 인터럽트걸림.");
 			}
-			
+
 			try {
 				setBounds(x, y, 70, 70);
 				Thread.sleep(200);
@@ -78,12 +78,11 @@ public class 주사위 extends JLabel implements MouseListener {
 	
 	public void 굴리기() {
 		randomset();
-		new 흔들기().start();
+		굴림();
 	}
-	
+
 	public void 굴림() {
 		new 흔들기().start();
 	}
-
 	// 이미지 출처 https://www.flaticon.com/kr/authors/smashicons"
 }

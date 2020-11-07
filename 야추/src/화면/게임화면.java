@@ -3,7 +3,9 @@ package 화면;
 import java.awt.CardLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+
 import javax.swing.JPanel;
+
 import 야추메인.야추Frame;
 
 @SuppressWarnings("serial")
@@ -12,7 +14,7 @@ public class 게임화면 extends JPanel implements MouseListener {
 	private static 굴림판 굴림판;
 	private 주사위 주사위들[] = new 주사위[5];
 
-	public static int 턴 = 0;
+	public static int 턴;
 	int 포트번호들[] = new int[2];
 	static CardLayout 장면;
 	String 현재장면;
@@ -31,7 +33,10 @@ public class 게임화면 extends JPanel implements MouseListener {
 		}
 		굴림판 = new 굴림판(주사위들);
 		점수판 = new 점수판(주사위들);
+
 		// 객체 세팅
+		턴 = 0;
+
 		// 세팅
 		add(굴림판, "주사위굴리기");
 		add(점수판, "점수선택하기");
@@ -44,7 +49,7 @@ public class 게임화면 extends JPanel implements MouseListener {
 //		점수판.점수설정();
 		점수판.선택됨();
 		장면.show(this, "점수선택하기");
-		현재장면="점수판";
+		현재장면 = "점수판";
 	}
 
 	public void 굴림판으로() {
@@ -153,6 +158,14 @@ public class 게임화면 extends JPanel implements MouseListener {
 
 	public static CardLayout get장면() {
 		return 장면;
+	}
+
+	public void set턴(int i) {
+		턴 = i;
+	}
+
+	public static int get턴() {
+		return 턴;
 	}
 
 }

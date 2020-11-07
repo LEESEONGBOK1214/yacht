@@ -190,9 +190,9 @@ public class 유저 extends Thread {
 	private void 게임시작() {
 		System.out.println("======================");
 		int 랜덤값 = new Random().nextInt(2);
-		String 이름보내기 = this.room.유저들.get(0).이름 + this.room.유저들.get(1).이름;
-		outprint(this.room.유저들.get(1).port, "게임시작함/" + 랜덤값 + 이름보내기);
-		outprint("게임시작함/" + (랜덤값 + 1) % 2 + 이름보내기);
+		String 이름보내기 = this.room.유저들.get(0).이름 + "/" + this.room.유저들.get(1).이름;
+		outprint(this.room.유저들.get(1).port, "게임시작함/" + 랜덤값 + "/" + 이름보내기);
+		outprint("게임시작함/" + (랜덤값 + 1) % 2 + "/" + 이름보내기);
 		System.out.println("======================");
 	}
 
@@ -227,6 +227,15 @@ public class 유저 extends Thread {
 		} else {
 			outprint(this.room.유저들.get(0).port, "점수판으로/");
 		}
+	}
+
+	private void 턴종료(String split[]) {
+		if (this.room.유저들.get(0).port == this.port) {
+			outprint(this.room.유저들.get(1).port, "내턴/" + "1/" + split[2] + "/");
+		} else {
+			outprint(this.room.유저들.get(0).port, "내턴/" + "0/" + split[2] + "/");
+		}
+		outprint("턴종료/");
 	}
 
 	public void process(String inline) {
@@ -271,6 +280,9 @@ public class 유저 extends Thread {
 			break;
 		case "굴림판으로":
 			굴림판으로();
+			break;
+		case "점수선택":
+			턴종료(split);
 			break;
 		}
 		System.out.println();

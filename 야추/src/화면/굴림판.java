@@ -97,34 +97,39 @@ public class 굴림판 extends JPanel {
 				주사위들[i].굴리기();
 			}
 			주사위눈금 += 주사위들[i].눈금;
+
 		}
+		
 		야추Frame.outprint("굴리기/" + 주사위눈금);
 		// 굴린 값 출력.
 		주사위눈금 = "";
 		System.out.println("굴림 에서의 턴 : " + 게임화면.턴);
 		주사위판.repaint();
 
-		if (게임화면.턴 == 3) {
-//			턴종료();
+		System.out.println("턴 : " + 게임화면.턴);
+		if (게임화면.get턴() == 4) {
+			야추Frame.get게임화면().점수판으로();
+			야추Frame.outprint("점수판으로");
 		}
 	}
 	
 	public void 굴리기(String 응답) {
-		// 굴리기를 눌렀을 때, 숫자들을 다 정하고 이미지 흔들기를 따로 뽑아내.
-		// 그리고 서버에 전송! 눈금 수를 받아서 그만큼 흔들기!
-		게임화면.턴++;
+		// 상대방 결과를 그려주는 메소드.
+		// 그저 그려주기만 하면 됨.
 		for (int i = 0; i < 주사위들.length; i++) {
 			if (!주사위들[i].저장중) { // 저장중이 아니면,
 				주사위들[i].눈금=(응답.charAt(i)-48); // 문자이므로 -48 해줘야함.
 				주사위들[i].굴림();
 			}
+			if (i == 4) {
+				try {
+					주사위.흔들기.join();
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
 		}
-		System.out.println("굴림 에서의 턴 : " + 게임화면.턴);
 		주사위판.repaint();
-
-		if (게임화면.턴 == 3) {
-			//3이면 턴종료 outprint로 알림. 상대턴임을 알려줌.
-		}
 	}
 
 //	public void 턴종료() {
