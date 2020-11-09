@@ -20,8 +20,6 @@ public class 유저 extends Thread {
 	private String 아이디;
 	private String 비밀번호;
 	private String 이름;
-	private boolean 차례; // true면 내 차례.
-	private int 내점수 = 0;
 	// 게임에 관련된 변수 설정 // ... //
 	static String 응답 = "";
 	private static ArrayList<방> 방목록 = 방목록화면.get방목록();
@@ -361,21 +359,7 @@ public class 유저 extends Thread {
 		this.socket = socket;
 	}
 
-	public int get내점수() {
-		return 내점수;
-	}
 
-	public void set내점수(int 내점수) {
-		this.내점수 = 내점수;
-	}
-
-	public boolean is차례() {
-		return 차례;
-	}
-
-	public void set차례(boolean 차례) {
-		this.차례 = 차례;
-	}
 
 	public String get아이디() {
 		return 아이디;

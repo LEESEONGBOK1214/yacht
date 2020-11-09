@@ -121,13 +121,6 @@ public class 굴림판 extends JPanel {
 				주사위들[i].눈금=(응답.charAt(i)-48); // 문자이므로 -48 해줘야함.
 				주사위들[i].굴림();
 			}
-			if (i == 4) {
-				try {
-					주사위.흔들기.join();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
 		}
 		주사위판.repaint();
 	}

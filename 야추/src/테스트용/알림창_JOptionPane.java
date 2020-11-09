@@ -11,7 +11,7 @@ public class ¾Ë¸²Ã¢_JOptionPane {
 		// System.out.printf("%d %f %c %s", 1, 1.0, 1.0, 'c', "asdf");
 		System.out.printf("%d\n", 1);
 		System.out.printf("%f\n", 1.0);
-		// new Ex01();
+		new Ex01();
 	}
 }
 
