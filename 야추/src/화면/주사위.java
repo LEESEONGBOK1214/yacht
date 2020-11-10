@@ -7,6 +7,7 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
+import 야추메인.야추Frame;
 
 @SuppressWarnings("serial")
 public class 주사위 extends JLabel implements MouseListener {
@@ -45,7 +46,7 @@ public class 주사위 extends JLabel implements MouseListener {
 
 		public void run() {
 			// 굴리는 중엔 선택못하게.
-			굴림판.get굴림버튼().setEnabled(false);
+			야추Frame.get게임화면().get굴림판().get굴림버튼().setEnabled(false);
 			int 회수 = new Random().nextInt(5) + 5; // 5~10회 흔들기.
 			try {
 				for (int i = 0, j = 10; i < 회수; i++) {
@@ -64,7 +65,7 @@ public class 주사위 extends JLabel implements MouseListener {
 			} catch (InterruptedException e) {
 				System.out.println("주사위 흔들기 사이 멈춤에서 인터럽트걸림.");
 			}
-			굴림판.get굴림버튼().setEnabled(true);
+			야추Frame.get게임화면().get굴림판().get굴림버튼().setEnabled(true);
 			System.out.println(getName());
 		}
 //		

@@ -1,6 +1,9 @@
 package 화면;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -8,19 +11,19 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import 야추메인.야추Frame;
-import 인게임이벤트.e_마우스;
-import 인게임이벤트.e_액션;
 
 @SuppressWarnings("serial")
-public class 점수판 extends JPanel {
+public class 점수판 extends JPanel implements ActionListener {
 	JLabel 목록[] = new JLabel[12];
-	JButton 선택[] = new JButton[12];
+	private JButton 선택버튼[] = new JButton[12];
+	JLabel 상대점수[] = new JLabel[12];
 	String 목록들[] = { "Aces", "Deuces", "Threes", "Fours", "Fives", "Sixes", "Choice", "4 of Kind", "Full House",
 			"S.Straight", "L.Straight", "Yatch" };
 	int 점수[] = new int[12];
 	주사위[] 주사위들;
 	private JButton 돌아가기;
 	private JLabel 유저점수[][] = new JLabel[2][2];
+	private int 유저순서;
 
 	점수판(주사위[] 주사위들) {
 		setLayout(null);
@@ -43,16 +46,28 @@ public class 점수판 extends JPanel {
 		for (int i = 0; i < 2; i++) {
 			for (int j = 6 * i; j < 6 * (i + 1); j++) {
 				목록[j] = new JLabel(목록들[j]);
-				목록[j].setBounds(20 + 250 * i, 70 * (j % 6) + 50, 100, 50);
+				목록[j].setBounds(20 + 200 * i, 70 * (j % 6) + 50, 100, 50);
 
-				선택[j] = new JButton();
-				선택[j].setName("점수선택버튼");
-				선택[j].setBackground(Color.white);
-				선택[j].setFocusPainted(false);
-				선택[j].setBounds(120 + 250 * i, 70 * (j % 6) + 50, 100, 50);
-				선택[j].addActionListener(new e_액션());
+				선택버튼[j] = new JButton();
+				선택버튼[j].setName(목록들[j]);
+				선택버튼[j].setBackground(Color.white);
+				선택버튼[j].setFocusPainted(false);
+				선택버튼[j].setBounds(70 + 220 * i, 70 * (j % 6) + 50, 50, 50);
+				선택버튼[j].addActionListener(this);
+				선택버튼[j].setEnabled(false);
+				
+				JPanel tmp = new JPanel(new BorderLayout());
+				상대점수[j] = new JLabel("0");
+				상대점수[j].setName(목록들[j]);
+				상대점수[j].setHorizontalAlignment(JLabel.CENTER);
+				tmp.setBounds(130 + 220 * i, 70 * (j % 6) + 50, 50, 50);
+				tmp.setBackground(Color.gray);
+				tmp.setBorder(new LineBorder(Color.black));
+				tmp.add(상대점수[j], BorderLayout.CENTER);
+				
 				add(목록[j]);
-				add(선택[j]);
+				add(선택버튼[j]);
+				add(tmp);
 			}
 		}
 
@@ -67,7 +82,7 @@ public class 점수판 extends JPanel {
 		돌아가기.setName("굴림판으로");
 		돌아가기.setVisible(false);
 		돌아가기.setBounds(300, 600, 100, 50);
-		돌아가기.addMouseListener(new e_마우스());
+		돌아가기.addActionListener(this);
 		add(돌아가기);
 	}
 
@@ -156,10 +171,10 @@ public class 점수판 extends JPanel {
 		}
 
 		for (int i = 0; i < 12; i++) {
-			remove(선택[i]);
-			선택[i].setText("" + 점수[i]);
-			System.out.println(목록들[i] + " : " + 선택[i].getText());
-			add(선택[i]);
+			remove(선택버튼[i]);
+			선택버튼[i].setText("" + 점수[i]);
+			System.out.println(목록들[i] + " : " + 선택버튼[i].getText());
+			add(선택버튼[i]);
 //			System.out.println(목록들[i] + " : " + 점수[i]);
 		}
 	}
@@ -195,4 +210,64 @@ public class 점수판 extends JPanel {
 	public void set돌아가기(JButton 돌아가기) {
 		this.돌아가기 = 돌아가기;
 	}
+
+	public int get유저순서() {
+		return 유저순서;
+	}
+
+	public void set유저순서(int 유저순서) {
+		this.유저순서 = 유저순서;
+	}
+
+	public void 선택버튼셋(boolean b) {
+		for (int i = 0; i < 선택버튼.length; i++) {
+			if (!선택버튼[i].getName().equals("눌림")) {
+				선택버튼[i].setEnabled(b);
+			}
+		}
+	}
+
+	public void 점수세팅(String[] 응답) {
+		for (int i = 0; i < 목록들.length; i++) {
+			if (목록들[i].equals(응답[2])) {
+				상대점수[i].setText(응답[3]);
+				유저점수[(유저순서 + 1) % 2][1]
+						.setText(Integer.parseInt(유저점수[(유저순서 + 1) % 2][1].getText()) + Integer.parseInt(응답[3]) + "");
+				break;
+			}
+		}
+	}
+
+	public void actionPerformed(ActionEvent e) {
+		JButton 눌린버튼 = (JButton) e.getSource();
+
+		if (눌린버튼 == 돌아가기) {
+			야추Frame.outprint("굴림판으로");
+		} else { // 점수 선택 시,
+			int 점수 = Integer.parseInt(눌린버튼.getText());
+			눌린버튼.setEnabled(false);
+			야추Frame.outprint("점수선택/" + 눌린버튼.getName() + "/" + 점수);
+			눌린버튼.setName("눌림");
+			야추Frame.get게임화면().턴 = 0;
+			유저점수[유저순서][1].setText(Integer.parseInt(유저점수[유저순서][1].getText()) + 점수 + "");
+//			야추Frame.get게임화면().set내점수(점수);
+		}
+
+		야추Frame.get게임화면().굴림판으로();
+
+	}
+
+	public void 턴시작(boolean 세팅값) {
+		선택버튼셋(세팅값);
+		get돌아가기().setVisible(세팅값);
+	}
+
+	public int get내점수() {
+		return Integer.parseInt(유저점수[유저순서][1].getText());
+	}
+
+	public int get상대점수() {
+		return Integer.parseInt(유저점수[(유저순서 + 1) % 2][1].getText());
+	}
+
 }

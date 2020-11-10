@@ -1,4 +1,4 @@
-package 야추_클라;
+package 야추_회원폼;
 
 
 import java.awt.BorderLayout;

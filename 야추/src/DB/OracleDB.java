@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import 具眠_辑滚.规;
-import 具眠_辑滚.蜡历;
 
 public class OracleDB {
 //	Connection conn;
@@ -305,7 +304,7 @@ public class OracleDB {
 		}
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		String sql = "select u1_port, title from yat_room";
+		String sql = "select * from yat_room";
 		// 1: 规厘 蜡历 家南
 		// 2: 老馆 蜡历 家南
 		// 3: 规力格
@@ -319,10 +318,11 @@ public class OracleDB {
 				// u1 socket
 				// u2 socket
 				// title
-				String 家南力格 = "";
-				家南力格 += rs.getInt(1);
-				家南力格 += ("/" + rs.getString(2));
-				规格废.add(家南力格);
+				String 规沥焊 = "";
+				规沥焊 += rs.getInt(1);
+				规沥焊 += ("/" + rs.getInt(2));
+				规沥焊 += ("/" + rs.getString(3));
+				规格废.add(规沥焊);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -354,6 +354,45 @@ public class OracleDB {
 			if(pstm!=null)pstm.close();
 			if(conn!=null)conn.close();
 		}
+	}
+
+	public boolean 规唱啊扁(int 规厘port, int 蜡历port) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		String sql = "update yat_room set u2_port = ? where u1_port = ?";
+		// 1: 规厘 蜡历 家南
+		// 2: 老馆 蜡历 家南
+		// 3: 规力格
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, 0);
+			pstm.setInt(2, 规厘port);
+
+			rs = pstm.executeQuery();
+
+			if (rs.next()) {
+				System.out.println("DB > 规唱啊扁 > 己傍");
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+//			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
+		} finally {
+			if (rs != null)
+				rs.close();
+			if (pstm != null)
+				pstm.close();
+			if (conn != null)
+				conn.close();
+		}
+		return false;
 	}
 
 	/*

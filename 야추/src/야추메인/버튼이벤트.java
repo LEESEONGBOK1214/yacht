@@ -10,8 +10,8 @@ import java.net.Socket;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import 야추_클라.로그인;
-import 야추_클라.회원가입;
+import 야추_회원폼.로그인;
+import 야추_회원폼.회원가입;
 
 public class 버튼이벤트 implements ActionListener {
 	Socket socket = 야추Frame.socket;
@@ -31,7 +31,7 @@ public class 버튼이벤트 implements ActionListener {
 		case "로그인":
 			장면.show(메인화면, "로그인");
 			break;
-		case "회원가입":
+		case "회원가입": // 회원가입 창으로
 			장면.show(메인화면, "회원가입");
 			break;
 		case "가입":

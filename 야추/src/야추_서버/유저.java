@@ -126,9 +126,9 @@ public class 유저 extends Thread {
 		Iterator<방> 방목록 = get방목록().iterator();
 		System.out.println("방목록 사이즈 : " + get방목록().size());
 		while (방목록.hasNext()) {
-//			if(!방목록.hasNext()) {
-//				return;
-//			}
+			if (!방목록.hasNext()) {
+				return;
+			}
 			방 방 = 방목록.next();
 			System.out.println("======================");
 			for (유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(방)).유저들) {
@@ -148,15 +148,24 @@ public class 유저 extends Thread {
 					}
 					// 같은 방에 있던 유저한테도 보내줘야함..
 					System.out.println("방장이 나감..!");
-					outprint("방나가렴");
+//					outprint("방나가렴");
 					outprint(방.유저들.get(1).socket.getPort(), "방나가렴");
 					get방목록().remove(this.room);
 					broadCast("방업데이트");
 					방.유저들.get(1).room = null;
 				} else {
-					outprint("방나가렴");
+//					outprint("방나가렴");
+					try {
+						new OracleDB().방나가기(this.room.get유저들().get(0).port, this.port);
+					} catch (SQLException e) {
+						System.out.println("방삭제실패..");
+						e.printStackTrace();
+					}
 					this.room = null;
 				}
+				outprint("방나가렴");
+				broadCast("방업데이트");
+				break;
 			}
 		}
 	}
@@ -172,7 +181,13 @@ public class 유저 extends Thread {
 			System.out.println("방장의 포트번호 : " + 방장포트);
 			if (방장포트 == 검색포트) { // split[2]이 방장 소켓이 넘어옴,
 				this.room = in_room; // 유저가 속한 방을 룸으로 변경한다.(중요)
-				방목록화면.get방목록().get(방목록화면.get방목록().indexOf(in_room)).유저들.add(this);
+				in_room.유저들.add(this);
+				try {
+					new OracleDB().방입장(방장포트, this.port);
+				} catch (SQLException e) {
+//					e.printStackTrace();
+					System.out.println("\n\n\n\n방입장실패\n\n\n\n");
+				}
 				System.out.println("======================");
 				for (유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(in_room)).유저들) {
 					System.out.println(유저.port);
@@ -180,6 +195,7 @@ public class 유저 extends Thread {
 				System.out.println("======================");
 				outprint("방입장/" + in_room.유저들.get(0).이름);
 				outprint(방장포트, "유저입장/" + this.이름);
+				broadCast("방업데이트");
 			}
 		}
 
@@ -189,8 +205,8 @@ public class 유저 extends Thread {
 		System.out.println("======================");
 		int 랜덤값 = new Random().nextInt(2);
 		String 이름보내기 = this.room.유저들.get(0).이름 + "/" + this.room.유저들.get(1).이름;
-		outprint(this.room.유저들.get(1).port, "게임시작함/" + 랜덤값 + "/" + 이름보내기);
-		outprint("게임시작함/" + (랜덤값 + 1) % 2 + "/" + 이름보내기);
+		outprint(this.room.유저들.get(1).port, "게임시작함/" + 랜덤값 + "/" + 이름보내기 + "/" + 1);
+		outprint("게임시작함/" + (랜덤값 + 1) % 2 + "/" + 이름보내기 + "/" + 0);
 		System.out.println("======================");
 	}
 
@@ -229,11 +245,24 @@ public class 유저 extends Thread {
 
 	private void 턴종료(String split[]) {
 		if (this.room.유저들.get(0).port == this.port) {
-			outprint(this.room.유저들.get(1).port, "내턴/" + "1/" + split[2] + "/");
+			outprint(this.room.유저들.get(1).port, "내턴/" + split[2] + "/" + split[3] + "/");
 		} else {
-			outprint(this.room.유저들.get(0).port, "내턴/" + "0/" + split[2] + "/");
+			outprint(this.room.유저들.get(0).port, "내턴/" + split[2] + "/" + split[3] + "/");
 		}
 		outprint("턴종료/");
+	}
+
+	private void 마지막굴림() {
+		if (this.room.유저들.get(0).port == this.port) {
+			outprint(this.room.유저들.get(1).port, "마지막굴림/");
+		} else {
+			outprint(this.room.유저들.get(0).port, "마지막굴림/");
+		}
+	}
+
+	private void 게임종료() {
+		outprint(this.room.유저들.get(0).port, "게임종료/");
+		outprint(this.room.유저들.get(1).port, "게임종료/");
 	}
 
 	public void process(String inline) {
@@ -281,6 +310,12 @@ public class 유저 extends Thread {
 			break;
 		case "점수선택":
 			턴종료(split);
+			break;
+		case "마지막굴림":
+			마지막굴림();
+			break;
+		case "게임종료":
+			게임종료();
 			break;
 		}
 		System.out.println();

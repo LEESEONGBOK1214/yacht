@@ -28,14 +28,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import 야추_클라.로그인;
-import 야추_클라.메뉴;
-import 야추_클라.회원가입;
+import 야추_회원폼.로그인;
+import 야추_회원폼.메뉴;
+import 야추_회원폼.회원가입;
 import 화면.게임화면;
-import 화면.굴림판;
 import 화면.대기화면;
 import 화면.방목록화면;
-import 화면.주사위판;
 
 @SuppressWarnings("serial")
 public class 야추Frame extends JFrame implements ActionListener, WindowListener {
@@ -53,12 +51,13 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	PreparedStatement ptst;
 
 	String 응답 = null;
-
+	int 전체턴;
 	야추Frame() {
 		super("yacht!");
 		// 기본 설정.
 		setSize(720, 700);
-		setLocation(600, 200); // 화면 가운데 조정
+//		setLocation(600, 200); // 화면 가운데 조정 데탑
+		setLocation(470, 100); // 노트북
 		setDefaultCloseOperation(3);// 닫기 누르면 종료.
 		
 		// =================================================================================================
@@ -163,7 +162,8 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								게임화면.get굴림판().굴리기(응답[2]);
 								break;
 							case "게임시작함":
-								게임시작(응답[2], 응답[3], 응답[4]); // 차례 선 정보 전달.
+								전체턴 = 0;
+								게임시작(응답[2], 응답[3], 응답[4], 응답[5]); // 차례 선 정보 전달.
 								break;
 							case "유저입장":
 								유저입장(응답);
@@ -195,12 +195,28 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								repaint();
 								break;
 							case "내턴":
+								게임화면.get점수판().점수세팅(응답);
+								게임화면.set턴(1);
 								턴세팅(true);
+								전체턴++;
+								System.out.println("전체턴 : " + 전체턴);
 								break;
 							case "턴종료":
+								전체턴++;
+								System.out.println("전체턴 : " + 전체턴);
+								if (전체턴 == 24) {
+									outprint("게임종료");
+								}
 								턴세팅(false);
 								break;
+							case "마지막굴림":
+								게임화면.get굴림판().마지막굴림();
+								break;
+							case "게임종료":
+								게임종료();
+								break;
 							}
+
 						}
 						Thread.sleep(100);
 					}
@@ -228,17 +244,39 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		방나가기.start();
 	}
 
-	protected void 게임시작(String 순서정하기, String 유저명1, String 유저명2) {
+	protected void 게임종료() {
+		String 결과 = "";
+		int 내점수 = 게임화면.get점수판().get내점수();
+		int 상대점수 = 게임화면.get점수판().get상대점수();
+		
+		if(내점수 > 상대점수) {
+			결과 = "승리!";
+		}else if(내점수 < 상대점수) {
+			결과 = "패배!";
+		}else {
+			결과 = "무승부..";
+		}
+		JOptionPane.showMessageDialog(야추Frame.this, "게임종료!! 결과 : " + 결과);
+		outprint("방나가기");
+	}
+
+	protected void 게임시작(String 순서정하기, String 유저명1, String 유저명2, String 순서) {
 		if(순서정하기.equals("0")) { // 0이면 내 굴리기 차례 
 			턴세팅(true);
-			굴림판.get차례표시().setText("내 차례");
-			게임화면.set턴(1);
+			게임화면.턴 = 1;
+			게임화면.get굴림판().get차례표시().setText("내 차례");
+		} else {
+			턴세팅(false);
+			게임화면.get굴림판().get차례표시().setText("상대 차례");
 		}
+
 		게임화면.get점수판().get유저점수()[0][0].setText(유저명1);
 		게임화면.get점수판().get유저점수()[1][0].setText(유저명2);
+		게임화면.get점수판().set유저순서(Integer.parseInt(순서));
 		장면.show(메인화면, "게임화면");
 	}
 
+	JButton 방입장버튼;
 	private void 방목록새로고침() {
 		try {
 			ArrayList<String> DB방목록;
@@ -271,19 +309,25 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 				방장소켓.setBounds(0, 0, 50, 30);
 				방장소켓.setBorder(new LineBorder(Color.black));
 
-				JLabel 방제목 = new JLabel(방정보.split("/")[1]);
+				JLabel 방제목 = new JLabel(방정보.split("/")[2]);
 				방제목.setBounds(55, 0, 90, 30);
 
-				JButton 입장 = new JButton();
-				입장.setIcon(new ImageIcon(getClass().getResource("/images/입장.png")));
-				입장.setBounds(150, 0, 50, 30);
-				입장.setName(방정보.split("/")[0]); // 방장의 소켓을 넘겨 같은거 찾아 입장시키게 하자.
-				입장.addActionListener(this);
+				방입장버튼 = new JButton();
+				방입장버튼.setIcon(new ImageIcon(getClass().getResource("/images/입장.png")));
+				방입장버튼.setBounds(150, 0, 50, 30);
+				방입장버튼.setName(방정보.split("/")[0]); // 방장의 소켓을 넘겨 같은거 찾아 입장시키게 하자.
+				방입장버튼.addActionListener(this);
 				// 불가 text면 setEnable false로 하자.
+
+				System.out.println("Integer.parseInt(방정보.split(\"/\")[1]) : " + Integer.parseInt(방정보.split("/")[1]));
+				if (Integer.parseInt(방정보.split("/")[1]) > 0)
+				{
+					방입장버튼.setVisible(false);
+				}
 
 				방패널.add(방장소켓);
 				방패널.add(방제목);
-				방패널.add(입장);
+				방패널.add(방입장버튼);
 				방목록화면.get방목록패널().add(방패널);
 				i++;
 			}
@@ -354,56 +398,32 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		return 장면;
 	}
 
-	@Override
 	public void windowActivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
-	@Override
 	public void windowClosed(WindowEvent arg0) {
-
 	}
 
-	@Override
 	public void windowClosing(WindowEvent arg0) {
-		
 		outprint("창닫음");
 	}
 
-	@Override
 	public void windowDeactivated(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
-	@Override
 	public void windowDeiconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
-	@Override
 	public void windowIconified(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
-	@Override
 	public void windowOpened(WindowEvent arg0) {
-		// TODO Auto-generated method stub
-
 	}
 
 	private void 턴세팅(boolean 세팅값) {
-		굴림판.get점수화면전환().setVisible(세팅값);
-		굴림판.get굴림버튼().setVisible(세팅값);
-		게임화면.get점수판().get돌아가기().setVisible(세팅값);
-		게임화면.set턴(1);
-		for (int i = 0; i < 주사위판.get주사위들().length; i++) {
-			ImageIcon icon = new ImageIcon(getClass().getResource("/images/No.png"));
-			주사위판.get주사위들()[i].setIcon(icon);
-		}
+		게임화면.get굴림판().턴시작(세팅값);
+		게임화면.get점수판().턴시작(세팅값);
+		게임화면.굴림판으로();
 	}
 
 }

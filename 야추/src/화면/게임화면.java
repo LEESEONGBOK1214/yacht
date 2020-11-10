@@ -14,7 +14,7 @@ public class 게임화면 extends JPanel implements MouseListener {
 	private static 굴림판 굴림판;
 	private 주사위 주사위들[] = new 주사위[5];
 
-	public static int 턴;
+	public int 턴;
 	int 포트번호들[] = new int[2];
 	static CardLayout 장면;
 	String 현재장면;
@@ -25,24 +25,22 @@ public class 게임화면 extends JPanel implements MouseListener {
 		// 판 속성 세팅
 		장면 = new CardLayout();
 		setLayout(get장면());
-
 		// 객체 초기화
 		for (int i = 0; i < 주사위들.length; i++) {
 			주사위들[i] = new 주사위((i * 102) + 10, 0, 70);
 			주사위들[i].addMouseListener(this);
 		}
+
 		굴림판 = new 굴림판(주사위들);
 		점수판 = new 점수판(주사위들);
 
-		// 객체 세팅
-		턴 = 0;
-
-		// 세팅
+		// 추가
 		add(굴림판, "주사위굴리기");
 		add(점수판, "점수선택하기");
-
 		장면.show(this, "주사위굴리기");
-		현재장면="굴림판";
+
+		턴 = 0;
+		현재장면 = "굴림판";
 	}
 
 	public void 점수판으로() {
@@ -76,9 +74,9 @@ public class 게임화면 extends JPanel implements MouseListener {
 		}
 		System.out.println("주사위 저장할때 왜 안돼? " + count);
 		if (count == 5) {
-			화면.굴림판.get굴림버튼().setVisible(false);
+			굴림판.get굴림버튼().setVisible(false);
 		} else {
-			화면.굴림판.get굴림버튼().setVisible(true);
+			굴림판.get굴림버튼().setVisible(true);
 		}
 	}
 
@@ -104,6 +102,8 @@ public class 게임화면 extends JPanel implements MouseListener {
 		System.out.println(e.getSource().getClass());
 		
 		if(현재장면.equals("점수판"))return;
+		if (턴 == 0)
+			return;
 		
 		if (e.getSource().getClass() == 주사위.class) {
 			// 선택한게 주사위 이면!!!
@@ -164,7 +164,7 @@ public class 게임화면 extends JPanel implements MouseListener {
 		턴 = i;
 	}
 
-	public static int get턴() {
+	public int get턴() {
 		return 턴;
 	}
 
