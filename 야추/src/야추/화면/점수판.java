@@ -1,4 +1,4 @@
-package 화면;
+package 야추.화면;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import 야추메인.야추Frame;
+import 야추.야추Frame;
 
 @SuppressWarnings("serial")
 public class 점수판 extends JPanel implements ActionListener {

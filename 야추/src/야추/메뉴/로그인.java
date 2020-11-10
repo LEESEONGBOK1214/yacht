@@ -1,4 +1,4 @@
-package 야추_회원폼;
+package 야추.메뉴;
 
 
 import java.awt.BorderLayout;

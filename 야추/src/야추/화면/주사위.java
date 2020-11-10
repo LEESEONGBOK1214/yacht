@@ -1,4 +1,4 @@
-package 화면;
+package 야추.화면;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -7,7 +7,7 @@ import java.util.Random;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
-import 야추메인.야추Frame;
+import 야추.야추Frame;
 
 @SuppressWarnings("serial")
 public class 주사위 extends JLabel implements MouseListener {

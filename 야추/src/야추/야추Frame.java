@@ -1,4 +1,4 @@
-package 야추메인;
+package 야추;
 
 import java.awt.CardLayout;
 import java.awt.Color;
@@ -28,12 +28,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import 야추_회원폼.로그인;
-import 야추_회원폼.메뉴;
-import 야추_회원폼.회원가입;
-import 화면.게임화면;
-import 화면.대기화면;
-import 화면.방목록화면;
+import 야추.메뉴.로그인;
+import 야추.메뉴.메뉴;
+import 야추.메뉴.회원가입;
+import 야추.화면.게임화면;
+import 야추.화면.대기화면;
+import 야추.화면.방목록화면;
 
 @SuppressWarnings("serial")
 public class 야추Frame extends JFrame implements ActionListener, WindowListener {
@@ -101,7 +101,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		방목록창.get방만들기().addActionListener(new 버튼이벤트());
 		메인화면.add(방목록창, "방목록화면");
 
-		대기화면 대기화면 = 화면.대기화면.getInstance();
+		대기화면 대기화면 = 야추.화면.대기화면.getInstance();
 		대기화면.get돌아가기().addActionListener(new 버튼이벤트());
 		대기화면.get시작하기().addActionListener(new 버튼이벤트());
 		메인화면.add(대기화면, "대기화면");
@@ -169,8 +169,8 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								유저입장(응답);
 								break;
 							case "방나가렴":
-								화면.대기화면.getInstance().get시작하기().setEnabled(false);
-								화면.대기화면.getInstance().상대방이름설정("");
+								야추.화면.대기화면.getInstance().get시작하기().setEnabled(false);
+								야추.화면.대기화면.getInstance().상대방이름설정("");
 								// break 없어도됨.
 							case "로그인성공":
 								장면.show(메인화면, "방목록화면");
@@ -231,13 +231,13 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 			}
 
 			private void 방입장(String[] 응답) {
-				화면.대기화면.getInstance().상대방이름설정(응답[2]);
+				야추.화면.대기화면.getInstance().상대방이름설정(응답[2]);
 				장면.show(메인화면, "대기화면");
 			}
 
 			private void 유저입장(String[] 응답) {
-				화면.대기화면.getInstance().상대방이름설정(응답[2]);
-				화면.대기화면.getInstance().get시작하기().setEnabled(true);
+				야추.화면.대기화면.getInstance().상대방이름설정(응답[2]);
+				야추.화면.대기화면.getInstance().get시작하기().setEnabled(true);
 			}
 
 		});

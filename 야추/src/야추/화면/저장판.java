@@ -1,4 +1,4 @@
-package 화면;
+package 야추.화면;
 
 import java.awt.Color;
 import javax.swing.JPanel;

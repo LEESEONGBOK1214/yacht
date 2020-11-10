@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import 야추_서버.방;
+import 야추.서버.방;
 
 public class OracleDB {
 //	Connection conn;

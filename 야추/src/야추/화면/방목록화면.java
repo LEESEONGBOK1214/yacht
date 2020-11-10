@@ -1,4 +1,4 @@
-package 화면;
+package 야추.화면;
 
 import java.awt.Color;
 import java.sql.SQLException;
@@ -8,8 +8,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import DB.OracleDB;
-import 야추_서버.방;
-import 야추_서버.유저;
+import 야추.서버.방;
+import 야추.서버.유저;
 
 
 @SuppressWarnings("serial")

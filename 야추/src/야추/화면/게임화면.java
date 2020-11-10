@@ -1,4 +1,4 @@
-package 화면;
+package 야추.화면;
 
 import java.awt.CardLayout;
 import java.awt.event.MouseEvent;
@@ -6,7 +6,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-import 야추메인.야추Frame;
+import 야추.야추Frame;
 
 @SuppressWarnings("serial")
 public class 게임화면 extends JPanel implements MouseListener {

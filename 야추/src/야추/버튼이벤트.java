@@ -1,4 +1,4 @@
-package 야추메인;
+package 야추;
 
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
@@ -10,8 +10,8 @@ import java.net.Socket;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import 야추_회원폼.로그인;
-import 야추_회원폼.회원가입;
+import 야추.메뉴.로그인;
+import 야추.메뉴.회원가입;
 
 public class 버튼이벤트 implements ActionListener {
 	Socket socket = 야추Frame.socket;

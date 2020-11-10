@@ -1,4 +1,4 @@
-package 야추_서버;
+package 야추.서버;
 
 import java.util.ArrayList;
 
