@@ -12,13 +12,19 @@ import javax.swing.border.LineBorder;
 
 import 야추.야추Frame;
 
+enum scores{
+	aces, deuces, threes, fours, fives, sixes, bonus, choice, fourOfKind, fullHouse, sStraight, lStraight, yatch
+}
+
+
 @SuppressWarnings("serial")
 public class 점수판 extends JPanel implements ActionListener {
-	JLabel 목록[] = new JLabel[12];
-	private JButton 선택버튼[] = new JButton[12];
-	JLabel 상대점수[] = new JLabel[12];
-	String 목록들[] = { "Aces", "Deuces", "Threes", "Fours", "Fives", "Sixes", "Choice", "4 of Kind", "Full House",
-			"S.Straight", "L.Straight", "Yatch" };
+	int size = 14;
+	JLabel 목록[] = new JLabel[size];
+	private JButton 선택버튼[] = new JButton[size];
+	JLabel 상대점수[] = new JLabel[size];
+	String 목록들[] = { "Aces", "Deuces", "Threes", "Fours", "Fives", "Sixes", "bonus", "Choice", "4 of Kind",
+			"Full House", "S.Straight", "L.Straight", "Yatch" };
 	int 점수[] = new int[12];
 	주사위[] 주사위들;
 	private JButton 돌아가기;
@@ -34,6 +40,7 @@ public class 점수판 extends JPanel implements ActionListener {
 		// 초이스, 4 of kind, Full house(2, 3),
 		// S.straight, L.straight, yatch
 
+		// 유저 두명의 점수 보이기
 		for (int i = 0; i < 2; i++) {
 			for (int j = 0; j < 2; j++) {
 				get유저점수()[i][j] = new JLabel("0"); // [유저][이름, 점수]
@@ -43,8 +50,9 @@ public class 점수판 extends JPanel implements ActionListener {
 			}
 		}
 
+
 		for (int i = 0; i < 2; i++) {
-			for (int j = 6 * i; j < 6 * (i + 1); j++) {
+			for (int j = 7 * i; j < 7 * (i + 1); j++) {
 				목록[j] = new JLabel(목록들[j]);
 				목록[j].setBounds(20 + 200 * i, 70 * (j % 6) + 50, 100, 50);
 
@@ -112,6 +120,9 @@ public class 점수판 extends JPanel implements ActionListener {
 			// 초이스
 			점수[6] += 주사위.눈금;
 		}
+		
+//		점수[7] = 
+		 
 		// 포오카
 		for (int i = 0; i < 6; i++) {
 			if (점수[i] >= (i + 1) * 4) {
