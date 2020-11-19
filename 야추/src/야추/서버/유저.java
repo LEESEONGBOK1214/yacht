@@ -130,12 +130,6 @@ public class 유저 extends Thread {
 				return;
 			}
 			방 방 = 방목록.next();
-			System.out.println("======================");
-			for (유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(방)).유저들) {
-				System.out.println(유저.port);
-			}
-			System.out.println("======================");
-			System.out.println("방 : " + 방);
 			if (방.equals(this.room)) {
 				System.out.println("입장방이랑 같넹!?");
 				System.out.println("인덱스 :" + 방.유저들.indexOf(this));
@@ -148,17 +142,17 @@ public class 유저 extends Thread {
 					}
 					// 같은 방에 있던 유저한테도 보내줘야함..
 					System.out.println("방장이 나감..!");
-//					outprint("방나가렴");
+					outprint("방나가렴");
 					outprint(방.유저들.get(1).socket.getPort(), "방나가렴");
+					방.유저들.get(1).room = null;
 					get방목록().remove(this.room);
 					broadCast("방업데이트");
-					방.유저들.get(1).room = null;
 				} else {
 //					outprint("방나가렴");
 					try {
 						new OracleDB().방나가기(this.room.get유저들().get(0).port, this.port);
 					} catch (SQLException e) {
-						System.out.println("방삭제실패..");
+						System.out.println("방나가기 실패..");
 						e.printStackTrace();
 					}
 					this.room = null;

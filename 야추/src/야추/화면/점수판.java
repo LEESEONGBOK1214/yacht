@@ -19,13 +19,13 @@ enum scores{
 
 @SuppressWarnings("serial")
 public class 점수판 extends JPanel implements ActionListener {
-	int size = 14;
+	int size = 13;
 	JLabel 목록[] = new JLabel[size];
 	private JButton 선택버튼[] = new JButton[size];
 	JLabel 상대점수[] = new JLabel[size];
 	String 목록들[] = { "Aces", "Deuces", "Threes", "Fours", "Fives", "Sixes", "bonus", "Choice", "4 of Kind",
 			"Full House", "S.Straight", "L.Straight", "Yatch" };
-	int 점수[] = new int[12];
+	int 점수[] = new int[size];
 	주사위[] 주사위들;
 	private JButton 돌아가기;
 	private JLabel 유저점수[][] = new JLabel[2][2];
@@ -50,9 +50,10 @@ public class 점수판 extends JPanel implements ActionListener {
 			}
 		}
 
-
 		for (int i = 0; i < 2; i++) {
-			for (int j = 7 * i; j < 7 * (i + 1); j++) {
+			for (int j = size/2 * i; j < size/2 * (i + 1); j++) {
+				if(j==size)break;
+//				System.out.println(j);
 				목록[j] = new JLabel(목록들[j]);
 				목록[j].setBounds(20 + 200 * i, 70 * (j % 6) + 50, 100, 50);
 
