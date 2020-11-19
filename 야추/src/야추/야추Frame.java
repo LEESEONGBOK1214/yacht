@@ -78,8 +78,6 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 
 		메뉴.get로그인().addActionListener(new 버튼이벤트());
 		메뉴.get회원가입().addActionListener(new 버튼이벤트());
-		메뉴.get바로시작().addActionListener(new 버튼이벤트());
-		메뉴.get방목록보기().addActionListener(new 버튼이벤트());
 		메인화면.add(메뉴, "메뉴");
 
 		회원가입 = new 회원가입();
@@ -97,7 +95,6 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 
 		방목록창 = new 방목록화면();
 		방목록창.get새로고침().addActionListener(new 버튼이벤트());
-		방목록창.get들어가기().addActionListener(new 버튼이벤트());
 		방목록창.get로그아웃().addActionListener(new 버튼이벤트());
 		방목록창.get방만들기().addActionListener(new 버튼이벤트());
 		메인화면.add(방목록창, "방목록화면");
@@ -116,7 +113,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	}
 
 	private void 서버값받기() {
-		Thread 방나가기 = new Thread(new Runnable() {
+		Thread 서버값받기 = new Thread(new Runnable() {
 			String 서버응답 = "";
 
 			public void run() {
@@ -260,7 +257,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 			}
 
 		});
-		방나가기.start();
+		서버값받기.start();
 	}
 
 	protected void 게임종료() {
@@ -289,6 +286,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 			게임화면.get굴림판().get차례표시().setText("상대 차례");
 		}
 
+		게임화면.get점수판().점수초기화();
 		게임화면.get점수판().get유저점수()[0][0].setText(유저명1);
 		게임화면.get점수판().get유저점수()[1][0].setText(유저명2);
 		게임화면.get점수판().set유저순서(Integer.parseInt(순서));

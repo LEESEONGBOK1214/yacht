@@ -23,14 +23,12 @@ public class 방목록화면 extends JPanel {
 	private static ArrayList<방> 방목록 = new ArrayList<방>(); // 방의 리스트방목록
 	private JButton 방만들기;
 	private JButton 새로고침;
-	private JButton 들어가기;
 	private JButton 로그아웃;
 	public 방목록화면() {
 		버튼목록 = new JPanel();
 		setLayout(null);
 		방만들기 = new JButton("방만들기");
 		새로고침 = new JButton("새로고침");
-		들어가기 = new JButton("들어가기");
 		로그아웃 = new JButton("로그아웃");
 
 		방목록패널 = new JPanel();
@@ -39,11 +37,9 @@ public class 방목록화면 extends JPanel {
 
 		버튼목록.setLayout(null);
 		버튼목록.add(방만들기);
-		버튼목록.add(들어가기);
 		버튼목록.add(새로고침);
 		버튼목록.add(로그아웃);
 		방만들기.setBounds(20, 0, 150, 50);
-		들어가기.setBounds(192, 0, 150, 50);
 		새로고침.setBounds(363, 0, 150, 50);
 		로그아웃.setBounds(535, 0, 150, 50);
 
@@ -85,9 +81,6 @@ public class 방목록화면 extends JPanel {
 		return 새로고침;
 	}
 
-	public JButton get들어가기() {
-		return 들어가기;
-	}
 
 	public JButton get로그아웃() {
 		return 로그아웃;

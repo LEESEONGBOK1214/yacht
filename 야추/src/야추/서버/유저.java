@@ -129,15 +129,14 @@ public class 유저 extends Thread {
 				System.out.println("방삭제실패..");
 				e.printStackTrace();
 			}
-			// 같은 방에 있던 유저한테도 보내줘야함..
 			System.out.println("방장이 나감..!");
-//			outprint("방나가렴");
-			if (방.유저들.size() > 1) {
-				outprint(방.유저들.get(1).socket.getPort(), "방나가렴");
-			}
 			get방목록().remove(this.room);
 			broadCast("방업데이트");
-			방.유저들.get(1).room = null;
+			// 방장이 나갔으니 같은 방에 있는 유저 내보내기.
+			if (방.유저들.size() > 1) {
+				outprint(방.유저들.get(1).socket.getPort(), "방나가렴");
+				방.유저들.get(1).room = null;
+			}
 		} else {
 			try {
 				new OracleDB().방나가기(this.room.get유저들().get(0).port, this.port);
@@ -147,7 +146,6 @@ public class 유저 extends Thread {
 //				e.printStackTrace();
 			}
 		}
-
 		outprint("방나가렴");
 		broadCast("방업데이트");
 		this.room = null;
@@ -168,7 +166,7 @@ public class 유저 extends Thread {
 				try {
 					new OracleDB().방입장(방장포트, this.port);
 				} catch (SQLException e) {
-//					e.printStackTrace();
+					e.printStackTrace();
 //					System.out.println("\n\n\n\n방입장실패\n\n\n\n");
 				}
 //				System.out.println("======================");
@@ -329,14 +327,15 @@ public class 유저 extends Thread {
 		try {
 			if (this.room != null)
 				if (this.room.유저들.get(0).port == this.port) {
-					new DB.OracleDB().방삭제(port);
-					broadCast("방업데이트");
 					outprint(this.room.유저들.get(1).port, "부전승");
+					this.room.유저들.get(1).room = null;
 				} else {
 					outprint(this.room.유저들.get(0).port, "부전승");
-					this.room = null;
+					this.room.유저들.get(0).room = null;
 				}
-			
+			this.room = null;
+			new DB.OracleDB().방삭제(this.room.유저들.get(0).port);
+			broadCast("방업데이트");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

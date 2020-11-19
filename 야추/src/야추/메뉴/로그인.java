@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class 로그인 extends 배경화면{
+public class 로그인 extends 배경화면 {
 	static JTextField idTextField;
 	static JPasswordField passwdTextField;
 	JButton startButton,backButton;
@@ -46,29 +46,30 @@ public class 로그인 extends 배경화면{
 		passwdTextField.setFont(font);
 		id = new JLabel("아 이 디");
 		id.setFont(font);
-		id.setBackground(Color.pink);
 		passwd = new JLabel("비밀번호");
 		passwd.setFont(font);
 
 		add(id);
-		id.setBounds(170, 150, 200, 100);
+		id.setBounds(170, 170, 200, 100);
+		id.setForeground(Color.green);
 		add(idTextField);
-		idTextField.setBounds(300, 170, 300, 70);
+		idTextField.setBounds(300, 190, 300, 70);
 		add(passwd);
-		passwd.setBounds(160, 230, 200, 150);
+		passwd.setBounds(160, 250, 200, 150);
+		passwd.setForeground(Color.green);
 		add(passwdTextField);
-		passwdTextField.setBounds(300, 280, 300, 70);
+		passwdTextField.setBounds(300, 300, 300, 70);
 		passwdTextField.setEchoChar('*');
 		startButton = new JButton("시작");
 		backButton = new JButton("뒤로");
 		startButton.setFont(font);
 		backButton.setFont(font);
-		startButton.setBackground(Color.white);
+		startButton.setBackground(new Color(200, 100, 0));
 		startButton.setBorderPainted(false);
-		startButton.setBounds(250, 380, 150, 80);
-		backButton.setBackground(Color.white);
+		startButton.setBounds(250, 400, 150, 80);
+		backButton.setBackground(new Color(200, 100, 0));
 		backButton.setBorderPainted(false);
-		backButton.setBounds(430, 380, 150, 80);
+		backButton.setBounds(430, 400, 150, 80);
 		add(startButton);
 		add(backButton);
 	}

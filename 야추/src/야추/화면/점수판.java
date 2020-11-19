@@ -84,10 +84,20 @@ public class 점수판 extends JPanel implements ActionListener {
 				add(tmp);
 			}
 		}
+
+		점수초기화();
 //		for(int i=0;i<12;i++) {
 //			선택[i] = new JButton(목록들[i]);
 //		}
 		돌아가기설정();
+	}
+
+	public void 점수초기화() {
+		// 점수 0으로 바꾸기
+		for (int i = 0; i < size; i++) {
+			점수[i] = 0;
+
+		}
 	}
 
 	private void 돌아가기설정() {
@@ -102,11 +112,7 @@ public class 점수판 extends JPanel implements ActionListener {
 	void 점수설정() {
 		System.out.println("점수설정 >");
 
-		// 점수 0으로 바꾸기
-		for (int i = 0; i < size; i++) {
-			점수[i] = 0;
 
-		}
 		// 1~6합.
 		System.out.println("주사위 눈금 ==================================");
 		for (주사위 주사위 : 주사위들) {
