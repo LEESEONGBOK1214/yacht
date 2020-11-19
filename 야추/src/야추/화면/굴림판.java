@@ -100,13 +100,30 @@ public class 굴림판 extends JPanel implements ActionListener {
 
 		}
 
+		Thread 굴리기활성화 = new Thread(new Runnable() {
+			public void run() {
+				try {
+					Thread.sleep(2000);
+					야추Frame.get게임화면().get굴림판().get굴림버튼().setEnabled(true);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+		굴리기활성화.start();
+
 		야추Frame.outprint("굴리기/" + 주사위눈금);
 		// 굴린 값 출력.
 		주사위눈금 = "";
-		System.out.println("굴림 에서의 턴 : " + 야추Frame.get게임화면().턴);
+
 		주사위판.repaint();
 
 		System.out.println("턴 : " + 야추Frame.get게임화면().턴);
+		if (야추Frame.get게임화면().get턴() >= 2 && 야추Frame.get게임화면().get턴() < 4) {
+			점수화면전환.setEnabled(true);
+		} else {
+			점수화면전환.setEnabled(false);
+		}
 		if (야추Frame.get게임화면().get턴() == 4) {
 			마지막굴림();
 			야추Frame.outprint("마지막굴림");
@@ -200,6 +217,8 @@ public class 굴림판 extends JPanel implements ActionListener {
 	public void 턴시작(boolean 세팅값) {
 		점수화면전환.setVisible(세팅값);
 		굴림버튼.setVisible(세팅값);
+		점수화면전환.setEnabled(세팅값);
+		굴림버튼.setEnabled(세팅값);
 
 		for (int i = 0; i < 5; i++) {
 			this.주사위들[i].눈금 = 0;

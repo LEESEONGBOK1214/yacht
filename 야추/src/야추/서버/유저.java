@@ -120,54 +120,37 @@ public class 유저 extends Thread {
 
 	private void 방나가기() {
 		System.out.print("방나가기 > ");
-		System.out.println("방size : " + get방목록().size());
 
-		System.out.println("this.room : " + this.room);
-		Iterator<방> 방목록 = get방목록().iterator();
-		System.out.println("방목록 사이즈 : " + get방목록().size());
-		while (방목록.hasNext()) {
-			if (!방목록.hasNext()) {
-				return;
+		방 방 = this.room;
+		if ((방.유저들.indexOf(this) == 0)) {
+			try {
+				new OracleDB().방삭제(this.port);
+			} catch (SQLException e) {
+				System.out.println("방삭제실패..");
+				e.printStackTrace();
 			}
-			방 방 = 방목록.next();
-			System.out.println("======================");
-			for (유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(방)).유저들) {
-				System.out.println(유저.port);
+			// 같은 방에 있던 유저한테도 보내줘야함..
+			System.out.println("방장이 나감..!");
+//			outprint("방나가렴");
+			if (방.유저들.size() > 1) {
+				outprint(방.유저들.get(1).socket.getPort(), "방나가렴");
 			}
-			System.out.println("======================");
-			System.out.println("방 : " + 방);
-			if (방.equals(this.room)) {
-				System.out.println("입장방이랑 같넹!?");
-				System.out.println("인덱스 :" + 방.유저들.indexOf(this));
-				if ((방.유저들.indexOf(this) == 0)) {
-					try {
-						new OracleDB().방삭제(this.port);
-					} catch (SQLException e) {
-						System.out.println("방삭제실패..");
-						e.printStackTrace();
-					}
-					// 같은 방에 있던 유저한테도 보내줘야함..
-					System.out.println("방장이 나감..!");
-//					outprint("방나가렴");
-					outprint(방.유저들.get(1).socket.getPort(), "방나가렴");
-					get방목록().remove(this.room);
-					broadCast("방업데이트");
-					방.유저들.get(1).room = null;
-				} else {
-//					outprint("방나가렴");
-					try {
-						new OracleDB().방나가기(this.room.get유저들().get(0).port, this.port);
-					} catch (SQLException e) {
-						System.out.println("방삭제실패..");
-						e.printStackTrace();
-					}
-					this.room = null;
-				}
-				outprint("방나가렴");
-				broadCast("방업데이트");
-				break;
+			get방목록().remove(this.room);
+			broadCast("방업데이트");
+			방.유저들.get(1).room = null;
+		} else {
+			try {
+				new OracleDB().방나가기(this.room.get유저들().get(0).port, this.port);
+				outprint(this.room.유저들.get(0).port, "유저퇴장");
+			} catch (SQLException e) {
+				System.out.println("방삭제실패..");
+//				e.printStackTrace();
 			}
 		}
+
+		outprint("방나가렴");
+		broadCast("방업데이트");
+		this.room = null;
 	}
 
 	public void 방입장(String[] split) {
@@ -178,7 +161,7 @@ public class 유저 extends Thread {
 			int 방장포트 = Integer.parseInt(split[2]);
 			int 검색포트 = in_room.유저들.get(0).socket.getPort();
 //			System.out.println("현재 검색중인 유저의 포트번호 : " + 검색포트);
-			System.out.println("방장의 포트번호 : " + 방장포트);
+//			System.out.println("방장의 포트번호 : " + 방장포트);
 			if (방장포트 == 검색포트) { // split[2]이 방장 소켓이 넘어옴,
 				this.room = in_room; // 유저가 속한 방을 룸으로 변경한다.(중요)
 				in_room.유저들.add(this);
@@ -186,13 +169,13 @@ public class 유저 extends Thread {
 					new OracleDB().방입장(방장포트, this.port);
 				} catch (SQLException e) {
 //					e.printStackTrace();
-					System.out.println("\n\n\n\n방입장실패\n\n\n\n");
+//					System.out.println("\n\n\n\n방입장실패\n\n\n\n");
 				}
-				System.out.println("======================");
-				for (유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(in_room)).유저들) {
-					System.out.println(유저.port);
-				}
-				System.out.println("======================");
+//				System.out.println("======================");
+//				for (유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(in_room)).유저들) {
+//					System.out.println(유저.port);
+//				}
+//				System.out.println("======================");
 				outprint("방입장/" + in_room.유저들.get(0).이름);
 				outprint(방장포트, "유저입장/" + this.이름);
 				broadCast("방업데이트");
@@ -202,12 +185,12 @@ public class 유저 extends Thread {
 	}
 
 	private void 게임시작() {
-		System.out.println("======================");
+//		System.out.println("======================");
 		int 랜덤값 = new Random().nextInt(2);
 		String 이름보내기 = this.room.유저들.get(0).이름 + "/" + this.room.유저들.get(1).이름;
 		outprint(this.room.유저들.get(1).port, "게임시작함/" + 랜덤값 + "/" + 이름보내기 + "/" + 1);
 		outprint("게임시작함/" + (랜덤값 + 1) % 2 + "/" + 이름보내기 + "/" + 0);
-		System.out.println("======================");
+//		System.out.println("======================");
 	}
 
 	private void 굴리기(String split[]) {
@@ -344,14 +327,16 @@ public class 유저 extends Thread {
 	private void 종료() {
 		// DB에도 삭제하고 서버에도 삭제해야함.
 		try {
-			String 삭제결과 = "";
 			if (this.room != null)
 				if (this.room.유저들.get(0).port == this.port) {
-					삭제결과 = new DB.OracleDB().방삭제(port);
+					new DB.OracleDB().방삭제(port);
+					broadCast("방업데이트");
+					outprint(this.room.유저들.get(1).port, "부전승");
 				} else {
+					outprint(this.room.유저들.get(0).port, "부전승");
 					this.room = null;
 				}
-			broadCast(삭제결과);
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

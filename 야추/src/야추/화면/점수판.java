@@ -13,7 +13,8 @@ import javax.swing.border.LineBorder;
 import 야추.야추Frame;
 
 enum scores{
-	aces, deuces, threes, fours, fives, sixes, bonus, choice, fourOfKind, fullHouse, sStraight, lStraight, yatch
+	aces, deuces, threes, fours, fives, sixes, subtotal, choice, fourOfKind, fullHouse, sStraight, lStraight, yatch,
+	bonus
 }
 
 
@@ -23,9 +24,9 @@ public class 점수판 extends JPanel implements ActionListener {
 	JLabel 목록[] = new JLabel[size];
 	private JButton 선택버튼[] = new JButton[size];
 	JLabel 상대점수[] = new JLabel[size];
-	String 목록들[] = { "Aces", "Deuces", "Threes", "Fours", "Fives", "Sixes", "bonus", "Choice", "4 of Kind",
-			"Full House", "S.Straight", "L.Straight", "Yatch" };
-	int 점수[] = new int[12];
+	String 목록들[] = { "Aces", "Deuces", "Threes", "Fours", "Fives", "Sixes", "subtotal", "Choice", "4 of Kind",
+			"Full House", "S.Straight", "L.Straight", "Yatch", "bonus" };
+	int 점수[] = new int[size];
 	주사위[] 주사위들;
 	private JButton 돌아가기;
 	private JLabel 유저점수[][] = new JLabel[2][2];
@@ -52,33 +53,37 @@ public class 점수판 extends JPanel implements ActionListener {
 
 
 		for (int i = 0; i < 2; i++) {
-			for (int j = 7 * i; j < 7 * (i + 1); j++) {
+			int 좌우간격 = 200;
+			int 상하간격 = 65;
+			int len = (size % 2 == 0) ? size : size + 1;
+
+			for (int j = len / 2 * i; j < len / 2 * (i + 1); j++) {
 				목록[j] = new JLabel(목록들[j]);
-				목록[j].setBounds(20 + 200 * i, 70 * (j % 6) + 50, 100, 50);
+				목록[j].setBounds(20 + 좌우간격 * i, 상하간격 * (j % (len / 2)) + 30, 100, 50);
 
 				선택버튼[j] = new JButton();
 				선택버튼[j].setName(목록들[j]);
 				선택버튼[j].setBackground(Color.white);
 				선택버튼[j].setFocusPainted(false);
-				선택버튼[j].setBounds(70 + 220 * i, 70 * (j % 6) + 50, 50, 50);
+				선택버튼[j].setBounds(70 + (좌우간격 + 20) * i, 상하간격 * (j % (len / 2)) + 30, 50, 50);
 				선택버튼[j].addActionListener(this);
 				선택버튼[j].setEnabled(false);
 				
-				JPanel tmp = new JPanel(new BorderLayout());
 				상대점수[j] = new JLabel("0");
 				상대점수[j].setName(목록들[j]);
 				상대점수[j].setHorizontalAlignment(JLabel.CENTER);
-				tmp.setBounds(130 + 220 * i, 70 * (j % 6) + 50, 50, 50);
+
+				JPanel tmp = new JPanel(new BorderLayout());
+				tmp.setBounds(130 + (좌우간격 + 20) * i, 상하간격 * (j % (len / 2)) + 30, 50, 50);
 				tmp.setBackground(Color.gray);
 				tmp.setBorder(new LineBorder(Color.black));
 				tmp.add(상대점수[j], BorderLayout.CENTER);
-				
+
 				add(목록[j]);
 				add(선택버튼[j]);
 				add(tmp);
 			}
 		}
-
 //		for(int i=0;i<12;i++) {
 //			선택[i] = new JButton(목록들[i]);
 //		}
@@ -98,30 +103,25 @@ public class 점수판 extends JPanel implements ActionListener {
 		System.out.println("점수설정 >");
 
 		// 점수 0으로 바꾸기
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < size; i++) {
 			점수[i] = 0;
 
 		}
 		// 1~6합.
+		System.out.println("주사위 눈금 ==================================");
 		for (주사위 주사위 : 주사위들) {
-			if (주사위.눈금 == 1) {
-				점수[0] += 1;
-			} else if (주사위.눈금 == 2) {
-				점수[1] += 2;
-			} else if (주사위.눈금 == 3) {
-				점수[2] += 3;
-			} else if (주사위.눈금 == 4) {
-				점수[3] += 4;
-			} else if (주사위.눈금 == 5) {
-				점수[4] += 5;
-			} else if (주사위.눈금 == 6) {
-				점수[5] += 6;
-			}
+			System.out.println(주사위.눈금);
+			점수[주사위.눈금 - 1] += 주사위.눈금;
 			// 초이스
-			점수[6] += 주사위.눈금;
+			점수[scores.choice.ordinal()] += 주사위.눈금;
 		}
+		System.out.println("주사위 눈금 ==================================");
 		
-//		점수[7] = 
+//		// 보너스 -> 선택 할 때 추가.
+//		for (int i = 0; i < 6; i++) {
+//			점수[scores.bonus.ordinal()] += 점수[i];
+//		}
+
 		 
 		// 포오카
 		for (int i = 0; i < 6; i++) {
@@ -130,8 +130,8 @@ public class 점수판 extends JPanel implements ActionListener {
 				for (int j = 0; j < 5; j++) {
 					포오카 += 주사위들[j].눈금;
 				}
-				if (포오카 > 점수[7]) {
-					점수[7] = 포오카;
+				if (포오카 > 점수[scores.fourOfKind.ordinal()]) {
+					점수[scores.fourOfKind.ordinal()] = 포오카;
 				}
 			}
 		}
@@ -149,26 +149,26 @@ public class 점수판 extends JPanel implements ActionListener {
 			}
 		}
 		if (a > 0 && b > 0)
-			점수[8] = a + b;
+			점수[scores.fullHouse.ordinal()] = a + b;
 
 		// 스몰스트
 		// 라지스트
-		if (점수[2] > 0 && 점수[3] > 0) { // 3, 4는 무조건 있어야함.
+		if (점수[scores.threes.ordinal()] > 0 && 점수[scores.fours.ordinal()] > 0) { // 3, 4는 무조건 있어야함.
 			System.out.print("3, 4");
-			if (점수[1] > 0 && 점수[4] > 0) {// 2 3 4 5
+			if (점수[scores.deuces.ordinal()] > 0 && 점수[scores.fives.ordinal()] > 0) {// 2 3 4 5
 				System.out.print(", 2, 5");
-				if (점수[0] > 0 || 점수[5] > 0) { // 1 2 3 4 5 || 2 3 4 5 6
+				if (점수[scores.aces.ordinal()] > 0 || 점수[scores.sixes.ordinal()] > 0) { // 1 2 3 4 5 || 2 3 4 5 6
 					System.out.print(", 1 or 6");
 					점수[10] = 30;
 				}
 				점수[9] = 15;
-			} else if (점수[0] > 0 && 점수[1] > 0) {// 1 2 3 4
+			} else if (점수[scores.aces.ordinal()] > 0 && 점수[scores.deuces.ordinal()] > 0) {// 1 2 3 4
 				System.out.print(", 1, 2");
 				// 1 2 3 4 5는 위에서 처리.
-				점수[9] = 15;
-			} else if (점수[4] > 0 && 점수[5] > 0) { // 3 4 5 6
+				점수[scores.sStraight.ordinal()] = 15;
+			} else if (점수[scores.fives.ordinal()] > 0 && 점수[scores.sixes.ordinal()] > 0) { // 3 4 5 6
 				System.out.print(", 5, 6");
-				점수[9] = 15;
+				점수[scores.sStraight.ordinal()] = 15;
 			}
 			System.out.println();
 		}
@@ -176,12 +176,12 @@ public class 점수판 extends JPanel implements ActionListener {
 		// 야추
 		for (int i = 0; i < 6; i++) {
 			if (점수[i] == (i + 1) * 5) {
-				점수[11] = 50;
+				점수[scores.yatch.ordinal()] = 50;
 				break;
 			}
 		}
 
-		for (int i = 0; i < 12; i++) {
+		for (int i = 0; i < size; i++) {
 			remove(선택버튼[i]);
 			선택버튼[i].setText("" + 점수[i]);
 			System.out.println(목록들[i] + " : " + 선택버튼[i].getText());
@@ -231,11 +231,15 @@ public class 점수판 extends JPanel implements ActionListener {
 	}
 
 	public void 선택버튼셋(boolean b) {
+		System.out.println("점수판 > 선택버튼셋 >");
 		for (int i = 0; i < 선택버튼.length; i++) {
+			System.out.println(i);
 			if (!선택버튼[i].getName().equals("눌림")) {
 				선택버튼[i].setEnabled(b);
 			}
 		}
+		선택버튼[scores.subtotal.ordinal()].setEnabled(false);
+		선택버튼[scores.bonus.ordinal()].setEnabled(false);
 	}
 
 	public void 점수세팅(String[] 응답) {
@@ -256,6 +260,14 @@ public class 점수판 extends JPanel implements ActionListener {
 			야추Frame.outprint("굴림판으로");
 		} else { // 점수 선택 시,
 			int 점수 = Integer.parseInt(눌린버튼.getText());
+
+			switch (눌린버튼.getName()) {
+			case "aces": case "deuces": case "threes": case"fours": case"fives": case"sixes":
+				this.점수[scores.subtotal.ordinal()] = this.점수[scores.subtotal.ordinal()] + 점수;
+				break;
+
+			}
+			
 			눌린버튼.setEnabled(false);
 			야추Frame.outprint("점수선택/" + 눌린버튼.getName() + "/" + 점수);
 			눌린버튼.setName("눌림");
