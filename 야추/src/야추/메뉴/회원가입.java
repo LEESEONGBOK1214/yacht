@@ -5,13 +5,12 @@ import java.awt.Font;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 
 @SuppressWarnings("serial")
-public class 회원가입 extends JPanel// extends 가입배경
+public class 회원가입 extends 배경화면// extends 가입배경
 {
 	private Font 가입폰트;
 	private static JLabel 아이디, 비밀번호, 이름;

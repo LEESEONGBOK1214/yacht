@@ -47,8 +47,6 @@ public class 버튼이벤트 implements ActionListener {
 		case "방만들기":
 			방만들기();
 			break;
-		case "들어가기":
-			break;
 		case "새로고침":
 			outprint("새로고침");
 			break;
@@ -58,15 +56,8 @@ public class 버튼이벤트 implements ActionListener {
 		case "방목록으로":
 			outprint("방나가기");
 			break;
-		// 테스팅용들
 		case "게임시작":
 			outprint("게임시작");
-			break;
-		case "바로시작":
-			장면.show(메인화면, "게임화면");
-			break;
-		case "방목록보기":
-			장면.show(메인화면, "방목록화면");
 			break;
 		}
 	}

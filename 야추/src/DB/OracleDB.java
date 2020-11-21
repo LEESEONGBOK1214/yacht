@@ -256,7 +256,7 @@ public class OracleDB {
 		return false;
 	}
 
-	public String 规昏力(int port) throws SQLException {
+	public void 规昏力(int port) throws SQLException {
 		Connection conn = null;
 		try {
 			conn = DBconn.getConnection();
@@ -279,7 +279,6 @@ public class OracleDB {
 			System.out.println("DB > 规昏力 > port : " +  port );
 			if (rs.next()) {
 				System.out.println("DB > 规昏力 > 己傍");
-				return "规诀单捞飘";
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -291,7 +290,6 @@ public class OracleDB {
 			if(pstm!=null)pstm.close();
 			if(conn!=null)conn.close();
 		}
-		return "";
 	}
 
 	public ArrayList<String> 规格废啊廉坷扁() throws SQLException {

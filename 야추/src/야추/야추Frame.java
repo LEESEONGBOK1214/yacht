@@ -51,7 +51,8 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	PreparedStatement ptst;
 
 	String 응답 = null;
-	int 전체턴;
+	int 전체턴 = -1;
+
 	야추Frame() {
 		super("yacht!");
 		// 기본 설정.
@@ -59,7 +60,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 //		setLocation(600, 200); // 화면 가운데 조정 데탑
 		setLocation(470, 100); // 노트북
 		setDefaultCloseOperation(3);// 닫기 누르면 종료.
-		
+
 		// =================================================================================================
 		try {
 			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
@@ -77,8 +78,6 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 
 		메뉴.get로그인().addActionListener(new 버튼이벤트());
 		메뉴.get회원가입().addActionListener(new 버튼이벤트());
-		메뉴.get바로시작().addActionListener(new 버튼이벤트());
-		메뉴.get방목록보기().addActionListener(new 버튼이벤트());
 		메인화면.add(메뉴, "메뉴");
 
 		회원가입 = new 회원가입();
@@ -96,7 +95,6 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 
 		방목록창 = new 방목록화면();
 		방목록창.get새로고침().addActionListener(new 버튼이벤트());
-		방목록창.get들어가기().addActionListener(new 버튼이벤트());
 		방목록창.get로그아웃().addActionListener(new 버튼이벤트());
 		방목록창.get방만들기().addActionListener(new 버튼이벤트());
 		메인화면.add(방목록창, "방목록화면");
@@ -115,7 +113,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	}
 
 	private void 서버값받기() {
-		Thread 방나가기 = new Thread(new Runnable() {
+		Thread 서버값받기 = new Thread(new Runnable() {
 			String 서버응답 = "";
 
 			public void run() {
@@ -131,7 +129,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 						}
 						System.out.println("서버응답 : " + 서버응답);
 						String 응답[] = 서버응답.split("/");
-						if(응답.length<2) {
+						if (응답.length < 2) {
 							System.out.println("서버 응답이 잘못된거 같다.");
 							return;
 						}
@@ -166,7 +164,10 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								게임시작(응답[2], 응답[3], 응답[4], 응답[5]); // 차례 선 정보 전달.
 								break;
 							case "유저입장":
-								유저입장(응답);
+								유저입장(응답[2]);
+								break;
+							case "유저퇴장":
+								유저입장("");
 								break;
 							case "방나가렴":
 								야추.화면.대기화면.getInstance().get시작하기().setEnabled(false);
@@ -214,6 +215,17 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								break;
 							case "게임종료":
 								게임종료();
+								전체턴 = -1;
+								break;
+							case "부전승":
+								if (전체턴 == -1)
+									break;
+								JOptionPane.showMessageDialog(야추Frame.this, "상대가 나갔습니다! 승리!");
+								야추.화면.대기화면.getInstance().get시작하기().setEnabled(false);
+								야추.화면.대기화면.getInstance().상대방이름설정("");
+								장면.show(메인화면, "방목록화면");
+								방목록새로고침();
+								전체턴 = -1;
 								break;
 							}
 
@@ -235,25 +247,29 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 				장면.show(메인화면, "대기화면");
 			}
 
-			private void 유저입장(String[] 응답) {
-				야추.화면.대기화면.getInstance().상대방이름설정(응답[2]);
-				야추.화면.대기화면.getInstance().get시작하기().setEnabled(true);
+			private void 유저입장(String 상대이름) {
+				야추.화면.대기화면.getInstance().상대방이름설정(상대이름);
+				if (상대이름.equals("")) {
+					야추.화면.대기화면.getInstance().get시작하기().setEnabled(false);
+				} else {
+					야추.화면.대기화면.getInstance().get시작하기().setEnabled(true);
+				}
 			}
 
 		});
-		방나가기.start();
+		서버값받기.start();
 	}
 
 	protected void 게임종료() {
 		String 결과 = "";
 		int 내점수 = 게임화면.get점수판().get내점수();
 		int 상대점수 = 게임화면.get점수판().get상대점수();
-		
-		if(내점수 > 상대점수) {
+
+		if (내점수 > 상대점수) {
 			결과 = "승리!";
-		}else if(내점수 < 상대점수) {
+		} else if (내점수 < 상대점수) {
 			결과 = "패배!";
-		}else {
+		} else {
 			결과 = "무승부..";
 		}
 		JOptionPane.showMessageDialog(야추Frame.this, "게임종료!! 결과 : " + 결과);
@@ -261,7 +277,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	}
 
 	protected void 게임시작(String 순서정하기, String 유저명1, String 유저명2, String 순서) {
-		if(순서정하기.equals("0")) { // 0이면 내 굴리기 차례 
+		if (순서정하기.equals("0")) { // 0이면 내 굴리기 차례
 			턴세팅(true);
 			게임화면.턴 = 1;
 			게임화면.get굴림판().get차례표시().setText("내 차례");
@@ -270,6 +286,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 			게임화면.get굴림판().get차례표시().setText("상대 차례");
 		}
 
+		게임화면.get점수판().점수초기화();
 		게임화면.get점수판().get유저점수()[0][0].setText(유저명1);
 		게임화면.get점수판().get유저점수()[1][0].setText(유저명2);
 		게임화면.get점수판().set유저순서(Integer.parseInt(순서));
@@ -277,6 +294,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	}
 
 	JButton 방입장버튼;
+
 	private void 방목록새로고침() {
 		try {
 			ArrayList<String> DB방목록;
@@ -320,8 +338,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 				// 불가 text면 setEnable false로 하자.
 
 				System.out.println("Integer.parseInt(방정보.split(\"/\")[1]) : " + Integer.parseInt(방정보.split("/")[1]));
-				if (Integer.parseInt(방정보.split("/")[1]) > 0)
-				{
+				if (Integer.parseInt(방정보.split("/")[1]) > 0) {
 					방입장버튼.setVisible(false);
 				}
 
@@ -423,6 +440,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	private void 턴세팅(boolean 세팅값) {
 		게임화면.get굴림판().턴시작(세팅값);
 		게임화면.get점수판().턴시작(세팅값);
+		게임화면.get굴림판().get점수화면전환().setEnabled(false);
 		게임화면.굴림판으로();
 	}
 

@@ -65,7 +65,6 @@ public class 주사위 extends JLabel implements MouseListener {
 			} catch (InterruptedException e) {
 				System.out.println("주사위 흔들기 사이 멈춤에서 인터럽트걸림.");
 			}
-			야추Frame.get게임화면().get굴림판().get굴림버튼().setEnabled(true);
 			System.out.println(getName());
 		}
 //		
