@@ -44,7 +44,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	private static 로그인 로그인;
 	private static CardLayout 장면; // 카드 레이아웃은 add한 레이아웃들을 하나씩 show 가능.
 	private static JPanel 메인화면;
-	private static 방목록화면 방목록창;
+	private 방목록화면 방목록패널;
 
 	static Socket socket;
 	Connection conn;
@@ -93,21 +93,21 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		게임화면 = new 게임화면();
 		메인화면.add(게임화면, "게임화면");
 
-		방목록창 = new 방목록화면();
-		방목록창.get새로고침().addActionListener(new 버튼이벤트());
-		방목록창.get로그아웃().addActionListener(new 버튼이벤트());
-		방목록창.get방만들기().addActionListener(new 버튼이벤트());
-		메인화면.add(방목록창, "방목록화면");
+		방목록패널 = 방목록화면.getInstance();
+		방목록패널.get새로고침().addActionListener(new 버튼이벤트());
+		방목록패널.get로그아웃().addActionListener(new 버튼이벤트());
+		방목록패널.get방만들기().addActionListener(new 버튼이벤트());
+		메인화면.add(방목록패널, "방목록화면");
 
 		대기화면 대기화면 = 야추.화면.대기화면.getInstance();
 		대기화면.get돌아가기().addActionListener(new 버튼이벤트());
 		대기화면.get시작하기().addActionListener(new 버튼이벤트());
 		메인화면.add(대기화면, "대기화면");
 
-		장면.show(get메인화면(), "메뉴");
+		장면.show(메인화면, "메뉴");
 		setResizable(false);
 		서버값받기();
-		add(get메인화면());
+		add(메인화면);
 		setVisible(true);
 		addWindowListener(this);
 	}
@@ -301,15 +301,14 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 			DB방목록 = new DB.OracleDB().방목록가져오기();
 			Iterator<String> 방목록 = DB방목록.iterator();
 			int i = 0;
-
-			방목록화면.get방목록패널().removeAll();
+			방목록패널.get방목록패널().removeAll();
 
 			if (!방목록.hasNext()) {
 				JLabel 방없음 = new JLabel("방이 없습니다.");
 				방없음.setFont(new Font("Serif", Font.BOLD, 40));
 				방없음.setBounds(200, 230, 300, 50);
 //				방없음.setBorder(new LineBorder(Color.pink));
-				방목록화면.get방목록패널().add(방없음);
+				방목록패널.get방목록패널().add(방없음);
 				System.out.println("방없음..");
 			}
 			while (방목록.hasNext()) {
@@ -345,7 +344,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 				방패널.add(방장소켓);
 				방패널.add(방제목);
 				방패널.add(방입장버튼);
-				방목록화면.get방목록패널().add(방패널);
+				방목록패널.get방목록패널().add(방패널);
 				i++;
 			}
 
@@ -400,6 +399,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	}
 
 	public static 회원가입 get회원가입() {
+		방목록화면.get방목록();
 		return 회원가입;
 	}
 
