@@ -53,7 +53,9 @@ public class 유저 extends Thread {
 		String pw = split[3];
 		System.out.println("split.length : " + split.length);
 
-		String 이름 = null;
+		String 로그인결과값 = null;
+		String 이름 = "";
+		int 승, 무, 패;
 		try {
 			boolean idcheck = true;
 			for (유저 user : 게임서버.get유저목록()) {
@@ -63,15 +65,20 @@ public class 유저 extends Thread {
 				}
 			}
 			if (idcheck) {
-				이름 = DB.로그인(id, pw);
+				로그인결과값 = DB.로그인(id, pw);
+				String res[] = 로그인결과값.split("/");
+				이름 = res[0];
+				승 = Integer.parseInt(res[1]);
+				무 = Integer.parseInt(res[2]);
+				패 = Integer.parseInt(res[3]);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (이름 != null) {
+		if (로그인결과값 != null) {
 			System.out.println("로그인성공");
-			this.이름 = 이름;
+			this.이름 = 로그인결과값;
 			this.아이디 = id;
 			this.비밀번호 = pw;
 
@@ -79,9 +86,8 @@ public class 유저 extends Thread {
 			게임서버.get유저목록().add(this);
 			System.out.println("게임서버.get유저목록().size() : " + 게임서버.get유저목록().size());
 
-			int 승률 = DB.승률(id);
-			int 랭킹 = DB.랭킹(id);
-			outprint("로그인성공/" + 이름 + "/" + 승률 + "/" + 랭킹);
+			double 승률 = (승 / (승 + 무 + 패 * 1.0));
+			outprint("로그인성공/" + 로그인결과값 + "/" + 승률 + "/" + 랭킹);
 		} else {
 			System.out.println("로그인 실패");
 			outprint("로그인실패");

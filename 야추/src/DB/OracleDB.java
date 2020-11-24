@@ -79,13 +79,18 @@ public class OracleDB {
 				}
 				PreparedStatement pstm = null;
 				ResultSet rs = null;
-				sql = "select user_name from yat_user where user_id = ?";
+				sql = "select user_name, win, draw, lose from yat_user where user_id = ?";
 				try {
 					pstm = conn.prepareStatement(sql);
 					pstm.setString(1, id);
 					rs = pstm.executeQuery();
 					if (rs.next()) {
-						return rs.getString(1);
+						String 출력문 = "";
+						출력문 += rs.getString(1) + "/";
+						출력문 += rs.getString(2) + "/";
+						출력문 += rs.getString(3) + "/";
+						출력문 += rs.getString(4);
+						return 출력문;
 					} else {
 						return null;
 					}
@@ -379,73 +384,7 @@ public class OracleDB {
 			conn.close();
 	}
 
-	public int 승률(String id) {
-		Connection conn = null;
-		try {
-			conn = DBconn.getConnection();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		PreparedStatement pstm = null;
-		ResultSet rs = null;
-		String sql = "select count(winner";
-		// 1: 방장 유저 소켓
-		// 2: 일반 유저 소켓
-		// 3: 방제목
-		try {
-			pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, 0);
-			pstm.setInt(2, 방장port);
 
-			rs = pstm.executeQuery();
-
-			if (rs.next()) {
-				System.out.println("DB > 방나가기 > 성공");
-				return true;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-//			System.out.println("DB > 방생성 > 실패. 오류 발생!");
-		} finally {
-			finalClose(conn, pstm, rs);
-		}
-		return false;
-	}
-
-	public int 랭킹(String id) {
-		Connection conn = null;
-		try {
-			conn = DBconn.getConnection();
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		PreparedStatement pstm = null;
-		ResultSet rs = null;
-		String sql = "update yat_room set u2_port = ? where u1_port = ?";
-		// 1: 방장 유저 소켓
-		// 2: 일반 유저 소켓
-		// 3: 방제목
-		try {
-			pstm = conn.prepareStatement(sql);
-			pstm.setInt(1, 0);
-			pstm.setInt(2, 방장port);
-
-			rs = pstm.executeQuery();
-
-			if (rs.next()) {
-				System.out.println("DB > 방나가기 > 성공");
-				return true;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-//			System.out.println("DB > 방생성 > 실패. 오류 발생!");
-		} finally {
-			finalClose(conn, pstm, rs);
-		}
-		return 0;
-	}
 
 	/*
 	 * void 메서드명(){ Connection conn = null; try { conn = DBconn.getConnection(); }
