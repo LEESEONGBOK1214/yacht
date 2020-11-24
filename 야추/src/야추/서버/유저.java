@@ -155,12 +155,10 @@ public class 유저 extends Thread {
 	public void 방입장(String[] split) {
 //		_room.방입장(this); // 룸에 입장시킨 후
 		Iterator<방> Iter방목록 = 방목록.iterator();
+		int 방장포트 = Integer.parseInt(split[2]);
 		while (Iter방목록.hasNext()) {
 			방 in_room = Iter방목록.next();
-			int 방장포트 = Integer.parseInt(split[2]);
 			int 검색포트 = in_room.유저들.get(0).socket.getPort();
-//			System.out.println("현재 검색중인 유저의 포트번호 : " + 검색포트);
-//			System.out.println("방장의 포트번호 : " + 방장포트);
 			if (방장포트 == 검색포트) { // split[2]이 방장 소켓이 넘어옴,
 				this.room = in_room; // 유저가 속한 방을 룸으로 변경한다.(중요)
 				in_room.유저들.add(this);
@@ -168,13 +166,7 @@ public class 유저 extends Thread {
 					new OracleDB().방입장(방장포트, this.port);
 				} catch (SQLException e) {
 					e.printStackTrace();
-//					System.out.println("\n\n\n\n방입장실패\n\n\n\n");
 				}
-//				System.out.println("======================");
-//				for (유저 유저 : 방목록화면.get방목록().get(방목록화면.get방목록().indexOf(in_room)).유저들) {
-//					System.out.println(유저.port);
-//				}
-//				System.out.println("======================");
 				outprint("방입장/" + in_room.유저들.get(0).이름);
 				outprint(방장포트, "유저입장/" + this.이름);
 				broadCast("방업데이트");
