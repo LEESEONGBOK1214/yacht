@@ -56,9 +56,7 @@ public class OracleDB {
 			e.printStackTrace();
 			System.out.println("坷幅 : " + e.getCause());
 		}finally{
-			if(rs!=null)rs.close();
-			if(pstm!=null)pstm.close();
-			if(conn!=null)conn.close();
+			finalClose(conn, pstm, rs);
 		}
 
 		
@@ -97,9 +95,7 @@ public class OracleDB {
 					e.printStackTrace();
 					System.out.println("坷幅 : " + e.getCause());
 				}finally{
-					if(rs!=null)rs.close();
-					if(pstm!=null)pstm.close();
-					if(conn!=null)conn.close();
+					finalClose(conn, pstm, rs);
 				}
 
 		
@@ -141,9 +137,7 @@ public class OracleDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
-			if(rs!=null)rs.close();
-			if(pstm!=null)pstm.close();
-			if(conn!=null)conn.close();
+			finalClose(conn, pstm, rs);
 		}
 
 		return false;
@@ -175,9 +169,7 @@ public class OracleDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}finally{
-			if(rs!=null)rs.close();
-			if(pstm!=null)pstm.close();
-			if(conn!=null)conn.close();
+			finalClose(conn, pstm, rs);
 		}
 
 		return false;
@@ -214,9 +206,7 @@ public class OracleDB {
 			e.printStackTrace();
 //			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
 		}finally{
-			if(rs!=null)rs.close();
-			if(pstm!=null)pstm.close();
-			if(conn!=null)conn.close();
+			finalClose(conn, pstm, rs);
 		}
 	}
 	
@@ -249,9 +239,7 @@ public class OracleDB {
 			e.printStackTrace();
 //			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
 		}finally{
-			if(rs!=null)rs.close();
-			if(pstm!=null)pstm.close();
-			if(conn!=null)conn.close();
+			finalClose(conn, pstm, rs);
 		}
 		return false;
 	}
@@ -286,9 +274,7 @@ public class OracleDB {
 		}finally{
 			conn.commit();
 			conn.setAutoCommit(true);
-			if(rs!=null)rs.close();
-			if(pstm!=null)pstm.close();
-			if(conn!=null)conn.close();
+			finalClose(conn, pstm, rs);
 		}
 	}
 
@@ -326,9 +312,7 @@ public class OracleDB {
 			e.printStackTrace();
 		}finally{
 			
-			if(rs!=null)rs.close();
-			if(pstm!=null)pstm.close();
-			if(conn!=null)conn.close();
+			finalClose(conn, pstm, rs);
 		}
 		return 规格废;
 	}
@@ -348,9 +332,7 @@ public class OracleDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}finally{
-			if(rs!=null)rs.close();
-			if(pstm!=null)pstm.close();
-			if(conn!=null)conn.close();
+			finalClose(conn, pstm, rs);
 		}
 	}
 
@@ -383,14 +365,86 @@ public class OracleDB {
 			e.printStackTrace();
 //			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
 		} finally {
-			if (rs != null)
-				rs.close();
-			if (pstm != null)
-				pstm.close();
-			if (conn != null)
-				conn.close();
+			finalClose(conn, pstm, rs);
 		}
 		return false;
+	}
+
+	private void finalClose(Connection conn, PreparedStatement pstm, ResultSet rs) throws SQLException {
+		if (rs != null)
+			rs.close();
+		if (pstm != null)
+			pstm.close();
+		if (conn != null)
+			conn.close();
+	}
+
+	public int 铰伏(String id) {
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		String sql = "select count(winner";
+		// 1: 规厘 蜡历 家南
+		// 2: 老馆 蜡历 家南
+		// 3: 规力格
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, 0);
+			pstm.setInt(2, 规厘port);
+
+			rs = pstm.executeQuery();
+
+			if (rs.next()) {
+				System.out.println("DB > 规唱啊扁 > 己傍");
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+//			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
+		} finally {
+			finalClose(conn, pstm, rs);
+		}
+		return false;
+	}
+
+	public int 珐欧(String id) {
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		String sql = "update yat_room set u2_port = ? where u1_port = ?";
+		// 1: 规厘 蜡历 家南
+		// 2: 老馆 蜡历 家南
+		// 3: 规力格
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setInt(1, 0);
+			pstm.setInt(2, 规厘port);
+
+			rs = pstm.executeQuery();
+
+			if (rs.next()) {
+				System.out.println("DB > 规唱啊扁 > 己傍");
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+//			System.out.println("DB > 规积己 > 角菩. 坷幅 惯积!");
+		} finally {
+			finalClose(conn, pstm, rs);
+		}
+		return 0;
 	}
 
 	/*

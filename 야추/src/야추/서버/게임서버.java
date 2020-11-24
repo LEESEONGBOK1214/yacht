@@ -22,8 +22,8 @@ public class 게임서버 {
 			Socket socket = null;
 			유저목록 = new ArrayList<유저>();
 			while ((socket = serverSocket.accept()) != null) {
-				for (유저 value : 유저목록) {
-					if (socket.getPort() == value.getSocket().getPort()) {
+				for (유저 user : 유저목록) {
+					if (socket.getPort() == user.getSocket().getPort()) {
 						// 같은 유저가 있으면... 안되니까.
 						// 플래그를 걸어 종료 시킴.
 						break;

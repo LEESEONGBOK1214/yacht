@@ -55,7 +55,16 @@ public class 유저 extends Thread {
 
 		String 이름 = null;
 		try {
-			이름 = DB.로그인(id, pw);
+			boolean idcheck = true;
+			for (유저 user : 게임서버.get유저목록()) {
+				if (id.equals(user.아이디)) {
+					idcheck = false;
+					break;
+				}
+			}
+			if (idcheck) {
+				이름 = DB.로그인(id, pw);
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -70,9 +79,12 @@ public class 유저 extends Thread {
 			게임서버.get유저목록().add(this);
 			System.out.println("게임서버.get유저목록().size() : " + 게임서버.get유저목록().size());
 
-			outprint("로그인성공");
+			int 승률 = DB.승률(id);
+			int 랭킹 = DB.랭킹(id);
+			outprint("로그인성공/" + 이름 + "/" + 승률 + "/" + 랭킹);
 		} else {
 			System.out.println("로그인 실패");
+			outprint("로그인실패");
 		}
 	}
 
@@ -318,7 +330,7 @@ public class 유저 extends Thread {
 	private void 종료() {
 		// DB에도 삭제하고 서버에도 삭제해야함.
 		try {
-			if (this.room != null)
+			if (this.room != null) {
 				if (this.room.유저들.get(0).port == this.port) {
 					outprint(this.room.유저들.get(1).port, "부전승");
 					this.room.유저들.get(1).room = null;
@@ -326,11 +338,12 @@ public class 유저 extends Thread {
 					outprint(this.room.유저들.get(0).port, "부전승");
 					this.room.유저들.get(0).room = null;
 				}
+				new DB.OracleDB().방삭제(this.room.유저들.get(0).port);
+			}
 			this.room = null;
-			new DB.OracleDB().방삭제(this.room.유저들.get(0).port);
 			broadCast("방업데이트");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("게임 종료!");
 		}
 		게임서버.get유저목록().remove(this);
 	}
