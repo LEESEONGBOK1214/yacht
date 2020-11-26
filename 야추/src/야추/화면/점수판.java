@@ -30,9 +30,9 @@ public class 점수판 extends JPanel implements ActionListener {
 	int 점수[] = new int[size];
 	주사위[] 주사위들;
 	private JButton 돌아가기;
-	private JLabel 유저점수[][] = new JLabel[2][2];
+	private JLabel 유저점수[][] = new JLabel[2][2]; // [앞 : 방장, 유저 순] [뒤 : 이름, 점수 순]
 	private int 입장순서;
-
+	private JLabel 턴정보;
 	점수판(주사위[] 주사위들) {
 		setLayout(null);
 		setBackground(Color.decode("#CDD1FF"));
@@ -41,6 +41,14 @@ public class 점수판 extends JPanel implements ActionListener {
 		// 1~6 합 6개
 		// 초이스, 4 of kind, Full house(2, 3),
 		// S.straight, L.straight, yatch
+
+		// 턴 정보 알려주기
+		// 내 턴이면 점수를 선택하세요.
+		// 상대 턴이면 상대턴입니다.
+		턴정보 = new JLabel("");
+		턴정보.setBounds(200, 70, 100, 30);
+		턴정보.setBorder(new LineBorder(Color.black));
+		add(턴정보);
 
 		// 유저 두명의 점수 보이기
 		for (int i = 0; i < 2; i++) {
@@ -51,6 +59,7 @@ public class 점수판 extends JPanel implements ActionListener {
 				add(get유저점수()[i][j]);
 			}
 		}
+
 
 		for (int i = 0; i < 2; i++) {
 			for (int j = size / 2 * i; j < size / 2 * (i + 1); j++) {
@@ -260,6 +269,11 @@ public class 점수판 extends JPanel implements ActionListener {
 				선택버튼[i].setEnabled(b);
 			}
 		}
+		if (b) {
+			턴정보.setText("점수를 선택해주세요");
+		} else {
+			턴정보.setText("상대턴입니다.");
+		}
 		선택버튼[scores.Subtotal.ordinal()].setEnabled(false);
 		선택버튼[scores.Bonus.ordinal()].setEnabled(false);
 	}
@@ -299,7 +313,7 @@ public class 점수판 extends JPanel implements ActionListener {
 			case "Fives":
 			case "Sixes":
 				System.out.println("점수판 > 눌린버튼 > 1~6");
-				this.점수[scores.Subtotal.ordinal()] = this.점수[scores.Subtotal.ordinal()] + 63;
+				this.점수[scores.Subtotal.ordinal()] = this.점수[scores.Subtotal.ordinal()] + 점수;
 
 				if (this.점수[scores.Subtotal.ordinal()] >= 63) {
 					JOptionPane.showMessageDialog(야추Frame.get게임화면(), "보너스 성공!!!");

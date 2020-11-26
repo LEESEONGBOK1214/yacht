@@ -20,11 +20,17 @@ public class 굴림판 extends JPanel implements ActionListener {
 	private static JLabel 차례표시;
 	private static JButton 굴림버튼;
 	private static JButton 점수화면전환;
+	private JLabel 내이름;
 
 	굴림판(주사위[] 주사위들) {
 //		System.out.println("굴림판으로 옴.");
 		setLayout(null);
 		setBackground(Color.pink);
+
+		내이름 = new JLabel();
+		내이름.setBounds(300, 150, 200, 50);
+		내이름.setHorizontalTextPosition(JLabel.CENTER);
+		내이름.setBackground(Color.magenta);
 
 		this.주사위들 = 주사위들;
 		굴림버튼세팅();
@@ -38,9 +44,10 @@ public class 굴림판 extends JPanel implements ActionListener {
 		add(주사위판);
 		add(저장판);
 		add(굴림버튼);
-		add(get점수화면전환());
+		add(점수화면전환);
+		add(내이름);
 //		차례표시세팅();
-//		add(차례표시);
+		add(차례표시);
 	}
 
 	private void 주사위판세팅(주사위[] 주사위들) {
@@ -57,9 +64,10 @@ public class 굴림판 extends JPanel implements ActionListener {
 	}
 
 	private void 차례표시세팅() {
-		set차례표시(new JLabel());
-		get차례표시().setBounds(250, 20, 200, 100);
-		get차례표시().setBorder(new LineBorder(Color.green));
+		차례표시 = new JLabel();
+		차례표시.setBounds(250, 20, 200, 100);
+//		차례표시.setBorder(new LineBorder(Color.green));
+		차례표시.setHorizontalTextPosition(JLabel.CENTER);
 	}
 
 	private void 굴림버튼세팅() {
@@ -226,5 +234,16 @@ public class 굴림판 extends JPanel implements ActionListener {
 			ImageIcon icon = new ImageIcon(getClass().getResource("/images/No.png"));
 			주사위들[i].setIcon(icon);
 		}
+
+		if (세팅값) {
+			내이름.setText("점수를 선택해주세요");
+		} else {
+			내이름.setText("상대턴입니다.");
+		}
 	}
+
+	public void set내이름(String name) {
+		내이름.setText(name);
+	}
+
 }

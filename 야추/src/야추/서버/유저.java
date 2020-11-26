@@ -255,9 +255,48 @@ public class 유저 extends Thread {
 		}
 	}
 
-	private void 게임종료() {
+	private void 게임종료(String[] split) {
+		// 1 : 게임종료
+		// 2 : 승자
+		// 3 : 패자
+		// 4 : 무승부값 => "true", "false"
 		outprint(this.room.유저들.get(0).port, "게임종료/");
 		outprint(this.room.유저들.get(1).port, "게임종료/");
+		String 승자아이디 = this.room.유저들.get(Integer.parseInt(split[2])).아이디;
+		String 패자아이디 = this.room.유저들.get(Integer.parseInt(split[3])).아이디;
+		if (split[4].equals("true")) {
+			승무패추가(승자아이디, 패자아이디, true);
+		} else {
+			승무패추가(승자아이디, 패자아이디, false);
+		}
+	}
+
+	private void 종료() {
+		// DB에도 삭제하고 서버에도 삭제해야함.
+		try {
+			if (this.room != null) {
+				if (this.room.유저들.get(0).port == this.port) {
+					outprint(this.room.유저들.get(1).port, "부전승");
+					승무패추가(this.room.유저들.get(1).아이디, this.아이디, false);
+					this.room.유저들.get(1).room = null;
+				} else {
+					outprint(this.room.유저들.get(0).port, "부전승");
+					승무패추가(this.room.유저들.get(0).아이디, this.아이디, false);
+					this.room.유저들.get(0).room = null;
+				}
+				new DB.OracleDB().방삭제(this.room.유저들.get(0).port);
+
+				this.room = null;
+			}
+			broadCast("방업데이트");
+		} catch (SQLException e) {
+			System.out.println("게임 종료!");
+		}
+		게임서버.get유저목록().remove(this);
+	}
+
+	public void 승무패추가(String winner, String loser, boolean 무승부) {
+		new DB.OracleDB().승패추가(winner, loser, 무승부);
 	}
 
 	public void process(String inline) {
@@ -310,11 +349,11 @@ public class 유저 extends Thread {
 			마지막굴림();
 			break;
 		case "게임종료":
-			게임종료();
+			게임종료(split);
 			break;
 		}
-		System.out.println();
-	}
+		System.out.println();	}
+
 
 	public void run() {
 		try {
@@ -336,26 +375,6 @@ public class 유저 extends Thread {
 
 	}
 
-	private void 종료() {
-		// DB에도 삭제하고 서버에도 삭제해야함.
-		try {
-			if (this.room != null) {
-				if (this.room.유저들.get(0).port == this.port) {
-					outprint(this.room.유저들.get(1).port, "부전승");
-					this.room.유저들.get(1).room = null;
-				} else {
-					outprint(this.room.유저들.get(0).port, "부전승");
-					this.room.유저들.get(0).room = null;
-				}
-				new DB.OracleDB().방삭제(this.room.유저들.get(0).port);
-			}
-			this.room = null;
-			broadCast("방업데이트");
-		} catch (SQLException e) {
-			System.out.println("게임 종료!");
-		}
-		게임서버.get유저목록().remove(this);
-	}
 
 	public void broadCast(String str) {
 		PrintWriter out;

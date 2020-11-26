@@ -18,6 +18,7 @@ public class 게임서버 {
 			m_OutputList = new ArrayList<PrintWriter>();
 			ServerSocket serverSocket = new ServerSocket(8888);
 			System.out.println("서버가 시작됐습니다.");
+//			System.out.println("서버 .." + serverSocket.);
 			System.out.println("서버의 포트는 " + serverSocket.getLocalPort());
 			Socket socket = null;
 			유저목록 = new ArrayList<유저>();

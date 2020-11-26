@@ -75,6 +75,7 @@ public class 버튼이벤트 implements ActionListener {
 		if (!로그인.getIdTextField().getText().equals("")) {
 			if (!로그인.getPasswdTextField().getText().equals("")) {
 				outprint("로그인/" + uid + "/" + upw);
+				야추Frame.아이디 = uid;
 			} else {
 				JOptionPane.showMessageDialog(null, "비밀번호를 입력하세요.");
 			}

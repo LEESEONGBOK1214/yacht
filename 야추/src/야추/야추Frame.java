@@ -52,6 +52,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 
 	String 응답 = null;
 	int 전체턴 = -1;
+	static String 아이디;
 
 	야추Frame() {
 		super("yacht!");
@@ -64,9 +65,10 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		// =================================================================================================
 		try {
 //			172.26.2.227
-			socket = new Socket("172.26.2.227", 8888);
+//			socket = new Socket("39.127.9.97", 8888);
 //			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
+//			System.out.println(socket.getLocalAddress());
 		} catch (UnknownHostException e1) {
 			System.out.println("서버 연결 실패");
 			return;
@@ -178,8 +180,10 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								방목록으로();
 								break;
 							case "로그인성공":
+								setTitle("yatch - 유저명 : " + 응답[2]);
 								// 방목록화면에 이름, 승률, 랭킹 보여야함
 								방목록패널.유저정보세팅(응답);
+								게임화면.get굴림판().set내이름(응답[2]);
 								방목록으로();
 								break;
 							case "중복접속":
@@ -214,7 +218,20 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								전체턴++;
 								System.out.println("전체턴 : " + 전체턴);
 								if (전체턴 == 24) {
-									outprint("게임종료");
+									String 무승부 = "false";
+									String 승자 = "0/";
+									String 패자 = "1/";
+									int 방장점수 = Integer.parseInt(게임화면.get점수판().get유저점수()[0][1].getText());
+									int 유저점수 = Integer.parseInt(게임화면.get점수판().get유저점수()[1][1].getText());
+									if (방장점수 < 유저점수) {
+										승자 = "1/";
+										패자 = "0/";
+									}
+									if (방장점수 == 유저점수) {
+										무승부 = "true";
+									}
+									
+									outprint("게임종료/" + 승자 + 패자 + 무승부);
 								}
 								턴세팅(false);
 								break;
@@ -290,11 +307,11 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 			턴세팅(true);
 			게임화면.턴 = 1;
 			게임화면.get굴림판().get차례표시().setText("내 차례");
+
 		} else {
 			턴세팅(false);
 			게임화면.get굴림판().get차례표시().setText("상대 차례");
 		}
-
 		게임화면.get점수판().점수초기화();
 		게임화면.get점수판().get유저점수()[0][0].setText(유저명1);
 		게임화면.get점수판().get유저점수()[1][0].setText(유저명2);
@@ -356,6 +373,9 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 				방목록패널.get방목록패널().add(방패널);
 				i++;
 			}
+
+			String 승무패결과 = new DB.OracleDB().승패정보(아이디);
+//			방목록화면.
 
 			repaint();
 		} catch (SQLException e) {

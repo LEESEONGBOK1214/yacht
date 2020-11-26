@@ -28,9 +28,9 @@ public class 방목록화면 extends JPanel {
 	private JButton 새로고침;
 	private JButton 로그아웃;
 
-	private JLabel 유저명;
-	private JLabel 승률;
-	private JLabel 랭킹;
+	JLabel 유저명;
+	JLabel 승률;
+	JLabel 랭킹;
 
 	public 방목록화면() {
 		setLayout(null);
@@ -125,10 +125,11 @@ public class 방목록화면 extends JPanel {
 	}
 
 	public void 유저정보세팅(String[] 응답) {
-		// 0 로그인성공
-		// 1 유저명
-		// 2 승률
-		// 3 랭킹
+		// 0 포트
+		// 1 로그인성공
+		// 2 유저명
+		// 3 승률
+		// 4 랭킹
 		Font 유저정보폰트 = new Font(null, Font.PLAIN, 30);
 		유저명.setFont(유저정보폰트);
 		승률.setFont(유저정보폰트);

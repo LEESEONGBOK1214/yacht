@@ -68,45 +68,7 @@ public class OracleDB {
 		if (checkId(id)) {
 			if (checkPw(pw)) {
 				System.out.println("들어온 유저가 맞음.");
-				Connection conn = null;
-				try {
-					conn = DBconn.getConnection();
-				} catch (Exception e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				PreparedStatement pstm = null;
-				ResultSet rs = null;
-				sql = "select user_name, win, draw, lose, B.RANK\r\n"
-						+ "from yat_user A, (select user_id, ROW_NUMBER() OVER (ORDER BY win DESC) AS RANK from yat_user) B\r\n"
-						+ "where A.user_id = B.user_id and A.user_id = ?";
-				try {
-					pstm = conn.prepareStatement(sql);
-					pstm.setString(1, id);
-					rs = pstm.executeQuery();
-					if (rs.next()) {
-						String 출력문 = "";
-						출력문 += rs.getString(1) + "/"; // 유저명
-						출력문 += rs.getString(2) + "/"; // 승
-						출력문 += rs.getString(3) + "/"; // 무
-						출력문 += rs.getString(4) + "/"; // 패
-						출력문 += rs.getString(5); // 랭킹
-						System.out.println("DB > 로그인성공 > 출력문 : " + 출력문);
-						return 출력문;
-					} else {
-						return null;
-					}
-
-				} catch (SQLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					System.out.println("오류 : " + e.getCause());
-				} finally {
-					finalClose(conn, pstm, rs);
-				}
-
-				return null;
-
+				return 승패정보(id);
 			} else {
 				System.out.println("비밀번호 틀림!");
 			}
@@ -374,6 +336,92 @@ public class OracleDB {
 			finalClose(conn, pstm, rs);
 		}
 		return false;
+	}
+
+	public void 승패추가(String winner, String loser, boolean 무승부) {
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+
+		// 1: 승자 소켓
+		try {
+			if (무승부) {
+				String sqlDraw = "update yat_user set draw = draw + 1 where user_id = ? or user_id = ?";
+				pstm = conn.prepareStatement(sqlDraw);
+				pstm.setString(1, winner);
+				rs = pstm.executeQuery();
+				if (rs.next()) {
+					System.out.println("무승부 추가 성공");
+				}
+			} else {
+				String sqlWin = "update yat_user set win = win + 1 where user_id = ?";
+				String sqlLose = "update yat_user set lose = lose + 1 where user_id = ?";
+
+				pstm = conn.prepareStatement(sqlWin);
+				pstm.setString(1, winner);
+				rs = pstm.executeQuery();
+				if (rs.next()) {
+					System.out.println("승 추가 성공");
+				}
+				pstm.close();
+				rs.close();
+
+				pstm = conn.prepareStatement(sqlLose);
+				pstm.setString(1, loser);
+				rs = pstm.executeQuery();
+				if (rs.next()) {
+					System.out.println("패 추가 성공");
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			finalClose(conn, pstm, rs);
+		}
+	}
+
+	public String 승패정보(String id) throws SQLException {
+		Connection conn = null;
+		try {
+			conn = DBconn.getConnection();
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		PreparedStatement pstm = null;
+		ResultSet rs = null;
+		sql = "select user_name, win, draw, lose, B.RANK\r\n"
+				+ "from yat_user A, (select user_id, ROW_NUMBER() OVER (ORDER BY win DESC) AS RANK from yat_user) B\r\n"
+				+ "where A.user_id = B.user_id and A.user_id = ?";
+		try {
+			pstm = conn.prepareStatement(sql);
+			pstm.setString(1, id);
+			rs = pstm.executeQuery();
+			if (rs.next()) {
+				String 출력문 = "";
+				출력문 += rs.getString(1) + "/"; // 유저명
+				출력문 += rs.getString(2) + "/"; // 승
+				출력문 += rs.getString(3) + "/"; // 무
+				출력문 += rs.getString(4) + "/"; // 패
+				출력문 += rs.getString(5); // 랭킹
+				return 출력문;
+			} else {
+				return null;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("오류 : " + e.getCause());
+		} finally {
+			finalClose(conn, pstm, rs);
+		}
+
+		return null;
+
 	}
 
 	private void finalClose(Connection conn, PreparedStatement pstm, ResultSet rs) {
