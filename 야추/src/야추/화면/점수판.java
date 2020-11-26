@@ -11,7 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import 야추.야추Frame;
+import 야추.YatchFrame;
 
 enum scores {
 	Aces, Deuces, Threes, Fours, Fives, Sixes, Subtotal, Choice, FourOfKind, FullHouse, sStraight, lStraight, Yatch,
@@ -46,7 +46,7 @@ public class 점수판 extends JPanel implements ActionListener {
 		// 내 턴이면 점수를 선택하세요.
 		// 상대 턴이면 상대턴입니다.
 		턴정보 = new JLabel("");
-		턴정보.setBounds(200, 70, 100, 30);
+		턴정보.setBounds(450, 70, 150, 30);
 		턴정보.setBorder(new LineBorder(Color.black));
 		add(턴정보);
 
@@ -104,7 +104,8 @@ public class 점수판 extends JPanel implements ActionListener {
 
 	public void 점수초기화() {
 		// 점수 0으로 바꾸기
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < size-1; i++) {
+			if(i==6)continue;
 			점수[i] = 0;
 		}
 	}
@@ -222,7 +223,7 @@ public class 점수판 extends JPanel implements ActionListener {
 
 	void 선택됨() {
 		// 점수선택판 하단에 주사위 표시
-		주사위판 주사위목록 = 야추Frame.get게임화면().get굴림판().주사위판;
+		주사위판 주사위목록 = YatchFrame.get게임화면().get굴림판().주사위판;
 		주사위목록.setBounds(100, 500, 500, 70);
 		주사위목록.보여줘();
 
@@ -301,7 +302,7 @@ public class 점수판 extends JPanel implements ActionListener {
 		JButton 눌린버튼 = (JButton) e.getSource();
 
 		if (눌린버튼 == 돌아가기) {
-			야추Frame.outprint("굴림판으로");
+			YatchFrame.outprint("굴림판으로");
 		} else { // 점수 선택 시,
 			int 점수 = Integer.parseInt(눌린버튼.getText());
 			System.out.println("눌린버튼 . getName() : " + 눌린버튼.getName());
@@ -316,23 +317,23 @@ public class 점수판 extends JPanel implements ActionListener {
 				this.점수[scores.Subtotal.ordinal()] = this.점수[scores.Subtotal.ordinal()] + 점수;
 
 				if (this.점수[scores.Subtotal.ordinal()] >= 63) {
-					JOptionPane.showMessageDialog(야추Frame.get게임화면(), "보너스 성공!!!");
+					JOptionPane.showMessageDialog(YatchFrame.get게임화면(), "보너스 성공!!!");
 					this.점수[scores.Bonus.ordinal()] = 35;
-					야추Frame.outprint("점수선택/" + 눌린버튼.getName() + "/" + 점수);
+					YatchFrame.outprint("점수선택/" + 눌린버튼.getName() + "/" + 점수);
 				}
 				break;
 
 			}
 
 			눌린버튼.setEnabled(false);
-			야추Frame.outprint("점수선택/" + 눌린버튼.getName() + "/" + 점수);
+			YatchFrame.outprint("점수선택/" + 눌린버튼.getName() + "/" + 점수);
 			눌린버튼.setName("눌림");
-			야추Frame.get게임화면().턴 = 0;
+			YatchFrame.get게임화면().턴 = 0;
 			유저점수[입장순서][1].setText(Integer.parseInt(유저점수[입장순서][1].getText()) + 점수 + "");
 //			야추Frame.get게임화면().set내점수(점수);
 		}
 
-		야추Frame.get게임화면().굴림판으로();
+		YatchFrame.get게임화면().굴림판으로();
 
 	}
 

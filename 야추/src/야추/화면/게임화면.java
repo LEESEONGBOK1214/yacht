@@ -6,7 +6,7 @@ import java.awt.event.MouseListener;
 
 import javax.swing.JPanel;
 
-import 야추.야추Frame;
+import 야추.YatchFrame;
 
 @SuppressWarnings("serial")
 public class 게임화면 extends JPanel implements MouseListener {
@@ -110,7 +110,7 @@ public class 게임화면 extends JPanel implements MouseListener {
 			주사위 선택주사위 = (주사위) e.getSource();
 			if (선택주사위.눈금 != 0) {
 				선택주사위.저장중 = !선택주사위.저장중;
-				야추Frame.outprint("주사위저장/" + 선택주사위.getName());
+				YatchFrame.outprint("주사위저장/" + 선택주사위.getName());
 				System.out.println("선택 주사위 : " + 선택주사위.getName());
 				주사위선택();
 			}

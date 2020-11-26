@@ -138,5 +138,10 @@ public class ¹æ¸ñ·ÏÈ­¸é extends JPanel {
 		½Â·ü.setText("½Â·ü : " + ÀÀ´ä[3]);
 		·©Å·.setText("·©Å· : " + ÀÀ´ä[4]);
 	}
+	
+	public void À¯ÀúÁ¤º¸¼¼ÆÃ(int winrate, int ranking) {
+		½Â·ü.setText("½Â·ü : " + winrate);
+		·©Å·.setText("·©Å· : " + ranking);
+	}
 
 }

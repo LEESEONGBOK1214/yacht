@@ -14,7 +14,7 @@ import 야추.메뉴.로그인;
 import 야추.메뉴.회원가입;
 
 public class 버튼이벤트 implements ActionListener {
-	Socket socket = 야추Frame.socket;
+	Socket socket = YatchFrame.socket;
 
 	public void actionPerformed(ActionEvent e) {
 
@@ -24,8 +24,8 @@ public class 버튼이벤트 implements ActionListener {
 		// 그 값을 switch로 돌려서
 		// 해당 값 처리하는 식으로 변경합시다.
 
-		CardLayout 장면 = 야추Frame.get장면();
-		JPanel 메인화면 = 야추Frame.get메인화면();
+		CardLayout 장면 = YatchFrame.get장면();
+		JPanel 메인화면 = YatchFrame.get메인화면();
 
 		switch (e.getActionCommand()) {
 		case "로그인":
@@ -75,7 +75,7 @@ public class 버튼이벤트 implements ActionListener {
 		if (!로그인.getIdTextField().getText().equals("")) {
 			if (!로그인.getPasswdTextField().getText().equals("")) {
 				outprint("로그인/" + uid + "/" + upw);
-				야추Frame.아이디 = uid;
+				YatchFrame.아이디 = uid;
 			} else {
 				JOptionPane.showMessageDialog(null, "비밀번호를 입력하세요.");
 			}

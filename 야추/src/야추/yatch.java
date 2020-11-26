@@ -11,7 +11,7 @@ public class yatch {
 
 
 	public static void main(String[] args) {
-		new ¾ßÃßFrame();
+		new YatchFrame();
 	}
 
 }

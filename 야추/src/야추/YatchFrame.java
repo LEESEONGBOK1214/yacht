@@ -36,7 +36,7 @@ import 야추.화면.대기화면;
 import 야추.화면.방목록화면;
 
 @SuppressWarnings("serial")
-public class 야추Frame extends JFrame implements ActionListener, WindowListener {
+public class YatchFrame extends JFrame implements ActionListener, WindowListener {
 	private static 게임화면 게임화면;
 
 	private 메뉴 메뉴;
@@ -54,7 +54,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 	int 전체턴 = -1;
 	static String 아이디;
 
-	야추Frame() {
+	YatchFrame() {
 		super("yacht!");
 		// 기본 설정.
 		setSize(720, 700);
@@ -187,10 +187,10 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								방목록으로();
 								break;
 							case "중복접속":
-								JOptionPane.showMessageDialog(야추Frame.this, "이미 로그인되어있습니다.");
+								JOptionPane.showMessageDialog(YatchFrame.this, "이미 로그인되어있습니다.");
 								break;
 							case "로그인실패":
-								JOptionPane.showMessageDialog(야추Frame.this, "아이디/비밀번호를 확인하세요.");
+								JOptionPane.showMessageDialog(YatchFrame.this, "아이디/비밀번호를 확인하세요.");
 								break;
 							case "회원가입이 완료되었습니다.":
 								JOptionPane.showMessageDialog(null, "회원 가입 성공!");
@@ -245,7 +245,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 							case "부전승":
 								if (전체턴 == -1)
 									break;
-								JOptionPane.showMessageDialog(야추Frame.this, "상대가 나갔습니다! 승리!");
+								JOptionPane.showMessageDialog(YatchFrame.this, "상대가 나갔습니다! 승리!");
 								야추.화면.대기화면.getInstance().get시작하기().setEnabled(false);
 								야추.화면.대기화면.getInstance().상대방이름설정("");
 								방목록으로();
@@ -298,7 +298,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		} else {
 			결과 = "무승부..";
 		}
-		JOptionPane.showMessageDialog(야추Frame.this, "게임종료!! 결과 : " + 결과);
+		JOptionPane.showMessageDialog(YatchFrame.this, "게임종료!! 결과 : " + 결과);
 		outprint("방나가기");
 	}
 
@@ -306,11 +306,9 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		if (순서정하기.equals("0")) { // 0이면 내 굴리기 차례
 			턴세팅(true);
 			게임화면.턴 = 1;
-			게임화면.get굴림판().get차례표시().setText("내 차례");
 
 		} else {
 			턴세팅(false);
-			게임화면.get굴림판().get차례표시().setText("상대 차례");
 		}
 		게임화면.get점수판().점수초기화();
 		게임화면.get점수판().get유저점수()[0][0].setText(유저명1);
@@ -375,6 +373,13 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 			}
 
 			String 승무패결과 = new DB.OracleDB().승패정보(아이디);
+			String[] res = 승무패결과.split("/");
+			int 승 = Integer.parseInt(res[1]);
+			int 무 = Integer.parseInt(res[2]);
+			int 패 = Integer.parseInt(res[3]);
+			int ranking = Integer.parseInt(res[4]);
+			int winrate = (int) ((승 / (승 + 무 + 패 * 1.0)) * 100);
+			방목록패널.유저정보세팅(winrate, ranking);
 //			방목록화면.
 
 			repaint();

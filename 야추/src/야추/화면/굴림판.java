@@ -10,14 +10,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import 야추.야추Frame;
+import 야추.YatchFrame;
 
 @SuppressWarnings("serial")
 public class 굴림판 extends JPanel implements ActionListener {
 	주사위판 주사위판;
 	저장판 저장판;
 	주사위 주사위들[];
-	private static JLabel 차례표시;
 	private static JButton 굴림버튼;
 	private static JButton 점수화면전환;
 	private JLabel 내이름;
@@ -28,9 +27,8 @@ public class 굴림판 extends JPanel implements ActionListener {
 		setBackground(Color.pink);
 
 		내이름 = new JLabel();
-		내이름.setBounds(300, 150, 200, 50);
+		내이름.setBounds(300, 250, 200, 50);
 		내이름.setHorizontalTextPosition(JLabel.CENTER);
-		내이름.setBackground(Color.magenta);
 
 		this.주사위들 = 주사위들;
 		굴림버튼세팅();
@@ -38,7 +36,6 @@ public class 굴림판 extends JPanel implements ActionListener {
 		주사위세팅();
 
 		저장판 = new 저장판();
-		차례표시세팅();
 		점수화면버튼세팅();
 
 		add(주사위판);
@@ -47,7 +44,6 @@ public class 굴림판 extends JPanel implements ActionListener {
 		add(점수화면전환);
 		add(내이름);
 //		차례표시세팅();
-		add(차례표시);
 	}
 
 	private void 주사위판세팅(주사위[] 주사위들) {
@@ -61,13 +57,6 @@ public class 굴림판 extends JPanel implements ActionListener {
 		get점수화면전환().setVisible(false);
 		get점수화면전환().addActionListener(this);
 		get점수화면전환().setBounds(20, 250, 50, 100);
-	}
-
-	private void 차례표시세팅() {
-		차례표시 = new JLabel();
-		차례표시.setBounds(250, 20, 200, 100);
-//		차례표시.setBorder(new LineBorder(Color.green));
-		차례표시.setHorizontalTextPosition(JLabel.CENTER);
 	}
 
 	private void 굴림버튼세팅() {
@@ -97,8 +86,8 @@ public class 굴림판 extends JPanel implements ActionListener {
 	public void 굴리기() {
 		// 굴리기를 눌렀을 때, 숫자들을 다 정하고 이미지 흔들기를 따로 뽑아내.
 		// 그리고 서버에 전송! 눈금 수를 받아서 그만큼 흔들기!
-		야추Frame.get게임화면().set턴(야추Frame.get게임화면().get턴() + 1);
-		;
+		YatchFrame.get게임화면().set턴(YatchFrame.get게임화면().get턴() + 1);
+		점수화면전환.setEnabled(false);
 		String 주사위눈금 = "";
 		for (int i = 0; i < 주사위들.length; i++) {
 			if (!주사위들[i].저장중) { // 저장중이 아니면,
@@ -111,8 +100,9 @@ public class 굴림판 extends JPanel implements ActionListener {
 		Thread 굴리기활성화 = new Thread(new Runnable() {
 			public void run() {
 				try {
-					Thread.sleep(2000);
-					야추Frame.get게임화면().get굴림판().get굴림버튼().setEnabled(true);
+					Thread.sleep(1600);
+					YatchFrame.get게임화면().get굴림판().get굴림버튼().setEnabled(true);
+					점수화면전환.setEnabled(true);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -120,21 +110,19 @@ public class 굴림판 extends JPanel implements ActionListener {
 		});
 		굴리기활성화.start();
 
-		야추Frame.outprint("굴리기/" + 주사위눈금);
+		YatchFrame.outprint("굴리기/" + 주사위눈금);
 		// 굴린 값 출력.
 		주사위눈금 = "";
 
 		주사위판.repaint();
 
-		System.out.println("턴 : " + 야추Frame.get게임화면().턴);
-		if (야추Frame.get게임화면().get턴() >= 2 && 야추Frame.get게임화면().get턴() < 4) {
-			점수화면전환.setEnabled(true);
-		} else {
+		System.out.println("턴 : " + YatchFrame.get게임화면().턴);
+		if (YatchFrame.get게임화면().get턴() < 2 || YatchFrame.get게임화면().get턴() >= 4) {
 			점수화면전환.setEnabled(false);
-		}
-		if (야추Frame.get게임화면().get턴() == 4) {
+		} 
+		if (YatchFrame.get게임화면().get턴() == 4) {
 			마지막굴림();
-			야추Frame.outprint("마지막굴림");
+			YatchFrame.outprint("마지막굴림");
 		}
 	}
 
@@ -145,7 +133,7 @@ public class 굴림판 extends JPanel implements ActionListener {
 				try {
 					굴림버튼.setEnabled(false);
 					Thread.sleep(1500);
-					야추Frame.get게임화면().점수판으로();
+					YatchFrame.get게임화면().점수판으로();
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
@@ -161,7 +149,7 @@ public class 굴림판 extends JPanel implements ActionListener {
 		for (int i = 0; i < 주사위들.length; i++) {
 			if (!주사위들[i].저장중) { // 저장중이 아니면,
 				주사위들[i].눈금 = (응답.charAt(i) - 48); // 문자이므로 -48 해줘야함.
-				주사위들[i].굴림();
+				주사위들[i].흔들기 = true;
 			}
 		}
 		주사위판.repaint();
@@ -199,13 +187,6 @@ public class 굴림판 extends JPanel implements ActionListener {
 		점수화면전환 = _점수화면전환;
 	}
 
-	public JLabel get차례표시() {
-		return 차례표시;
-	}
-
-	public void set차례표시(JLabel _차례표시) {
-		차례표시 = _차례표시;
-	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -213,12 +194,12 @@ public class 굴림판 extends JPanel implements ActionListener {
 
 		JButton 눌린버튼 = (JButton) e.getSource();
 		if (눌린버튼 == 굴림버튼) {
-			야추Frame.get게임화면().get굴림판().굴리기();
+			YatchFrame.get게임화면().get굴림판().굴리기();
 		} else if (눌린버튼 == 점수화면전환) {
 
-			야추Frame.get게임화면().점수판으로();
+			YatchFrame.get게임화면().점수판으로();
 			System.out.println("점수화면으로 선택.");
-			야추Frame.outprint("점수판으로");
+			YatchFrame.outprint("점수판으로");
 		}
 	}
 
@@ -236,9 +217,9 @@ public class 굴림판 extends JPanel implements ActionListener {
 		}
 
 		if (세팅값) {
-			내이름.setText("점수를 선택해주세요");
+			내이름.setText("내 턴");
 		} else {
-			내이름.setText("상대턴입니다.");
+			내이름.setText("상대턴");
 		}
 	}
 
