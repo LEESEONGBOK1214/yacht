@@ -22,19 +22,18 @@ public class 게임서버 {
 			Socket socket = null;
 			유저목록 = new ArrayList<유저>();
 			while ((socket = serverSocket.accept()) != null) {
+				boolean flag = true;
 				for (유저 user : 유저목록) {
 					if (socket.getPort() == user.getSocket().getPort()) {
-						// 같은 유저가 있으면... 안되니까.
-						// 플래그를 걸어 종료 시킴.
+						flag = false;
 						break;
 					}
 				}
-				// 같은 유저가 있을때 안들어감.
-				m_OutputList.add(new PrintWriter(socket.getOutputStream()));
-				유저 client = new 유저(socket);
-				client.start();
-//					유저목록.add(client);
-//				System.out.println("게임서버 > 유저목록.size() : " + 유저목록.size());
+				if (flag) {
+					m_OutputList.add(new PrintWriter(socket.getOutputStream()));
+					유저 client = new 유저(socket);
+					client.start();
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

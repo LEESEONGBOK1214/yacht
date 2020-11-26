@@ -172,7 +172,7 @@ public class 굴림판 extends JPanel implements ActionListener {
 		add(주사위판);
 		add(저장판);
 		add(굴림버튼);
-		add(get점수화면전환());
+		add(점수화면전환);
 	}
 
 	public JButton get굴림버튼() {

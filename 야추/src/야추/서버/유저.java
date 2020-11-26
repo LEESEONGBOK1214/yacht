@@ -20,6 +20,10 @@ public class 유저 extends Thread {
 	private String 아이디;
 	private String 비밀번호;
 	private String 이름;
+	private int 승;
+	private int 무;
+	private int 패;
+	private int 랭킹;
 	// 게임에 관련된 변수 설정 // ... //
 	static String 응답 = "";
 	private static ArrayList<방> 방목록 = 방목록화면.get방목록();
@@ -54,42 +58,41 @@ public class 유저 extends Thread {
 		System.out.println("split.length : " + split.length);
 
 		String 로그인결과값 = null;
-		String 이름 = "";
-		int 승, 무, 패;
 		try {
 			boolean idcheck = true;
 			for (유저 user : 게임서버.get유저목록()) {
 				if (id.equals(user.아이디)) {
 					idcheck = false;
-					break;
+					// 아이디 중복 접속 확인
+					outprint("중복접속");
+					return;
 				}
 			}
 			if (idcheck) {
 				로그인결과값 = DB.로그인(id, pw);
-				String res[] = 로그인결과값.split("/");
-				이름 = res[0];
-				승 = Integer.parseInt(res[1]);
-				무 = Integer.parseInt(res[2]);
-				패 = Integer.parseInt(res[3]);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		if (로그인결과값 != null) {
 			System.out.println("로그인성공");
-			this.이름 = 로그인결과값;
+			String res[] = 로그인결과값.split("/");
+			this.이름 = res[0];
 			this.아이디 = id;
 			this.비밀번호 = pw;
+			승 = Integer.parseInt(res[1]);
+			무 = Integer.parseInt(res[2]);
+			패 = Integer.parseInt(res[3]);
+			랭킹 = Integer.parseInt(res[4]);
 
 			this.port = getSocket().getPort();
 			게임서버.get유저목록().add(this);
 			System.out.println("게임서버.get유저목록().size() : " + 게임서버.get유저목록().size());
 
-			double 승률 = (승 / (승 + 무 + 패 * 1.0));
-			outprint("로그인성공/" + 로그인결과값 + "/" + 승률 + "/" + 랭킹);
-		} else {
-			System.out.println("로그인 실패");
+			int 승률 = (int) ((승 / (승 + 무 + 패 * 1.0)) * 100);
+			outprint("로그인성공/" + 이름 + "/" + 승률 + "/" + 랭킹);
+		} else if (로그인결과값 == null) {
+			System.out.println("로그인실패");
 			outprint("로그인실패");
 		}
 	}

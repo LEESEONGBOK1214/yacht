@@ -63,6 +63,9 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 
 		// =================================================================================================
 		try {
+//			172.26.2.227
+			socket = new Socket("172.26.2.227", 8888);
+//			System.out.println(InetAddress.getLocalHost().getHostAddress());
 			socket = new Socket(InetAddress.getLocalHost().getHostAddress(), 8888);
 		} catch (UnknownHostException e1) {
 			System.out.println("서버 연결 실패");
@@ -172,10 +175,15 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 							case "방나가렴":
 								야추.화면.대기화면.getInstance().get시작하기().setEnabled(false);
 								야추.화면.대기화면.getInstance().상대방이름설정("");
-								// break 없어도됨.
+								방목록으로();
+								break;
 							case "로그인성공":
-								장면.show(메인화면, "방목록화면");
-								방목록새로고침();
+								// 방목록화면에 이름, 승률, 랭킹 보여야함
+								방목록패널.유저정보세팅(응답);
+								방목록으로();
+								break;
+							case "중복접속":
+								JOptionPane.showMessageDialog(야추Frame.this, "이미 로그인되어있습니다.");
 								break;
 							case "로그인실패":
 								JOptionPane.showMessageDialog(야추Frame.this, "아이디/비밀번호를 확인하세요.");
@@ -196,7 +204,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								repaint();
 								break;
 							case "내턴":
-								게임화면.get점수판().점수세팅(응답);
+								게임화면.get점수판().상대점수세팅(응답);
 								게임화면.set턴(1);
 								턴세팅(true);
 								전체턴++;
@@ -223,8 +231,7 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 								JOptionPane.showMessageDialog(야추Frame.this, "상대가 나갔습니다! 승리!");
 								야추.화면.대기화면.getInstance().get시작하기().setEnabled(false);
 								야추.화면.대기화면.getInstance().상대방이름설정("");
-								장면.show(메인화면, "방목록화면");
-								방목록새로고침();
+								방목록으로();
 								전체턴 = -1;
 								break;
 							}
@@ -241,6 +248,8 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 					System.exit(0);
 				}
 			}
+
+
 
 			private void 방입장(String[] 응답) {
 				야추.화면.대기화면.getInstance().상대방이름설정(응답[2]);
@@ -380,9 +389,9 @@ public class 야추Frame extends JFrame implements ActionListener, WindowListener 
 		장면.show(메인화면, "메뉴");
 	}
 
-	public void 방목록으로() {
-		// 방목록화면 세팅.
+	private void 방목록으로() {
 		장면.show(메인화면, "방목록화면");
+		방목록새로고침();
 	}
 
 	public void 게임화면으로() {

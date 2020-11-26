@@ -32,7 +32,7 @@ public class OracleDB {
 		}
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
-		sql = "insert into yat_user values(?, ?, ?)";
+		sql = "insert into yat_user(user_id, user_pw, user_name) values(?, ?, ?)";
 		System.out.println("id : " + id + "," + "pw : " + pw + "," + "name : " + name);
 		// id,pw,name
 		try {
@@ -55,11 +55,9 @@ public class OracleDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			System.out.println("오류 : " + e.getCause());
-		}finally{
+		} finally {
 			finalClose(conn, pstm, rs);
 		}
-
-		
 
 		return false;
 
@@ -79,17 +77,21 @@ public class OracleDB {
 				}
 				PreparedStatement pstm = null;
 				ResultSet rs = null;
-				sql = "select user_name, win, draw, lose from yat_user where user_id = ?";
+				sql = "select user_name, win, draw, lose, B.RANK\r\n"
+						+ "from yat_user A, (select user_id, ROW_NUMBER() OVER (ORDER BY win DESC) AS RANK from yat_user) B\r\n"
+						+ "where A.user_id = B.user_id and A.user_id = ?";
 				try {
 					pstm = conn.prepareStatement(sql);
 					pstm.setString(1, id);
 					rs = pstm.executeQuery();
 					if (rs.next()) {
 						String 출력문 = "";
-						출력문 += rs.getString(1) + "/";
-						출력문 += rs.getString(2) + "/";
-						출력문 += rs.getString(3) + "/";
-						출력문 += rs.getString(4);
+						출력문 += rs.getString(1) + "/"; // 유저명
+						출력문 += rs.getString(2) + "/"; // 승
+						출력문 += rs.getString(3) + "/"; // 무
+						출력문 += rs.getString(4) + "/"; // 패
+						출력문 += rs.getString(5); // 랭킹
+						System.out.println("DB > 로그인성공 > 출력문 : " + 출력문);
 						return 출력문;
 					} else {
 						return null;
@@ -99,11 +101,10 @@ public class OracleDB {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					System.out.println("오류 : " + e.getCause());
-				}finally{
+				} finally {
 					finalClose(conn, pstm, rs);
 				}
 
-		
 				return null;
 
 			} else {
@@ -141,7 +142,7 @@ public class OracleDB {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally {
 			finalClose(conn, pstm, rs);
 		}
 
@@ -173,13 +174,12 @@ public class OracleDB {
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally {
 			finalClose(conn, pstm, rs);
 		}
 
 		return false;
 	}
-
 
 	public void 방생성(방 room) throws SQLException {
 		Connection conn = null;
@@ -210,11 +210,11 @@ public class OracleDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 //			System.out.println("DB > 방생성 > 실패. 오류 발생!");
-		}finally{
+		} finally {
 			finalClose(conn, pstm, rs);
 		}
 	}
-	
+
 	public boolean 방입장(int 방장port, int 유저port) throws SQLException {
 		Connection conn = null;
 		try {
@@ -243,7 +243,7 @@ public class OracleDB {
 		} catch (SQLException e) {
 			e.printStackTrace();
 //			System.out.println("DB > 방생성 > 실패. 오류 발생!");
-		}finally{
+		} finally {
 			finalClose(conn, pstm, rs);
 		}
 		return false;
@@ -267,16 +267,16 @@ public class OracleDB {
 			conn.setAutoCommit(false);
 			pstm = conn.prepareStatement(sql);
 			pstm.setInt(1, port);
-			
+
 			rs = pstm.executeQuery();
-			System.out.println("DB > 방삭제 > port : " +  port );
+			System.out.println("DB > 방삭제 > port : " + port);
 			if (rs.next()) {
 				System.out.println("DB > 방삭제 > 성공");
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}finally{
+		} finally {
 			conn.commit();
 			conn.setAutoCommit(true);
 			finalClose(conn, pstm, rs);
@@ -297,13 +297,13 @@ public class OracleDB {
 		// 1: 방장 유저 소켓
 		// 2: 일반 유저 소켓
 		// 3: 방제목
-		
-		ArrayList<String> 방목록  = new ArrayList<String>();
+
+		ArrayList<String> 방목록 = new ArrayList<String>();
 		try {
 			pstm = conn.prepareStatement(sql);
-			
+
 			rs = pstm.executeQuery();
-			while(rs.next()) { // 방이 있을때만 true겠죠? ㅎ-ㅎ
+			while (rs.next()) { // 방이 있을때만 true겠죠? ㅎ-ㅎ
 				// u1 socket
 				// u2 socket
 				// title
@@ -315,8 +315,8 @@ public class OracleDB {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
-			
+		} finally {
+
 			finalClose(conn, pstm, rs);
 		}
 		return 방목록;
@@ -331,12 +331,13 @@ public class OracleDB {
 		}
 		PreparedStatement pstm = null;
 		ResultSet rs = null;
+		// 서버 종료시엔 모든 방이 사라져야함.
 		String sql = "delete from yat_room";
 		try {
 			pstm = conn.prepareStatement(sql);
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}finally{
+		} finally {
 			finalClose(conn, pstm, rs);
 		}
 	}
@@ -375,16 +376,26 @@ public class OracleDB {
 		return false;
 	}
 
-	private void finalClose(Connection conn, PreparedStatement pstm, ResultSet rs) throws SQLException {
+	private void finalClose(Connection conn, PreparedStatement pstm, ResultSet rs) {
 		if (rs != null)
-			rs.close();
+			try {
+				rs.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		if (pstm != null)
-			pstm.close();
+			try {
+				pstm.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		if (conn != null)
-			conn.close();
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 	}
-
-
 
 	/*
 	 * void 메서드명(){ Connection conn = null; try { conn = DBconn.getConnection(); }

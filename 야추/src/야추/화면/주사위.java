@@ -65,7 +65,6 @@ public class 주사위 extends JLabel implements MouseListener {
 			} catch (InterruptedException e) {
 				System.out.println("주사위 흔들기 사이 멈춤에서 인터럽트걸림.");
 			}
-			System.out.println(getName());
 		}
 //		
 	}

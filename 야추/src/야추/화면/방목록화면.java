@@ -1,6 +1,7 @@
 package 야추.화면;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class 방목록화면 extends JPanel {
 
 	public 방목록화면() {
 		setLayout(null);
-		setBackground(Color.white);
+		setBackground(Color.decode("#d789d7"));
 
 		버튼목록 = new JPanel(null);
 		방만들기 = new JButton("방만들기");
@@ -49,11 +50,12 @@ public class 방목록화면 extends JPanel {
 
 		유저정보패널 = new JPanel(new GridLayout());
 		유저정보패널.add(유저명);
-		유저정보패널.setBackground(Color.lightGray);
+		유저정보패널.setBackground(Color.decode("#f3bad6"));
 		유저정보패널.add(승률);
 		유저정보패널.add(랭킹);
 
 //		버튼목록.setLayout();
+		버튼목록.setBackground(Color.decode("#d789d7"));
 		버튼목록.add(방만들기);
 		버튼목록.add(새로고침);
 		버튼목록.add(로그아웃);
@@ -120,6 +122,20 @@ public class 방목록화면 extends JPanel {
 
 	public static 방목록화면 getInstance() {
 		return instance;
+	}
+
+	public void 유저정보세팅(String[] 응답) {
+		// 0 로그인성공
+		// 1 유저명
+		// 2 승률
+		// 3 랭킹
+		Font 유저정보폰트 = new Font(null, Font.PLAIN, 30);
+		유저명.setFont(유저정보폰트);
+		승률.setFont(유저정보폰트);
+		랭킹.setFont(유저정보폰트);
+		유저명.setText("이름 : " + 응답[2]);
+		승률.setText("승률 : " + 응답[3]);
+		랭킹.setText("랭킹 : " + 응답[4]);
 	}
 
 }

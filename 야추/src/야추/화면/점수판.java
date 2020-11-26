@@ -7,30 +7,31 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import 야추.야추Frame;
 
 enum scores {
-	aces, deuces, threes, fours, fives, sixes, subtotal, choice, fourOfKind, fullHouse, sStraight, lStraight, yatch,
-	bonus
+	Aces, Deuces, Threes, Fours, Fives, Sixes, Subtotal, Choice, FourOfKind, FullHouse, sStraight, lStraight, Yatch,
+	Bonus
 }
 
 @SuppressWarnings("serial")
 public class 점수판 extends JPanel implements ActionListener {
-	int size = 13;
+	int size = 14;
 	JLabel 목록[] = new JLabel[size];
 	private JButton 선택버튼[] = new JButton[size];
 	JLabel 상대점수[] = new JLabel[size];
 
-	String 목록들[] = { "Aces", "Deuces", "Threes", "Fours", "Fives", "Sixes", "subtotal", "Choice", "4 of Kind",
-			"Full House", "S.Straight", "L.Straight", "Yatch", "bonus" };
+	String 목록들[] = { "Aces", "Deuces", "Threes", "Fours", "Fives", "Sixes", "subtotal", "Choice", "FourOfKind",
+			"FullHouse", "sStraight", "lStraight", "Yatch", "Bonus" };
 	int 점수[] = new int[size];
 	주사위[] 주사위들;
 	private JButton 돌아가기;
 	private JLabel 유저점수[][] = new JLabel[2][2];
-	private int 유저순서;
+	private int 입장순서;
 
 	점수판(주사위[] 주사위들) {
 		setLayout(null);
@@ -53,8 +54,7 @@ public class 점수판 extends JPanel implements ActionListener {
 
 		for (int i = 0; i < 2; i++) {
 			for (int j = size / 2 * i; j < size / 2 * (i + 1); j++) {
-				if (j == size)
-					break;
+
 				int 좌우간격 = 200;
 				int 상하간격 = 65;
 				int len = (size % 2 == 0) ? size : size + 1;
@@ -97,7 +97,6 @@ public class 점수판 extends JPanel implements ActionListener {
 		// 점수 0으로 바꾸기
 		for (int i = 0; i < size; i++) {
 			점수[i] = 0;
-
 		}
 	}
 
@@ -112,14 +111,15 @@ public class 점수판 extends JPanel implements ActionListener {
 
 	void 점수설정() {
 		System.out.println("점수설정 >");
+		점수초기화();
 
 		// 1~6합.
 		System.out.println("주사위 눈금 ==================================");
 		for (주사위 주사위 : 주사위들) {
-			System.out.println(주사위.눈금);
+//			System.out.println(주사위.눈금);
 			점수[주사위.눈금 - 1] += 주사위.눈금;
 			// 초이스
-			점수[scores.choice.ordinal()] += 주사위.눈금;
+			점수[scores.Choice.ordinal()] += 주사위.눈금;
 		}
 		System.out.println("주사위 눈금 ==================================");
 
@@ -135,11 +135,14 @@ public class 점수판 extends JPanel implements ActionListener {
 				for (int j = 0; j < 5; j++) {
 					포오카 += 주사위들[j].눈금;
 				}
-				if (포오카 > 점수[scores.fourOfKind.ordinal()]) {
-					점수[scores.fourOfKind.ordinal()] = 포오카;
+				if (포오카 > 점수[scores.FourOfKind.ordinal()]) {
+					점수[scores.FourOfKind.ordinal()] = 포오카;
+				} else {
+					점수[scores.FourOfKind.ordinal()] = 0;
 				}
 			}
 		}
+
 		// 풀하
 		int a = 0, b = 0;
 		for (int i = 0; i < 6; i++) {
@@ -153,36 +156,49 @@ public class 점수판 extends JPanel implements ActionListener {
 				}
 			}
 		}
-		if (a > 0 && b > 0)
-			점수[scores.fullHouse.ordinal()] = a + b;
+		if (a > 0 && b > 0) {
+			점수[scores.FullHouse.ordinal()] = a + b;
+		} else {
+			점수[scores.FullHouse.ordinal()] = 0;
+		}
 
 		// 스몰스트
 		// 라지스트
-		if (점수[scores.threes.ordinal()] > 0 && 점수[scores.fours.ordinal()] > 0) { // 3, 4는 무조건 있어야함.
+		if (점수[scores.Threes.ordinal()] > 0 && 점수[scores.Fours.ordinal()] > 0) { // 3, 4는 무조건 있어야함.
 			System.out.print("3, 4");
-			if (점수[scores.deuces.ordinal()] > 0 && 점수[scores.fives.ordinal()] > 0) {// 2 3 4 5
+			if (점수[scores.Deuces.ordinal()] > 0 && 점수[scores.Fives.ordinal()] > 0) {// 2 3 4 5
 				System.out.print(", 2, 5");
-				if (점수[scores.aces.ordinal()] > 0 || 점수[scores.sixes.ordinal()] > 0) { // 1 2 3 4 5 || 2 3 4 5 6
+				if (점수[scores.Aces.ordinal()] > 0 || 점수[scores.Sixes.ordinal()] > 0) { // 1 2 3 4 5 || 2 3 4 5 6
 					System.out.print(", 1 or 6");
-					점수[10] = 30;
+					점수[scores.lStraight.ordinal()] = 30;
+				} else {
+					점수[scores.lStraight.ordinal()] = 0;
 				}
-				점수[9] = 15;
-			} else if (점수[scores.aces.ordinal()] > 0 && 점수[scores.deuces.ordinal()] > 0) {// 1 2 3 4
+				점수[scores.sStraight.ordinal()] = 15;
+			} else if (점수[scores.Aces.ordinal()] > 0 && 점수[scores.Deuces.ordinal()] > 0) {// 1 2 3 4
 				System.out.print(", 1, 2");
 				// 1 2 3 4 5는 위에서 처리.
 				점수[scores.sStraight.ordinal()] = 15;
-			} else if (점수[scores.fives.ordinal()] > 0 && 점수[scores.sixes.ordinal()] > 0) { // 3 4 5 6
+			} else if (점수[scores.Fives.ordinal()] > 0 && 점수[scores.Sixes.ordinal()] > 0) { // 3 4 5 6
 				System.out.print(", 5, 6");
 				점수[scores.sStraight.ordinal()] = 15;
+			} else {
+				점수[scores.lStraight.ordinal()] = 0;
+				점수[scores.sStraight.ordinal()] = 0;
 			}
 			System.out.println();
+		} else {
+			점수[scores.lStraight.ordinal()] = 0;
+			점수[scores.sStraight.ordinal()] = 0;
 		}
 
 		// 야추
 		for (int i = 0; i < 6; i++) {
 			if (점수[i] == (i + 1) * 5) {
-				점수[scores.yatch.ordinal()] = 50;
+				점수[scores.Yatch.ordinal()] = 50;
 				break;
+			} else {
+				점수[scores.Yatch.ordinal()] = 0;
 			}
 		}
 
@@ -228,31 +244,40 @@ public class 점수판 extends JPanel implements ActionListener {
 	}
 
 	public int get유저순서() {
-		return 유저순서;
+		return 입장순서;
 	}
 
 	public void set유저순서(int 유저순서) {
-		this.유저순서 = 유저순서;
+		this.입장순서 = 유저순서;
 	}
 
 	public void 선택버튼셋(boolean b) {
-		System.out.println("점수판 > 선택버튼셋 >");
+//		System.out.println("점수판 > 선택버튼셋 >");
 		for (int i = 0; i < 선택버튼.length; i++) {
-			System.out.println(i);
+//			System.out.println(i);
+
 			if (!선택버튼[i].getName().equals("눌림")) {
 				선택버튼[i].setEnabled(b);
 			}
 		}
-		선택버튼[scores.subtotal.ordinal()].setEnabled(false);
-		선택버튼[scores.bonus.ordinal()].setEnabled(false);
+		선택버튼[scores.Subtotal.ordinal()].setEnabled(false);
+		선택버튼[scores.Bonus.ordinal()].setEnabled(false);
 	}
 
-	public void 점수세팅(String[] 응답) {
+	public void 상대점수세팅(String[] 응답) {
 		for (int i = 0; i < 목록들.length; i++) {
 			if (목록들[i].equals(응답[2])) {
+				if (i < 6) // Aces ~ Sixes 까지면
+				{
+					상대점수[scores.Subtotal.ordinal()].setText(
+							Integer.parseInt(상대점수[scores.Subtotal.ordinal()].getText()) + Integer.parseInt(응답[3]) + "");
+					if (Integer.parseInt(상대점수[scores.Subtotal.ordinal()].getText()) >= 63) {
+						유저점수[(입장순서 + 1) % 2][1].setText(Integer.parseInt(유저점수[(입장순서 + 1) % 2][1].getText()) + 35 + "");
+					}
+				}
 				상대점수[i].setText(응답[3]);
-				유저점수[(유저순서 + 1) % 2][1]
-						.setText(Integer.parseInt(유저점수[(유저순서 + 1) % 2][1].getText()) + Integer.parseInt(응답[3]) + "");
+				유저점수[(입장순서 + 1) % 2][1]
+						.setText(Integer.parseInt(유저점수[(입장순서 + 1) % 2][1].getText()) + Integer.parseInt(응답[3]) + "");
 				break;
 			}
 		}
@@ -265,15 +290,22 @@ public class 점수판 extends JPanel implements ActionListener {
 			야추Frame.outprint("굴림판으로");
 		} else { // 점수 선택 시,
 			int 점수 = Integer.parseInt(눌린버튼.getText());
-
+			System.out.println("눌린버튼 . getName() : " + 눌린버튼.getName());
 			switch (눌린버튼.getName()) {
-			case "aces":
-			case "deuces":
-			case "threes":
-			case "fours":
-			case "fives":
-			case "sixes":
-				this.점수[scores.subtotal.ordinal()] = this.점수[scores.subtotal.ordinal()] + 점수;
+			case "Aces":
+			case "Deuces":
+			case "Threes":
+			case "Fours":
+			case "Fives":
+			case "Sixes":
+				System.out.println("점수판 > 눌린버튼 > 1~6");
+				this.점수[scores.Subtotal.ordinal()] = this.점수[scores.Subtotal.ordinal()] + 63;
+
+				if (this.점수[scores.Subtotal.ordinal()] >= 63) {
+					JOptionPane.showMessageDialog(야추Frame.get게임화면(), "보너스 성공!!!");
+					this.점수[scores.Bonus.ordinal()] = 35;
+					야추Frame.outprint("점수선택/" + 눌린버튼.getName() + "/" + 점수);
+				}
 				break;
 
 			}
@@ -282,7 +314,7 @@ public class 점수판 extends JPanel implements ActionListener {
 			야추Frame.outprint("점수선택/" + 눌린버튼.getName() + "/" + 점수);
 			눌린버튼.setName("눌림");
 			야추Frame.get게임화면().턴 = 0;
-			유저점수[유저순서][1].setText(Integer.parseInt(유저점수[유저순서][1].getText()) + 점수 + "");
+			유저점수[입장순서][1].setText(Integer.parseInt(유저점수[입장순서][1].getText()) + 점수 + "");
 //			야추Frame.get게임화면().set내점수(점수);
 		}
 
@@ -296,11 +328,11 @@ public class 점수판 extends JPanel implements ActionListener {
 	}
 
 	public int get내점수() {
-		return Integer.parseInt(유저점수[유저순서][1].getText());
+		return Integer.parseInt(유저점수[입장순서][1].getText());
 	}
 
 	public int get상대점수() {
-		return Integer.parseInt(유저점수[(유저순서 + 1) % 2][1].getText());
+		return Integer.parseInt(유저점수[(입장순서 + 1) % 2][1].getText());
 	}
 
 }
