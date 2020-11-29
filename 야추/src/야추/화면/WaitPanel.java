@@ -10,14 +10,14 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 @SuppressWarnings("serial")
-public class 대기화면 extends JPanel {
-	private static 대기화면 instance = new 대기화면();
+public class WaitPanel extends JPanel {
+	private static WaitPanel instance = new WaitPanel();
 	private JPanel 버튼패널;
 	private JButton 돌아가기;
 	private JButton 시작하기;
 	private JLabel 대기중입니다;
 	private JLabel 상대이름라벨;
-	private 대기화면() {
+	private WaitPanel() {
 		setLayout(null);
 		setBackground(Color.pink);
 		대기중입니다 = new JLabel("대기중입니다.");
@@ -52,7 +52,7 @@ public class 대기화면 extends JPanel {
 		add(버튼패널);
 	}
 
-	public static 대기화면 getInstance() {
+	public static WaitPanel getInstance() {
 		return instance;
 	}
 	

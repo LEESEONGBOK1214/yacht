@@ -9,10 +9,10 @@ import javax.swing.JPanel;
 import 야추.YatchFrame;
 
 @SuppressWarnings("serial")
-public class 게임화면 extends JPanel implements MouseListener {
-	private static 점수판 점수판;
-	private static 굴림판 굴림판;
-	private 주사위 주사위들[] = new 주사위[5];
+public class InGame extends JPanel implements MouseListener {
+	private static ScoreBoard 점수판;
+	private static RollPanel 굴림판;
+	private Dice 주사위들[] = new Dice[5];
 
 	public int 턴;
 	int 포트번호들[] = new int[2];
@@ -20,19 +20,19 @@ public class 게임화면 extends JPanel implements MouseListener {
 	String 현재장면;
 //	static 유저 턴유저;
 
-	public 게임화면() {
+	public InGame() {
 		// 방 생성하는거거든.
 		// 판 속성 세팅
 		장면 = new CardLayout();
 		setLayout(get장면());
 		// 객체 초기화
 		for (int i = 0; i < 주사위들.length; i++) {
-			주사위들[i] = new 주사위((i * 102) + 10, 0, 70);
+			주사위들[i] = new Dice((i * 102) + 10, 0, 70);
 			주사위들[i].addMouseListener(this);
 		}
 
-		굴림판 = new 굴림판(주사위들);
-		점수판 = new 점수판(주사위들);
+		굴림판 = new RollPanel(주사위들);
+		점수판 = new ScoreBoard(주사위들);
 
 		// 추가
 		add(굴림판, "주사위굴리기");
@@ -83,7 +83,7 @@ public class 게임화면 extends JPanel implements MouseListener {
 	public void 주사위저장함(String 선택주사위) {
 		// 상대방이 저장한 주사위값 가져와야함.
 
-		for (주사위 주사위 : 주사위들) {
+		for (Dice 주사위 : 주사위들) {
 			if (주사위.getName().equals(선택주사위)) {// 누른 주사위라면,
 				주사위.저장중 = !주사위.저장중;
 			}
@@ -105,9 +105,9 @@ public class 게임화면 extends JPanel implements MouseListener {
 		if (턴 == 0)
 			return;
 		
-		if (e.getSource().getClass() == 주사위.class) {
+		if (e.getSource().getClass() == Dice.class) {
 			// 선택한게 주사위 이면!!!
-			주사위 선택주사위 = (주사위) e.getSource();
+			Dice 선택주사위 = (Dice) e.getSource();
 			if (선택주사위.눈금 != 0) {
 				선택주사위.저장중 = !선택주사위.저장중;
 				YatchFrame.outprint("주사위저장/" + 선택주사위.getName());
@@ -120,27 +120,27 @@ public class 게임화면 extends JPanel implements MouseListener {
 
 	// get set --------------------------------------------------------------
 
-	public 점수판 get점수판() {
+	public ScoreBoard get점수판() {
 		return 점수판;
 	}
 
-	public void set점수판(점수판 셋점수판) {
+	public void set점수판(ScoreBoard 셋점수판) {
 		점수판 = 셋점수판;
 	}
 
-	public 굴림판 get굴림판() {
+	public RollPanel get굴림판() {
 		return 굴림판;
 	}
 
-	public void set굴림판(굴림판 셋굴림판) {
+	public void set굴림판(RollPanel 셋굴림판) {
 		굴림판 = 셋굴림판;
 	}
 
-	public 주사위[] get주사위들() {
+	public Dice[] get주사위들() {
 		return 주사위들;
 	}
 
-	public void set주사위들(주사위[] 주사위들) {
+	public void set주사위들(Dice[] 주사위들) {
 		this.주사위들 = 주사위들;
 	}
 

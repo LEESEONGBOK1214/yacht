@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import 야추.YatchFrame;
 
 @SuppressWarnings("serial")
-public class 주사위 extends JLabel implements MouseListener {
+public class Dice extends JLabel implements MouseListener {
 	int x;
 	int y;
 	int size;
@@ -20,7 +20,7 @@ public class 주사위 extends JLabel implements MouseListener {
 	boolean 흔들기;
 	String 이미지파일[] = { "one.png", "two.png", "three.png", "four.png", "five.png", "six.png" };
 
-	주사위(int x, int y, int size) {
+	Dice(int x, int y, int size) {
 		this.x = x;
 		this.y = y;
 		this.size = size;

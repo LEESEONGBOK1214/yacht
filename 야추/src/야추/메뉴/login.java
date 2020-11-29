@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
-public class 로그인 extends 배경화면 {
+public class login extends background {
 	static JTextField idTextField;
 	static JPasswordField passwdTextField;
 	JButton startButton,backButton;
@@ -34,7 +34,7 @@ public class 로그인 extends 배경화면 {
 	}
 
 
-	public 로그인() {
+	public login() {
 		setLayout(new BorderLayout());
 		Font font = new Font("Serif",1,30);
 		//nameInput.setLayout(new GridLayout(3,1,0,20));	

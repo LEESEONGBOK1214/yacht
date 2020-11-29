@@ -4,11 +4,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
-public class 주사위판 extends JPanel {
+public class DicePanel extends JPanel {
 
-	static 주사위[] 주사위들;
+	static Dice[] 주사위들;
 
-	주사위판(주사위[] _주사위들) {
+	DicePanel(Dice[] _주사위들) {
 		setLayout(null);
 		setBounds(100, 350, 500, 70);
 
@@ -30,7 +30,7 @@ public class 주사위판 extends JPanel {
 		}
 	}
 
-	public static 주사위[] get주사위들() {
+	public static Dice[] get주사위들() {
 		return 주사위들;
 	}
 }

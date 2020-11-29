@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 import DB.OracleDB;
 
-public class 게임서버 {
-	private static ArrayList<유저> 유저목록;
+public class server {
+	private static ArrayList<user> 유저목록;
 	public static ArrayList<PrintWriter> m_OutputList;
 
 	public static void main(String[] args) {
@@ -21,10 +21,10 @@ public class 게임서버 {
 //			System.out.println("서버 .." + serverSocket.);
 			System.out.println("서버의 포트는 " + serverSocket.getLocalPort());
 			Socket socket = null;
-			유저목록 = new ArrayList<유저>();
+			유저목록 = new ArrayList<user>();
 			while ((socket = serverSocket.accept()) != null) {
 				boolean flag = true;
-				for (유저 user : 유저목록) {
+				for (user user : 유저목록) {
 					if (socket.getPort() == user.getSocket().getPort()) {
 						flag = false;
 						break;
@@ -32,7 +32,7 @@ public class 게임서버 {
 				}
 				if (flag) {
 					m_OutputList.add(new PrintWriter(socket.getOutputStream()));
-					유저 client = new 유저(socket);
+					user client = new user(socket);
 					client.start();
 				}
 			}
@@ -48,7 +48,7 @@ public class 게임서버 {
 		}
 	}
 
-	public static ArrayList<유저> get유저목록() {
+	public static ArrayList<user> get유저목록() {
 		return 유저목록;
 	}
 

@@ -28,23 +28,23 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import 야추.메뉴.로그인;
-import 야추.메뉴.메뉴;
-import 야추.메뉴.회원가입;
-import 야추.화면.게임화면;
-import 야추.화면.대기화면;
-import 야추.화면.방목록화면;
+import 야추.메뉴.login;
+import 야추.메뉴.menu;
+import 야추.메뉴.signUp;
+import 야추.화면.InGame;
+import 야추.화면.WaitPanel;
+import 야추.화면.RoomsPanel;
 
 @SuppressWarnings("serial")
 public class YatchFrame extends JFrame implements ActionListener, WindowListener {
-	private static 게임화면 게임화면;
+	private static InGame 게임화면;
 
-	private 메뉴 메뉴;
-	private static 회원가입 회원가입;
-	private static 로그인 로그인;
+	private menu 메뉴;
+	private static signUp 회원가입;
+	private static login 로그인;
 	private static CardLayout 장면; // 카드 레이아웃은 add한 레이아웃들을 하나씩 show 가능.
 	private static JPanel 메인화면;
-	private 방목록화면 방목록패널;
+	private RoomsPanel 방목록패널;
 
 	static Socket socket;
 	Connection conn;
@@ -79,34 +79,34 @@ public class YatchFrame extends JFrame implements ActionListener, WindowListener
 		// =================================================================================================
 		장면 = new CardLayout();
 		메인화면 = new JPanel(장면);
-		메뉴 = new 메뉴();
+		메뉴 = new menu();
 
-		메뉴.get로그인().addActionListener(new 버튼이벤트());
-		메뉴.get회원가입().addActionListener(new 버튼이벤트());
+		메뉴.get로그인().addActionListener(new EventListener());
+		메뉴.get회원가입().addActionListener(new EventListener());
 		메인화면.add(메뉴, "메뉴");
 
-		회원가입 = new 회원가입();
-		회원가입.get가입().addActionListener(new 버튼이벤트());
-		회원가입.get취소().addActionListener(new 버튼이벤트());
+		회원가입 = new signUp();
+		회원가입.get가입().addActionListener(new EventListener());
+		회원가입.get취소().addActionListener(new EventListener());
 		메인화면.add(회원가입, "회원가입");
 
-		로그인 = new 로그인();
-		로그인.getStartButton().addActionListener(new 버튼이벤트());
-		로그인.getBackButton().addActionListener(new 버튼이벤트());
+		로그인 = new login();
+		로그인.getStartButton().addActionListener(new EventListener());
+		로그인.getBackButton().addActionListener(new EventListener());
 		메인화면.add(로그인, "로그인");
 
-		게임화면 = new 게임화면();
+		게임화면 = new InGame();
 		메인화면.add(게임화면, "게임화면");
 
-		방목록패널 = 방목록화면.getInstance();
-		방목록패널.get새로고침().addActionListener(new 버튼이벤트());
-		방목록패널.get로그아웃().addActionListener(new 버튼이벤트());
-		방목록패널.get방만들기().addActionListener(new 버튼이벤트());
+		방목록패널 = RoomsPanel.getInstance();
+		방목록패널.get새로고침().addActionListener(new EventListener());
+		방목록패널.get로그아웃().addActionListener(new EventListener());
+		방목록패널.get방만들기().addActionListener(new EventListener());
 		메인화면.add(방목록패널, "방목록화면");
 
-		대기화면 대기화면 = 야추.화면.대기화면.getInstance();
-		대기화면.get돌아가기().addActionListener(new 버튼이벤트());
-		대기화면.get시작하기().addActionListener(new 버튼이벤트());
+		WaitPanel 대기화면 = 야추.화면.WaitPanel.getInstance();
+		대기화면.get돌아가기().addActionListener(new EventListener());
+		대기화면.get시작하기().addActionListener(new EventListener());
 		메인화면.add(대기화면, "대기화면");
 
 		장면.show(메인화면, "메뉴");
@@ -175,8 +175,8 @@ public class YatchFrame extends JFrame implements ActionListener, WindowListener
 								유저입장("");
 								break;
 							case "방나가렴":
-								야추.화면.대기화면.getInstance().get시작하기().setEnabled(false);
-								야추.화면.대기화면.getInstance().상대방이름설정("");
+								야추.화면.WaitPanel.getInstance().get시작하기().setEnabled(false);
+								야추.화면.WaitPanel.getInstance().상대방이름설정("");
 								방목록으로();
 								break;
 							case "로그인성공":
@@ -246,8 +246,8 @@ public class YatchFrame extends JFrame implements ActionListener, WindowListener
 								if (전체턴 == -1)
 									break;
 								JOptionPane.showMessageDialog(YatchFrame.this, "상대가 나갔습니다! 승리!");
-								야추.화면.대기화면.getInstance().get시작하기().setEnabled(false);
-								야추.화면.대기화면.getInstance().상대방이름설정("");
+								야추.화면.WaitPanel.getInstance().get시작하기().setEnabled(false);
+								야추.화면.WaitPanel.getInstance().상대방이름설정("");
 								방목록으로();
 								전체턴 = -1;
 								break;
@@ -269,16 +269,16 @@ public class YatchFrame extends JFrame implements ActionListener, WindowListener
 
 
 			private void 방입장(String[] 응답) {
-				야추.화면.대기화면.getInstance().상대방이름설정(응답[2]);
+				야추.화면.WaitPanel.getInstance().상대방이름설정(응답[2]);
 				장면.show(메인화면, "대기화면");
 			}
 
 			private void 유저입장(String 상대이름) {
-				야추.화면.대기화면.getInstance().상대방이름설정(상대이름);
+				야추.화면.WaitPanel.getInstance().상대방이름설정(상대이름);
 				if (상대이름.equals("")) {
-					야추.화면.대기화면.getInstance().get시작하기().setEnabled(false);
+					야추.화면.WaitPanel.getInstance().get시작하기().setEnabled(false);
 				} else {
-					야추.화면.대기화면.getInstance().get시작하기().setEnabled(true);
+					야추.화면.WaitPanel.getInstance().get시작하기().setEnabled(true);
 				}
 			}
 
@@ -428,12 +428,12 @@ public class YatchFrame extends JFrame implements ActionListener, WindowListener
 	}
 	// get set
 
-	public static 게임화면 get게임화면() {
+	public static InGame get게임화면() {
 		return 게임화면;
 	}
 
-	public static 회원가입 get회원가입() {
-		방목록화면.get방목록();
+	public static signUp get회원가입() {
+		RoomsPanel.get방목록();
 		return 회원가입;
 	}
 

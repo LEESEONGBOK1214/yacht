@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 
 
 @SuppressWarnings("serial")
-public class 회원가입 extends 배경화면// extends 가입배경
+public class signUp extends background// extends 가입배경
 {
 	private Font 가입폰트;
 	private static JLabel 아이디, 비밀번호, 이름;
@@ -38,7 +38,7 @@ public class 회원가입 extends 배경화면// extends 가입배경
 		return 취소;
 	}
 
-	public 회원가입(){
+	public signUp(){
 		setLayout(null);
 		가입폰트 = new Font(null,1,40);
 		아이디 = new JLabel(" 아 이 디 ");

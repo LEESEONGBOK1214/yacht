@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import 具眠.辑滚.规;
+import 具眠.辑滚.room;
 
 public class OracleDB {
 //	Connection conn;
@@ -143,7 +143,7 @@ public class OracleDB {
 		return false;
 	}
 
-	public void 规积己(规 room) throws SQLException {
+	public void 规积己(room room) throws SQLException {
 		Connection conn = null;
 		try {
 			conn = DBconn.getConnection();

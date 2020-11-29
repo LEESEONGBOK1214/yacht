@@ -13,15 +13,15 @@ import javax.swing.border.LineBorder;
 import 야추.YatchFrame;
 
 @SuppressWarnings("serial")
-public class 굴림판 extends JPanel implements ActionListener {
-	주사위판 주사위판;
-	저장판 저장판;
-	주사위 주사위들[];
+public class RollPanel extends JPanel implements ActionListener {
+	DicePanel 주사위판;
+	StoreBoard 저장판;
+	Dice 주사위들[];
 	private static JButton 굴림버튼;
 	private static JButton 점수화면전환;
 	private JLabel 내이름;
 
-	굴림판(주사위[] 주사위들) {
+	RollPanel(Dice[] 주사위들) {
 //		System.out.println("굴림판으로 옴.");
 		setLayout(null);
 		setBackground(Color.pink);
@@ -35,7 +35,7 @@ public class 굴림판 extends JPanel implements ActionListener {
 		주사위판세팅(주사위들);
 		주사위세팅();
 
-		저장판 = new 저장판();
+		저장판 = new StoreBoard();
 		점수화면버튼세팅();
 
 		add(주사위판);
@@ -46,8 +46,8 @@ public class 굴림판 extends JPanel implements ActionListener {
 //		차례표시세팅();
 	}
 
-	private void 주사위판세팅(주사위[] 주사위들) {
-		주사위판 = new 주사위판(주사위들);
+	private void 주사위판세팅(Dice[] 주사위들) {
+		주사위판 = new DicePanel(주사위들);
 		주사위판.setBorder(new LineBorder(Color.red));
 	}
 

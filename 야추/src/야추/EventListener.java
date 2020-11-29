@@ -10,10 +10,10 @@ import java.net.Socket;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import 야추.메뉴.로그인;
-import 야추.메뉴.회원가입;
+import 야추.메뉴.login;
+import 야추.메뉴.signUp;
 
-public class 버튼이벤트 implements ActionListener {
+public class EventListener implements ActionListener {
 	Socket socket = YatchFrame.socket;
 
 	public void actionPerformed(ActionEvent e) {
@@ -70,10 +70,10 @@ public class 버튼이벤트 implements ActionListener {
 	}
 
 	private void 시작() {
-		String uid = 로그인.getIdTextField().getText();
-		String upw = 로그인.getPasswdTextField().getText();
-		if (!로그인.getIdTextField().getText().equals("")) {
-			if (!로그인.getPasswdTextField().getText().equals("")) {
+		String uid = login.getIdTextField().getText();
+		String upw = login.getPasswdTextField().getText();
+		if (!login.getIdTextField().getText().equals("")) {
+			if (!login.getPasswdTextField().getText().equals("")) {
 				outprint("로그인/" + uid + "/" + upw);
 				YatchFrame.아이디 = uid;
 			} else {
@@ -85,12 +85,12 @@ public class 버튼이벤트 implements ActionListener {
 	}
 
 	private void 가입() {
-		if (!회원가입.get아이디받기().getText().equals("")) {
-			if (!회원가입.get비밀번호받기().getText().equals("")) {
-				if (!회원가입.get이름받기().getText().equals("")) {
-					String 아이디 = 회원가입.get아이디받기().getText();
-					String 비밀번호 = 회원가입.get비밀번호받기().getText();
-					String 이름 = 회원가입.get이름받기().getText();
+		if (!signUp.get아이디받기().getText().equals("")) {
+			if (!signUp.get비밀번호받기().getText().equals("")) {
+				if (!signUp.get이름받기().getText().equals("")) {
+					String 아이디 = signUp.get아이디받기().getText();
+					String 비밀번호 = signUp.get비밀번호받기().getText();
+					String 이름 = signUp.get이름받기().getText();
 					outprint("회원가입/" + 아이디 + "/" + 비밀번호 + "/" + 이름);
 				} else {
 					JOptionPane.showMessageDialog(null, "이름을 확인하세요");

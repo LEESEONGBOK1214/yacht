@@ -11,10 +11,10 @@ import java.util.Iterator;
 import java.util.Random;
 
 import DB.OracleDB;
-import 야추.화면.방목록화면;
+import 야추.화면.RoomsPanel;
 
-public class 유저 extends Thread {
-	방 room = null; // 유저가 속한 룸이다.
+public class user extends Thread {
+	room room = null; // 유저가 속한 룸이다.
 	private Socket socket;
 	private int port;
 	private String 아이디;
@@ -26,7 +26,7 @@ public class 유저 extends Thread {
 	private int 랭킹;
 	// 게임에 관련된 변수 설정 // ... //
 	static String 응답 = "";
-	private static ArrayList<방> 방목록 = 방목록화면.get방목록();
+	private static ArrayList<room> 방목록 = RoomsPanel.get방목록();
 	String loginstatus = null;
 
 	public void 회원가입(String[] split) {
@@ -60,7 +60,7 @@ public class 유저 extends Thread {
 		String 로그인결과값 = null;
 		try {
 			boolean idcheck = true;
-			for (유저 user : 게임서버.get유저목록()) {
+			for (user user : server.get유저목록()) {
 				if (id.equals(user.아이디)) {
 					idcheck = false;
 					// 아이디 중복 접속 확인
@@ -86,8 +86,8 @@ public class 유저 extends Thread {
 			랭킹 = Integer.parseInt(res[4]);
 
 			this.port = getSocket().getPort();
-			게임서버.get유저목록().add(this);
-			System.out.println("게임서버.get유저목록().size() : " + 게임서버.get유저목록().size());
+			server.get유저목록().add(this);
+			System.out.println("게임서버.get유저목록().size() : " + server.get유저목록().size());
 
 			int 승률 = (int) ((승 / (승 + 무 + 패 * 1.0)) * 100);
 			outprint("로그인성공/" + 이름 + "/" + 승률 + "/" + 랭킹);
@@ -100,9 +100,9 @@ public class 유저 extends Thread {
 	private void 로그아웃(String[] split) {
 		System.out.print("로그아웃 > ");
 
-		ArrayList<유저> 유저목록 = 게임서버.get유저목록();
+		ArrayList<user> 유저목록 = server.get유저목록();
 		System.out.println("======================");
-		for (유저 유저 : 유저목록) {
+		for (user 유저 : 유저목록) {
 			System.out.println("유저.port = " + 유저.port);
 			System.out.println("this.port = " + this.port);
 			if (this.port == 유저.port) {
@@ -110,7 +110,7 @@ public class 유저 extends Thread {
 				break;
 			}
 		}
-		System.out.println("유저목록.size : " + 게임서버.get유저목록().size());
+		System.out.println("유저목록.size : " + server.get유저목록().size());
 		System.out.println("======================");
 
 		outprint("로그아웃성공");
@@ -123,7 +123,7 @@ public class 유저 extends Thread {
 
 		System.out.println("방만들기 in > ");
 
-		this.room = 방목록화면.방생성(this, split[2]);
+		this.room = RoomsPanel.방생성(this, split[2]);
 		if (this.room != null) {
 			outprint("방생성성공");
 			broadCast("방업데이트");
@@ -142,7 +142,7 @@ public class 유저 extends Thread {
 	private void 방나가기() {
 		System.out.print("방나가기 > ");
 
-		방 방 = this.room;
+		room 방 = this.room;
 		if ((방.유저들.indexOf(this) == 0)) {
 			try {
 				new OracleDB().방삭제(this.port);
@@ -175,10 +175,10 @@ public class 유저 extends Thread {
 
 	public void 방입장(String[] split) {
 //		_room.방입장(this); // 룸에 입장시킨 후
-		Iterator<방> Iter방목록 = 방목록.iterator();
+		Iterator<room> Iter방목록 = 방목록.iterator();
 		int 방장포트 = Integer.parseInt(split[2]);
 		while (Iter방목록.hasNext()) {
-			방 in_room = Iter방목록.next();
+			room in_room = Iter방목록.next();
 			int 검색포트 = in_room.유저들.get(0).socket.getPort();
 			if (방장포트 == 검색포트) { // split[2]이 방장 소켓이 넘어옴,
 				this.room = in_room; // 유저가 속한 방을 룸으로 변경한다.(중요)
@@ -292,7 +292,7 @@ public class 유저 extends Thread {
 		} catch (SQLException e) {
 			System.out.println("게임 종료!");
 		}
-		게임서버.get유저목록().remove(this);
+		server.get유저목록().remove(this);
 	}
 
 	public void 승무패추가(String winner, String loser, boolean 무승부) {
@@ -378,7 +378,7 @@ public class 유저 extends Thread {
 
 	public void broadCast(String str) {
 		PrintWriter out;
-		Iterator<PrintWriter> opw = 게임서버.m_OutputList.iterator();
+		Iterator<PrintWriter> opw = server.m_OutputList.iterator();
 		while (opw.hasNext()) {
 			out = new PrintWriter(opw.next(), true);
 			out.println("broadCast/" + str);
@@ -399,7 +399,7 @@ public class 유저 extends Thread {
 
 	public void outprint(int port, String str) {
 		PrintWriter out;
-		Iterator<PrintWriter> opw = 게임서버.m_OutputList.iterator();
+		Iterator<PrintWriter> opw = server.m_OutputList.iterator();
 		while (opw.hasNext()) {
 			out = new PrintWriter(opw.next(), true);
 			out.println(port + "/" + str);
@@ -408,7 +408,7 @@ public class 유저 extends Thread {
 	}
 	// get set ===============================================
 
-	public 유저(Socket socket) {
+	public user(Socket socket) {
 		this.socket = socket;
 	}
 
@@ -446,7 +446,7 @@ public class 유저 extends Thread {
 		this.socket = _socket;
 	}
 
-	public static ArrayList<방> get방목록() {
+	public static ArrayList<room> get방목록() {
 		return 방목록;
 	}
 }

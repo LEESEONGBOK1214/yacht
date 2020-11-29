@@ -5,7 +5,7 @@ import java.awt.Font;
 
 import javax.swing.JButton;
 
-public class 메뉴 extends 배경화면 {
+public class menu extends background {
 private JButton 로그인,회원가입;
 
 	
@@ -16,7 +16,7 @@ private JButton 로그인,회원가입;
 		return 회원가입;
 	}
 	
-	public 메뉴(){
+	public menu(){
 		setLayout(null);
 		Font 메뉴폰트 = new Font(null,0,40);
 		

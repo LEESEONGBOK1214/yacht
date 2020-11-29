@@ -8,7 +8,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JPanel;
 
-public class 배경화면 extends JPanel {
+public class background extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);

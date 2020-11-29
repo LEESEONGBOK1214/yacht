@@ -11,19 +11,19 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import DB.OracleDB;
-import 야추.서버.방;
-import 야추.서버.유저;
+import 야추.서버.room;
+import 야추.서버.user;
 
 @SuppressWarnings("serial")
-public class 방목록화면 extends JPanel {
+public class RoomsPanel extends JPanel {
 	// 1. GameRoom List 가져와서 뿌려주기.
 	// 2. 룸 선택시, 입장확인 메세지 보여주기.
 	// 3. 확인 선택시, 게임방 입장.
-	private static 방목록화면 instance = new 방목록화면();
+	private static RoomsPanel instance = new RoomsPanel();
 	private JPanel 방목록패널;
 	private JPanel 버튼목록;
 	private JPanel 유저정보패널;
-	private static ArrayList<방> 방목록 = new ArrayList<방>(); // 방의 리스트방목록
+	private static ArrayList<room> 방목록 = new ArrayList<room>(); // 방의 리스트방목록
 	private JButton 방만들기;
 	private JButton 새로고침;
 	private JButton 로그아웃;
@@ -32,7 +32,7 @@ public class 방목록화면 extends JPanel {
 	JLabel 승률;
 	JLabel 랭킹;
 
-	public 방목록화면() {
+	public RoomsPanel() {
 		setLayout(null);
 		setBackground(Color.decode("#d789d7"));
 
@@ -78,9 +78,9 @@ public class 방목록화면 extends JPanel {
 		add(버튼목록);
 	}
 
-	public static 방 방생성(유저 _owner, String title) {
+	public static room 방생성(user _owner, String title) {
 		// 유저가 방을 생성할 때 사용(유저가 방장으로 들어감)
-		방 room = new 방(_owner, title);
+		room room = new room(_owner, title);
 		try {
 			new OracleDB().방생성(room);
 		} catch (SQLException e) {
@@ -92,7 +92,7 @@ public class 방목록화면 extends JPanel {
 		return room;
 	}
 
-	public static ArrayList<방> get방목록() {
+	public static ArrayList<room> get방목록() {
 		return 방목록;
 	}
 
@@ -120,7 +120,7 @@ public class 방목록화면 extends JPanel {
 		this.방목록패널 = 방목록패널;
 	}
 
-	public static 방목록화면 getInstance() {
+	public static RoomsPanel getInstance() {
 		return instance;
 	}
 

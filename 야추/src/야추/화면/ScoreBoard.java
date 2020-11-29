@@ -19,7 +19,7 @@ enum scores {
 }
 
 @SuppressWarnings("serial")
-public class 점수판 extends JPanel implements ActionListener {
+public class ScoreBoard extends JPanel implements ActionListener {
 	int size = 14;
 	JLabel 목록[] = new JLabel[size];
 	private JButton 선택버튼[] = new JButton[size];
@@ -28,12 +28,12 @@ public class 점수판 extends JPanel implements ActionListener {
 	String 목록들[] = { "Aces", "Deuces", "Threes", "Fours", "Fives", "Sixes", "subtotal", "Choice", "FourOfKind",
 			"FullHouse", "sStraight", "lStraight", "Yatch", "Bonus" };
 	int 점수[] = new int[size];
-	주사위[] 주사위들;
+	Dice[] 주사위들;
 	private JButton 돌아가기;
 	private JLabel 유저점수[][] = new JLabel[2][2]; // [앞 : 방장, 유저 순] [뒤 : 이름, 점수 순]
 	private int 입장순서;
 	private JLabel 턴정보;
-	점수판(주사위[] 주사위들) {
+	ScoreBoard(Dice[] 주사위들) {
 		setLayout(null);
 		setBackground(Color.decode("#CDD1FF"));
 		this.주사위들 = 주사위들;
@@ -125,7 +125,7 @@ public class 점수판 extends JPanel implements ActionListener {
 
 		// 1~6합.
 		System.out.println("주사위 눈금 ==================================");
-		for (주사위 주사위 : 주사위들) {
+		for (Dice 주사위 : 주사위들) {
 //			System.out.println(주사위.눈금);
 			점수[주사위.눈금 - 1] += 주사위.눈금;
 			// 초이스
@@ -223,7 +223,7 @@ public class 점수판 extends JPanel implements ActionListener {
 
 	void 선택됨() {
 		// 점수선택판 하단에 주사위 표시
-		주사위판 주사위목록 = YatchFrame.get게임화면().get굴림판().주사위판;
+		DicePanel 주사위목록 = YatchFrame.get게임화면().get굴림판().주사위판;
 		주사위목록.setBounds(100, 500, 500, 70);
 		주사위목록.보여줘();
 
